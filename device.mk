@@ -20,7 +20,8 @@ PRODUCT_PACKAGES += \
 
 # Recovery files - copy to recovery ramdisk root
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/recovery/init.recovery.mt6853.rc:recovery/root/init.recovery.mt6853.rc
+    $(LOCAL_PATH)/recovery/init.recovery.mt6853.rc:recovery/root/init.recovery.mt6853.rc \
+    $(LOCAL_PATH)/recovery/fstab.mt6853:recovery/root/system/etc/recovery.fstab
 
 # USB
 PRODUCT_PACKAGES += \
