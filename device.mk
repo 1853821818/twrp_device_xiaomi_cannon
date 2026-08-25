@@ -2,9 +2,6 @@
 # device.mk for Redmi Note 9 5G (cannon)
 #
 
-# Copy prebuilt dtb.img to output directory (MTK recovery requires it)
-$(shell mkdir -p $(PRODUCT_OUT) && cp $(LOCAL_PATH)/prebuilt/dtb.img $(PRODUCT_OUT)/dtb.img)
-
 # VNDK
 PRODUCT_TARGET_VNDK_VERSION := 31
 PRODUCT_EXTRA_VNDK_VERSIONS := 30
