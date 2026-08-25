@@ -1,0 +1,118 @@
+name: Build TWRP for Redmi Note 9 5G (cannon)
+
+on:
+  workflow_dispatch:
+    inputs:
+      manifest_branch:
+        description: 'TWRP Manifest Branch'
+        required: true
+        default: 'twrp-12.1'
+      device:
+        description: 'Device Codename'
+        required: true
+        default: 'cannon'
+
+env:
+  MANIFEST_BRANCH: ${{ github.event.inputs.manifest_branch || 'twrp-12.1' }}
+  DEVICE: ${{ github.event.inputs.device || 'cannon' }}
+  OEM: xiaomi
+  TWRP_DEVICE: twrp_cannon
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 240
+
+    steps:
+      - name: Checkout device tree
+        uses: actions/checkout@v4
+        with:
+          path: device/xiaomi/cannon
+
+      - name: Prepare build environment
+        run: |
+          echo "=== Installing dependencies ==="
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq \
+            git-core gnupg flex bison build-essential zip curl zlib1g-dev \
+            gcc-multilib g++-multilib libc6-dev-i386 lib32ncurses5-dev \
+            x11proto-core-dev libx11-dev lib32z1-dev libgl1-mesa-dev \
+            libxml2-utils xsltproc unzip fontconfig python3 python3-pip \
+            libncurses5 libssl-dev libelf-dev bc cpio rsync
+          echo "=== Dependencies installed ==="
+
+      - name: Install repo tool
+        run: |
+          mkdir -p ~/bin
+          curl -sL https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+          chmod a+x ~/bin/repo
+          echo "$HOME/bin" >> $GITHUB_PATH
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git config --global color.ui false
+
+      - name: Initialize TWRP manifest
+        run: |
+          export PATH=~/bin:$PATH
+          mkdir -p ~/twrp
+          cd ~/twrp
+          echo "=== Initializing repo with branch: $MANIFEST_BRANCH ==="
+          repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b $MANIFEST_BRANCH
+          echo "=== Repo initialized ==="
+
+      - name: Sync TWRP source
+        run: |
+          export PATH=~/bin:$PATH
+          cd ~/twrp
+          echo "=== Syncing source (this may take a while) ==="
+          repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
+          echo "=== Source synced ==="
+
+      - name: Copy device tree
+        run: |
+          echo "=== Copying device tree ==="
+          cp -r $GITHUB_WORKSPACE/device/xiaomi/cannon ~/twrp/device/xiaomi/
+          ls -la ~/twrp/device/xiaomi/cannon/
+          echo "=== Device tree copied ==="
+
+      - name: Build TWRP
+        run: |
+          export PATH=~/bin:$PATH
+          export ALLOW_MISSING_DEPENDENCIES=true
+          cd ~/twrp
+          echo "=== Setting up build environment ==="
+          source build/envsetup.sh
+          echo "=== Lunching: $TWRP_DEVICE-eng ==="
+          lunch $TWRP_DEVICE-eng
+          echo "=== Building recoveryimage ==="
+          mka recoveryimage -j$(nproc --all)
+          echo "=== Build complete ==="
+
+      - name: Check build output
+        run: |
+          echo "=== Checking build output ==="
+          ls -la ~/twrp/out/target/product/$DEVICE/
+          if [ -f ~/twrp/out/target/product/$DEVICE/recovery.img ]; then
+            echo "=== recovery.img found ==="
+            file ~/twrp/out/target/product/$DEVICE/recovery.img
+            ls -lh ~/twrp/out/target/product/$DEVICE/recovery.img
+          else
+            echo "=== recovery.img NOT found, listing all img files ==="
+            find ~/twrp/out/target/product/$DEVICE/ -name "*.img" -type f
+            exit 1
+          fi
+
+      - name: Upload recovery image
+        uses: actions/upload-artifact@v4
+        with:
+          name: twrp-${{ env.DEVICE }}-${{ env.MANIFEST_BRANCH }}
+          path: ~/twrp/out/target/product/${{ env.DEVICE }}/recovery.img
+          retention-days: 30
+
+      - name: Upload build logs (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs-${{ env.DEVICE }}
+          path: ~/twrp/out/target/product/${{ env.DEVICE }}/obj/RECOVERY_RAMDISK/
+          retention-days: 7
