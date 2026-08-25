@@ -71,6 +71,7 @@ jobs:
       - name: Copy device tree
         run: |
           echo "=== Copying device tree ==="
+          mkdir -p ~/twrp/device/xiaomi
           cp -r $GITHUB_WORKSPACE/device/xiaomi/cannon ~/twrp/device/xiaomi/
           ls -la ~/twrp/device/xiaomi/cannon/
           echo "=== Device tree copied ==="
