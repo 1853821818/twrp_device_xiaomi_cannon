@@ -20,6 +20,7 @@ TARGET_2ND_ARCH_VARIANT := armv8-a
 TARGET_2ND_CPU_ABI := armeabi-v7a
 TARGET_2ND_CPU_ABI2 := armeabi
 TARGET_2ND_CPU_VARIANT := cortex-a76
+TARGET_SUPPORTS_64_BIT_APPS := true
 
 # Kernel
 TARGET_PREBUILT_KERNEL := $(LOCAL_PATH)/prebuilt/kernel
@@ -122,10 +123,10 @@ MALLOC_SVELTE := true
 
 # HIDL
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := hardware/interfaces/compatibility_matrices/compatibility_matrix.5.xml
-DEVICE_MANIFEST_FILE := $(LOCAL_PATH)/manifest.xml
+# DEVICE_MANIFEST_FILE := $(LOCAL_PATH)/manifest.xml
 
 # Use mke2fs
 TARGET_USES_MKE2FS := true
 
 # SELinux
-BOARD_SEPOLICY_DIRS += $(LOCAL_PATH)/sepolicy
+# BOARD_SEPOLICY_DIRS += $(LOCAL_PATH)/sepolicy
