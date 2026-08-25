@@ -116,7 +116,7 @@ BOARD_USES_QCOM_FBE_DECRYPTION := false
 TW_USE_FSCRYPT_POLICY := 2
 
 # fastbootd
-TARGET_RECOVERY_FSTAB := $(LOCAL_PATH)/recovery/fstab.mt6853
+TARGET_RECOVERY_FSTAB := device/xiaomi/cannon/recovery/fstab.mt6853
 
 # Malloc
 MALLOC_SVELTE := true
