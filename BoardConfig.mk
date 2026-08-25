@@ -40,8 +40,8 @@ BOARD_MKBOOTIMG_ARGS := --kernel_offset 0x00008000 --ramdisk_offset 0x07c08000 -
 # DTBO
 BOARD_KERNEL_SEPARATED_DTBO := true
 BOARD_PREBUILT_DTBOIMAGE := device/xiaomi/cannon/prebuilt/dtbo.img
-BOARD_INCLUDE_DTB_IN_BOOTIMG := true
-BOARD_PREBUILT_DTBIMAGE_DIR := device/xiaomi/cannon/prebuilt
+# MTK devices load DTB from bootloader, no need to include in boot.img
+BOARD_INCLUDE_DTB_IN_BOOTIMG := false
 
 # Recovery
 TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
