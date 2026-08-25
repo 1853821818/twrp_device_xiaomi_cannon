@@ -40,8 +40,8 @@ BOARD_MKBOOTIMG_ARGS := --kernel_offset 0x00008000 --ramdisk_offset 0x07c08000 -
 # DTBO
 BOARD_KERNEL_SEPARATED_DTBO := true
 BOARD_PREBUILT_DTBOIMAGE := device/xiaomi/cannon/prebuilt/dtbo.img
-# MTK devices load DTB from bootloader, no need to include in boot.img
-BOARD_INCLUDE_DTB_IN_BOOTIMG := false
+BOARD_INCLUDE_DTB_IN_BOOTIMG := true
+BOARD_PREBUILT_DTBIMAGE_DIR := device/xiaomi/cannon/prebuilt
 
 # Recovery
 TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
@@ -105,7 +105,7 @@ TW_NO_BATTERY_PERCENT := false
 TW_USE_MODEL_HARDWARE_ID_FOR_DEVICE_ID := true
 TARGET_USE_CUSTOM_LUN_FILE_PATH := "/config/usb_gadget/g1/functions/mass_storage.0/lun.0/file"
 
-# Crypto / Decryption
+# Crypto / Decryption - Android 14 FBE v1
 TW_INCLUDE_CRYPTO := true
 TW_INCLUDE_CRYPTO_FBE := true
 TW_INCLUDE_FBE := true
@@ -115,6 +115,9 @@ PLATFORM_SECURITY_PATCH := 2099-12-31
 VENDOR_SECURITY_PATCH := 2099-12-31
 BOARD_USES_QCOM_FBE_DECRYPTION := false
 TW_USE_FSCRYPT_POLICY := 1
+TW_CRYPTO_USE_SYSTEM_VOLD := true
+TW_CRYPTO_SYSTEM_VOLD_MOUNT_FLAGS := nosuid nodev noatime nodiratime
+TW_USE_FBE_METADATA_ENCRYPTION := true
 
 # fastbootd
 TARGET_RECOVERY_FSTAB := device/xiaomi/cannon/recovery/fstab.mt6853
