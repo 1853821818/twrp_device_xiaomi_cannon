@@ -3,6 +3,9 @@ out/
 *.img
 *.zip
 
+# But keep prebuilt dtbo
+!prebuilt/dtbo.img
+
 # Python
 __pycache__/
 *.pyc
