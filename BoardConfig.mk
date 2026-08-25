@@ -23,7 +23,7 @@ TARGET_2ND_CPU_VARIANT := cortex-a76
 TARGET_SUPPORTS_64_BIT_APPS := true
 
 # Kernel
-TARGET_PREBUILT_KERNEL := $(LOCAL_PATH)/prebuilt/kernel
+TARGET_PREBUILT_KERNEL := device/xiaomi/cannon/prebuilt/kernel
 TARGET_FORCE_PREBUILT_KERNEL := true
 BOARD_KERNEL_IMAGE_NAME := kernel
 TARGET_KERNEL_ARCH := arm64
@@ -39,7 +39,7 @@ BOARD_MKBOOTIMG_ARGS := --kernel_offset 0x00008000 --ramdisk_offset 0x07c08000 -
 
 # DTBO
 BOARD_KERNEL_SEPARATED_DTBO := true
-BOARD_PREBUILT_DTBOIMAGE := $(LOCAL_PATH)/prebuilt/dtbo.img
+BOARD_PREBUILT_DTBOIMAGE := device/xiaomi/cannon/prebuilt/dtbo.img
 BOARD_INCLUDE_DTB_IN_BOOTIMG := false
 
 # Recovery
