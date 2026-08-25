@@ -88,6 +88,9 @@ jobs:
           echo "=== Creating directories for recovery ramdisk ==="
           mkdir -p out/target/product/$DEVICE/root
           mkdir -p out/target/product/$DEVICE/recovery/root/system/etc
+          echo "=== Copying prebuilt dtb.img ==="
+          cp device/xiaomi/cannon/prebuilt/dtb.img out/target/product/$DEVICE/dtb.img
+          ls -la out/target/product/$DEVICE/dtb.img
           echo "=== Building recoveryimage ==="
           mka recoveryimage -j$(nproc --all)
           echo "=== Build complete ==="
