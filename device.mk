@@ -2,6 +2,9 @@
 # device.mk for Redmi Note 9 5G (cannon)
 #
 
+# Copy prebuilt dtb.img to output directory (MTK recovery requires it)
+$(shell mkdir -p $(PRODUCT_OUT) && cp $(LOCAL_PATH)/prebuilt/dtb.img $(PRODUCT_OUT)/dtb.img)
+
 # VNDK
 PRODUCT_TARGET_VNDK_VERSION := 31
 PRODUCT_EXTRA_VNDK_VERSIONS := 30
@@ -21,8 +24,7 @@ PRODUCT_PACKAGES += \
 # Recovery files - copy to recovery ramdisk root
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/recovery/init.recovery.mt6853.rc:recovery/root/init.recovery.mt6853.rc \
-    $(LOCAL_PATH)/recovery/fstab.mt6853:recovery/root/system/etc/recovery.fstab \
-    $(LOCAL_PATH)/prebuilt/dtb.img:dtb.img
+    $(LOCAL_PATH)/recovery/fstab.mt6853:recovery/root/system/etc/recovery.fstab
 
 # USB
 PRODUCT_PACKAGES += \
