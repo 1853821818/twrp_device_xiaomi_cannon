@@ -85,8 +85,9 @@ jobs:
           source build/envsetup.sh
           echo "=== Lunching: $TWRP_DEVICE-eng ==="
           lunch $TWRP_DEVICE-eng
-          echo "=== Creating root directory for recovery ramdisk ==="
+          echo "=== Creating directories for recovery ramdisk ==="
           mkdir -p out/target/product/$DEVICE/root
+          mkdir -p out/target/product/$DEVICE/recovery/root/system/etc
           echo "=== Building recoveryimage ==="
           mka recoveryimage -j$(nproc --all)
           echo "=== Build complete ==="
