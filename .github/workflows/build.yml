@@ -74,6 +74,10 @@ jobs:
           mkdir -p ~/twrp/device/xiaomi
           cp -r $GITHUB_WORKSPACE/device/xiaomi/cannon ~/twrp/device/xiaomi/
           ls -la ~/twrp/device/xiaomi/cannon/
+          echo "=== Check AndroidProducts.mk ==="
+          cat ~/twrp/device/xiaomi/cannon/AndroidProducts.mk
+          echo "=== Check twrp_cannon.mk ==="
+          cat ~/twrp/device/xiaomi/cannon/twrp_cannon.mk
           echo "=== Device tree copied ==="
 
       - name: Build TWRP
