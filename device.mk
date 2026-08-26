@@ -18,8 +18,9 @@ PRODUCT_BUILD_SUPER_PARTITION := false
 PRODUCT_PACKAGES += \
     fastbootd
 
-# TWRP required modules - qcom_decrypt triggers relink chain
+# TWRP required modules - recovery main binary + relink chain
 PRODUCT_PACKAGES += \
+    recovery \
     qcom_decrypt \
     twrp_ramdisk \
     relink_binaries \
