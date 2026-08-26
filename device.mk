@@ -18,6 +18,15 @@ PRODUCT_BUILD_SUPER_PARTITION := false
 PRODUCT_PACKAGES += \
     fastbootd
 
+# TWRP required modules
+PRODUCT_PACKAGES += \
+    teamwin \
+    twrp_ramdisk \
+    relink_binaries \
+    relink_libraries \
+    relink_vendor_hw_binaries \
+    init_second_stage.recovery
+
 # USB
 PRODUCT_PACKAGES += \
     android.hardware.usb@1.0-service.basic
