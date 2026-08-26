@@ -58,15 +58,6 @@ jobs:
           cd ~/twrp
           echo "=== Initializing repo with branch: $MANIFEST_BRANCH ==="
           repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b $MANIFEST_BRANCH
-          echo "=== Adding local manifests ==="
-          mkdir -p .repo/local_manifests
-          cat > .repo/local_manifests/cannon.xml << 'EOF'
-          <?xml version="1.0" encoding="UTF-8"?>
-          <manifest>
-            <remote name="github" fetch="https://github.com/" />
-            <project path="external/jemalloc" name="aosp-mirror/platform_external_jemalloc" remote="github" revision="master" />
-          </manifest>
-          EOF
           echo "=== Repo initialized ==="
 
       - name: Sync TWRP source
