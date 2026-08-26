@@ -123,6 +123,17 @@ jobs:
           echo "=== DEBUG3: ninja targets ==="
           find out/ -name "*.ninja" -exec grep -l "recovery" {} \; 2>/dev/null | head -5
           echo "=== DEBUG3 END ==="
+          echo "=== DEBUG4: search BUILD_EXECUTABLE in Android.mk ==="
+          grep -n "BUILD_EXECUTABLE\|LOCAL_MODULE.*recovery\|LOCAL_MODULE.*twrp\|name.*recovery\|name.*twrp" bootable/recovery/Android.mk 2>/dev/null | head -30
+          echo "=== DEBUG4: search cc_binary in all Android.bp ==="
+          grep -rn "cc_binary" bootable/recovery/ --include="*.bp" 2>/dev/null | head -20
+          echo "=== DEBUG4: full Android.bp ==="
+          cat bootable/recovery/Android.bp 2>/dev/null
+          echo "=== DEBUG4: PRODUCT_PACKAGES ==="
+          echo "$PRODUCT_PACKAGES" | tr ' ' '\n' | grep -i "recovery\|twrp"
+          echo "=== DEBUG4: build recovery module directly ==="
+          mka recovery 2>&1 | tail -20 || echo "recovery module not found"
+          echo "=== DEBUG4 END ==="
 
       - name: Check build output
         run: |
