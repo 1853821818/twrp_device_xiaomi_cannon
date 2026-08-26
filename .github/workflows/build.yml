@@ -102,6 +102,16 @@ jobs:
           echo "=== DEBUG: all executables in recovery/root ==="
           find out/target/product/$DEVICE/recovery/root/ -type f -executable 2>/dev/null | head -50
           echo "=== DEBUG END ==="
+          echo "=== DEBUG2: ramdisk-files.txt ==="
+          cat out/target/product/$DEVICE/recovery/root/ramdisk-files.txt 2>/dev/null | head -100
+          echo "=== DEBUG2: search recovery binary in out ==="
+          find out/ -name "recovery" -type f 2>/dev/null | head -20
+          find out/ -name "twrp" -type f 2>/dev/null | head -20
+          echo "=== DEBUG2: search executables in bootable/recovery intermediates ==="
+          find out/soong/.intermediates/bootable/recovery/ -type f -executable 2>/dev/null | head -30
+          echo "=== DEBUG2: system dir contents ==="
+          find out/target/product/$DEVICE/recovery/root/system/ -type f 2>/dev/null | head -30
+          echo "=== DEBUG2 END ==="
 
       - name: Check build output
         run: |
