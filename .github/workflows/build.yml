@@ -95,6 +95,11 @@ jobs:
           cat vendor/twrp/config/common.mk
           echo "=== DEBUG: common.mk line count ==="
           wc -l vendor/twrp/config/common.mk
+          echo "=== DEBUG: check packages.mk ==="
+          ls -la vendor/twrp/config/packages.mk 2>/dev/null || echo "packages.mk NOT FOUND"
+          cat vendor/twrp/config/packages.mk 2>/dev/null || echo "Cannot read packages.mk"
+          echo "=== DEBUG: check all files in vendor/twrp/config ==="
+          ls -la vendor/twrp/config/
           echo "=== DEBUG END ==="
           echo "=== Creating directories for recovery ramdisk ==="
           mkdir -p out/target/product/$DEVICE/root
