@@ -89,6 +89,11 @@ jobs:
           source build/envsetup.sh
           echo "=== Lunching: $TWRP_DEVICE-eng ==="
           lunch $TWRP_DEVICE-eng
+          echo "=== DEBUG: PRODUCT_PACKAGES after lunch ==="
+          echo "$PRODUCT_PACKAGES" | tr ' ' '\n' | sort | head -50
+          echo "=== DEBUG: TWRP common.mk content ==="
+          cat vendor/twrp/config/common.mk | head -100
+          echo "=== DEBUG END ==="
           echo "=== Creating directories for recovery ramdisk ==="
           mkdir -p out/target/product/$DEVICE/root
           mkdir -p out/target/product/$DEVICE/recovery/root/system/etc
