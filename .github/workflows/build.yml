@@ -112,6 +112,17 @@ jobs:
           echo "=== DEBUG2: system dir contents ==="
           find out/target/product/$DEVICE/recovery/root/system/ -type f 2>/dev/null | head -30
           echo "=== DEBUG2 END ==="
+          echo "=== DEBUG3: bootable/recovery files ==="
+          ls -la bootable/recovery/ 2>/dev/null | head -30
+          echo "=== DEBUG3: Android.bp in recovery ==="
+          find bootable/recovery/ -name "Android.bp" -o -name "Android.mk" 2>/dev/null | head -20
+          echo "=== DEBUG3: search recovery module in Android.bp ==="
+          grep -r "cc_binary\|name.*recovery\|name.*twrp" bootable/recovery/Android.bp 2>/dev/null | head -20
+          echo "=== DEBUG3: all executables in out ==="
+          find out/ -type f -executable 2>/dev/null | grep -i "recovery\|twrp" | head -20
+          echo "=== DEBUG3: ninja targets ==="
+          find out/ -name "*.ninja" -exec grep -l "recovery" {} \; 2>/dev/null | head -5
+          echo "=== DEBUG3 END ==="
 
       - name: Check build output
         run: |
