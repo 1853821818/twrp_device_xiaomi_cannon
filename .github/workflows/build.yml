@@ -228,6 +228,14 @@ jobs:
           echo "$PRODUCT_PACKAGES" | tr ' ' '\n' | sort > out/product_packages.txt
           find out/ -name "recovery" -type f 2>/dev/null > out/recovery_binaries.txt || true
           echo "=== DEBUG11 END ==="
+          echo "=== DEBUG12: try mma to build recovery directly ==="
+          cd bootable/recovery
+          mma 2>&1 | tail -100 || echo "mma failed"
+          cd ~/twrp
+          echo "=== Check if recovery binary was built ==="
+          find out/ -name "recovery" -type f 2>/dev/null | head -10
+          ls -la out/target/product/$DEVICE/obj/EXECUTABLES/recovery_intermediates/ 2>/dev/null || echo "No recovery_intermediates dir"
+          echo "=== DEBUG12 END ==="
 
       - name: Check build output
         run: |
