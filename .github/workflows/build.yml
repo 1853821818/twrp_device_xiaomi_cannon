@@ -92,7 +92,9 @@ jobs:
           echo "=== DEBUG: PRODUCT_PACKAGES after lunch ==="
           echo "$PRODUCT_PACKAGES" | tr ' ' '\n' | sort | head -50
           echo "=== DEBUG: TWRP common.mk content ==="
-          cat vendor/twrp/config/common.mk | head -100
+          cat vendor/twrp/config/common.mk
+          echo "=== DEBUG: common.mk line count ==="
+          wc -l vendor/twrp/config/common.mk
           echo "=== DEBUG END ==="
           echo "=== Creating directories for recovery ramdisk ==="
           mkdir -p out/target/product/$DEVICE/root
