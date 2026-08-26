@@ -63,7 +63,8 @@ jobs:
           cat > .repo/local_manifests/cannon.xml << 'EOF'
           <?xml version="1.0" encoding="UTF-8"?>
           <manifest>
-            <project path="external/jemalloc" name="platform/external/jemalloc" remote="aosp" />
+            <remote name="github" fetch="https://github.com/" />
+            <project path="external/jemalloc" name="aosp-mirror/platform_external_jemalloc" remote="github" revision="master" />
           </manifest>
           EOF
           echo "=== Repo initialized ==="
