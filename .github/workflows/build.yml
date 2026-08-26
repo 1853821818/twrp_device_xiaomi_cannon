@@ -91,6 +91,17 @@ jobs:
           echo "=== Building recoveryimage ==="
           mka recoveryimage -j$(nproc --all)
           echo "=== Build complete ==="
+          echo "=== DEBUG: recovery/root contents ==="
+          ls -la out/target/product/$DEVICE/recovery/root/ 2>/dev/null || echo "No recovery/root dir"
+          echo "=== DEBUG: system/bin contents ==="
+          ls -la out/target/product/$DEVICE/recovery/root/system/bin/ 2>/dev/null || echo "No system/bin dir"
+          echo "=== DEBUG: sbin contents ==="
+          ls -la out/target/product/$DEVICE/recovery/root/sbin/ 2>/dev/null || echo "No sbin dir"
+          echo "=== DEBUG: find twrp/recovery binaries ==="
+          find out/target/product/$DEVICE/recovery/root/ -name "twrp" -o -name "recovery" -type f 2>/dev/null || echo "No twrp/recovery binary found"
+          echo "=== DEBUG: all executables in recovery/root ==="
+          find out/target/product/$DEVICE/recovery/root/ -type f -executable 2>/dev/null | head -50
+          echo "=== DEBUG END ==="
 
       - name: Check build output
         run: |
