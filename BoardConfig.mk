@@ -153,11 +153,10 @@ BOARD_USES_METADATA_PARTITION := true
 PLATFORM_SECURITY_PATCH := 2099-12-31
 VENDOR_SECURITY_PATCH := 2099-12-31
 TW_USE_FSCRYPT_POLICY := 1
-TW_CRYPTO_USE_SYSTEM_VOLD := true
-TW_CRYPTO_SYSTEM_VOLD_MOUNT_FLAGS := nosuid nodev noatime nodiratime
-TW_USE_FBE_METADATA_ENCRYPTION := true
-# Enable QCOM decryption module to trigger TWRP required modules (relink_binaries, twrp_ramdisk, etc.)
-BOARD_USES_QCOM_DECRYPTION := true
+TW_CRYPTO_FS_TYPE := "ext4"
+TW_CRYPTO_REAL_BLKDEV := "/dev/block/platform/bootdevice/by-name/userdata"
+TW_CRYPTO_MNT_POINT := "/data"
+TW_CRYPTO_FS_OPTIONS := "noatime,nosuid,nodev,noauto_da_alloc,discard,errors=panic"
 
 # fastbootd
 TARGET_USES_MKE2FS := true
