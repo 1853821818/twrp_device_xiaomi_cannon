@@ -89,7 +89,7 @@ jobs:
           mkdir -p out/target/product/$DEVICE/root
           mkdir -p out/target/product/$DEVICE/recovery/root/system/etc
           echo "=== Building recoveryimage ==="
-          mka recoveryimage -j$(nproc --all)
+          mka recoveryimage teamwin twrp_ramdisk relink_binaries relink_libraries -j$(nproc --all)
           echo "=== Build complete ==="
 
       - name: Check build output
