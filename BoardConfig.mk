@@ -156,6 +156,8 @@ TW_USE_FSCRYPT_POLICY := 1
 TW_CRYPTO_USE_SYSTEM_VOLD := true
 TW_CRYPTO_SYSTEM_VOLD_MOUNT_FLAGS := nosuid nodev noatime nodiratime
 TW_USE_FBE_METADATA_ENCRYPTION := true
+# Enable QCOM decryption module to trigger TWRP required modules (relink_binaries, twrp_ramdisk, etc.)
+BOARD_USES_QCOM_DECRYPTION := true
 
 # fastbootd
 TARGET_USES_MKE2FS := true
