@@ -190,6 +190,17 @@ jobs:
           echo "--- Check if recovery binary exists after direct build ---"
           find out/ -name "recovery" -type f -executable 2>/dev/null | head -10
           echo "=== DEBUG7 END ==="
+          echo "=== DEBUG8: check TWRP common.mk for recovery package ==="
+          grep -n "recovery\|PRODUCT_PACKAGES" vendor/twrp/config/common.mk 2>/dev/null | head -30
+          echo "=== DEBUG8: check build/make for recoveryimage build process ==="
+          grep -rn "recovery.*binary\|recovery.*system/bin\|PRODUCT_PACKAGES.*recovery" build/make/core/Makefile 2>/dev/null | head -20
+          echo "=== DEBUG8: check if recovery is in any product makefile ==="
+          grep -rn "PRODUCT_PACKAGES.*recovery\|recovery.*PRODUCT_PACKAGES" build/target/product/ vendor/twrp/config/ 2>/dev/null | head -20
+          echo "=== DEBUG8: full recovery/root directory tree ==="
+          find out/target/product/$DEVICE/recovery/root/ -type f 2>/dev/null | sort
+          echo "=== DEBUG8: check recovery module in all Android.mk/bp ==="
+          grep -rn "LOCAL_MODULE := recovery\|name.*\"recovery\"" bootable/recovery/ 2>/dev/null | head -20
+          echo "=== DEBUG8 END ==="
 
       - name: Check build output
         run: |
