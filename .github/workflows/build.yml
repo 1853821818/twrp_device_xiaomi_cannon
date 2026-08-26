@@ -201,6 +201,19 @@ jobs:
           echo "=== DEBUG8: check recovery module in all Android.mk/bp ==="
           grep -rn "LOCAL_MODULE := recovery\|name.*\"recovery\"" bootable/recovery/ 2>/dev/null | head -20
           echo "=== DEBUG8 END ==="
+          echo "=== DEBUG9: list all modules in bootable/recovery ==="
+          grep -rn "LOCAL_MODULE\s*:=\|name:\s*\"" bootable/recovery/ --include="*.mk" --include="*.bp" 2>/dev/null | grep -i "recovery\|twrp\|teamwin" | head -30
+          echo "=== DEBUG9: check if twrp or teamwin binary exists ==="
+          find out/ -name "twrp" -o -name "teamwin" -type f 2>/dev/null | head -10
+          echo "=== DEBUG9: check all executables in out/target/product ==="
+          find out/target/product/$DEVICE/ -type f -executable 2>/dev/null | head -30
+          echo "=== DEBUG9: check recovery/root/sbin ==="
+          ls -la out/target/product/$DEVICE/recovery/root/sbin/ 2>/dev/null || echo "No sbin dir"
+          echo "=== DEBUG9: check recovery/root/system/bin ==="
+          ls -la out/target/product/$DEVICE/recovery/root/system/bin/ 2>/dev/null || echo "No system/bin dir"
+          echo "=== DEBUG9: full Android.mk around line 100 ==="
+          sed -n '95,130p' bootable/recovery/Android.mk
+          echo "=== DEBUG9 END ==="
 
       - name: Check build output
         run: |
