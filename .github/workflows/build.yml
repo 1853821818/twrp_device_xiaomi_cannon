@@ -175,6 +175,21 @@ jobs:
           echo "---"
           sed -n '635,650p' bootable/recovery/Android.mk
           echo "=== DEBUG6 END ==="
+          echo "=== DEBUG7: full recovery module definition ==="
+          grep -n "LOCAL_MODULE := recovery" bootable/recovery/Android.mk
+          echo "--- Lines 90-120 ---"
+          sed -n '90,120p' bootable/recovery/Android.mk
+          echo "--- Lines 630-660 ---"
+          sed -n '630,660p' bootable/recovery/Android.mk
+          echo "--- Check if recovery is in PRODUCT_PACKAGES ---"
+          grep -rn "recovery" device/xiaomi/cannon/*.mk 2>/dev/null || echo "No recovery in device mk"
+          echo "--- Check build variables ---"
+          grep -rn "BOARD_INCLUDE_RECOVERY_DTBO\|BOARD_USES_RECOVERY_AS_BOOT\|TARGET_NO_RECOVERY\|BOARD_HAS_NO_RECOVERY" device/xiaomi/cannon/*.mk build/make/core/*.mk 2>/dev/null | head -20
+          echo "--- Try building recovery module directly ---"
+          mka recovery -j$(nproc --all) 2>&1 | tail -30 || echo "mka recovery failed"
+          echo "--- Check if recovery binary exists after direct build ---"
+          find out/ -name "recovery" -type f -executable 2>/dev/null | head -10
+          echo "=== DEBUG7 END ==="
 
       - name: Check build output
         run: |
