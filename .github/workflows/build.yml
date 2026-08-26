@@ -223,6 +223,11 @@ jobs:
           echo "=== DEBUG10: check recovery_intermediates after mka recovery ==="
           ls -la out/target/product/$DEVICE/obj/EXECUTABLES/recovery_intermediates/ 2>/dev/null || echo "No recovery_intermediates dir"
           echo "=== DEBUG10 END ==="
+          echo "=== DEBUG11: save Android.mk and build info ==="
+          cp bootable/recovery/Android.mk out/recovery_Android.mk
+          echo "$PRODUCT_PACKAGES" | tr ' ' '\n' | sort > out/product_packages.txt
+          find out/ -name "recovery" -type f 2>/dev/null > out/recovery_binaries.txt || true
+          echo "=== DEBUG11 END ==="
 
       - name: Check build output
         run: |
@@ -244,6 +249,16 @@ jobs:
           name: twrp-${{ env.DEVICE }}-${{ env.MANIFEST_BRANCH }}
           path: ~/twrp/out/target/product/${{ env.DEVICE }}/recovery.img
           retention-days: 30
+
+      - name: Upload debug files
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-files-${{ env.DEVICE }}
+          path: |
+            ~/twrp/out/recovery_Android.mk
+            ~/twrp/out/product_packages.txt
+            ~/twrp/out/recovery_binaries.txt
+          retention-days: 7
 
       - name: Upload build logs (on failure)
         if: failure()
