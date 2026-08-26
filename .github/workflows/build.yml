@@ -134,6 +134,18 @@ jobs:
           echo "=== DEBUG4: build recovery module directly ==="
           mka recovery 2>&1 | tail -20 || echo "recovery module build failed or not found"
           echo "=== DEBUG4 END ==="
+          echo "=== DEBUG5: check if recovery binary exists ==="
+          find out/ -name "recovery" -type f 2>/dev/null | head -10
+          find out/ -name "recovery*" -type f 2>/dev/null | head -20
+          echo "=== DEBUG5: check Android.mk recovery module context ==="
+          sed -n '90,110p' bootable/recovery/Android.mk
+          echo "---"
+          sed -n '640,660p' bootable/recovery/Android.mk
+          echo "=== DEBUG5: check if TW_BUILD_TWRP or similar flags ==="
+          grep -n "TW_BUILD\|TWRP_BUILD\|ifeq.*recovery\|ifndef.*recovery" bootable/recovery/Android.mk | head -20
+          echo "=== DEBUG5: list all modules in PRODUCT_PACKAGES ==="
+          echo "$PRODUCT_PACKAGES" | tr ' ' '\n' | sort | head -50
+          echo "=== DEBUG5 END ==="
 
       - name: Check build output
         run: |
