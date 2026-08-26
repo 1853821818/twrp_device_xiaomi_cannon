@@ -146,6 +146,23 @@ jobs:
           echo "=== DEBUG5: list all modules in PRODUCT_PACKAGES ==="
           echo "$PRODUCT_PACKAGES" | tr ' ' '\n' | sort | head -50
           echo "=== DEBUG5 END ==="
+          echo "=== FIX: find recovery binary and copy to ramdisk ==="
+          RECOVERY_BIN=$(find out/target/product/$DEVICE/obj/EXECUTABLES/recovery_intermediates/ -name "recovery" -type f 2>/dev/null | head -1)
+          echo "Found recovery binary: $RECOVERY_BIN"
+          if [ -n "$RECOVERY_BIN" ]; then
+            echo "Copying recovery to system/bin/"
+            mkdir -p out/target/product/$DEVICE/recovery/root/system/bin
+            cp -f "$RECOVERY_BIN" out/target/product/$DEVICE/recovery/root/system/bin/recovery
+            chmod 755 out/target/product/$DEVICE/recovery/root/system/bin/recovery
+            ls -la out/target/product/$DEVICE/recovery/root/system/bin/
+            echo "Rebuilding recovery.img with recovery binary"
+            mka recoveryimage -j$(nproc --all)
+            echo "Recovery.img rebuilt"
+          else
+            echo "WARNING: recovery binary not found in intermediates"
+            find out/ -name "recovery" -type f 2>/dev/null | head -10
+          fi
+          echo "=== FIX END ==="
 
       - name: Check build output
         run: |
