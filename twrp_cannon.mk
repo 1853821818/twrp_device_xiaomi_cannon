@@ -8,6 +8,3 @@ PRODUCT_MANUFACTURER := xiaomi
 PRODUCT_RELEASE_NAME := cannon
 
 PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
-
-# Force include recovery module
-PRODUCT_PACKAGES += recovery
