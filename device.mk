@@ -18,11 +18,6 @@ PRODUCT_BUILD_SUPER_PARTITION := false
 PRODUCT_PACKAGES += \
     fastbootd
 
-# Recovery files - copy to recovery ramdisk root
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/recovery/init.recovery.mt6853.rc:recovery/root/init.recovery.mt6853.rc \
-    $(LOCAL_PATH)/recovery/fstab.mt6853:recovery/root/system/etc/recovery.fstab
-
 # USB
 PRODUCT_PACKAGES += \
     android.hardware.usb@1.0-service.basic
@@ -31,3 +26,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.health@2.1-impl \
     android.hardware.health@2.1-service
+
+# Properties
+TARGET_SYSTEM_PROP += $(LOCAL_PATH)/system.prop
