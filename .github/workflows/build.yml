@@ -163,6 +163,18 @@ jobs:
             find out/ -name "recovery" -type f 2>/dev/null | head -10
           fi
           echo "=== FIX END ==="
+          echo "=== DEBUG6: inspect recovery_intermediates ==="
+          ls -la out/target/product/$DEVICE/obj/EXECUTABLES/recovery_intermediates/ 2>/dev/null || echo "No recovery_intermediates dir"
+          echo "=== DEBUG6: find any recovery binary anywhere ==="
+          find out/ -name "recovery" -type f -executable 2>/dev/null | head -20
+          find out/ -name "recovery*" -type f -size +1M 2>/dev/null | head -20
+          echo "=== DEBUG6: check if recovery module was built ==="
+          find out/ -path "*recovery*" -name "*.o" 2>/dev/null | head -10
+          echo "=== DEBUG6: full recovery module in Android.mk ==="
+          sed -n '95,115p' bootable/recovery/Android.mk
+          echo "---"
+          sed -n '635,650p' bootable/recovery/Android.mk
+          echo "=== DEBUG6 END ==="
 
       - name: Check build output
         run: |
