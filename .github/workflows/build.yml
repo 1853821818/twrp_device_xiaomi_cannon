@@ -214,6 +214,15 @@ jobs:
           echo "=== DEBUG9: full Android.mk around line 100 ==="
           sed -n '95,130p' bootable/recovery/Android.mk
           echo "=== DEBUG9 END ==="
+          echo "=== DEBUG10: full Android.mk recovery module definition ==="
+          cat bootable/recovery/Android.mk | head -200
+          echo "=== DEBUG10: check if recovery is in PRODUCT_PACKAGES after lunch ==="
+          echo "$PRODUCT_PACKAGES" | tr ' ' '\n' | grep -i "recovery\|twrp\|teamwin" || echo "No recovery/twrp in PRODUCT_PACKAGES"
+          echo "=== DEBUG10: try mka recovery with verbose output ==="
+          mka recovery 2>&1 | tail -50 || echo "mka recovery failed"
+          echo "=== DEBUG10: check recovery_intermediates after mka recovery ==="
+          ls -la out/target/product/$DEVICE/obj/EXECUTABLES/recovery_intermediates/ 2>/dev/null || echo "No recovery_intermediates dir"
+          echo "=== DEBUG10 END ==="
 
       - name: Check build output
         run: |
