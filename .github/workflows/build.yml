@@ -130,9 +130,9 @@ jobs:
           echo "=== DEBUG4: full Android.bp ==="
           cat bootable/recovery/Android.bp 2>/dev/null
           echo "=== DEBUG4: PRODUCT_PACKAGES ==="
-          echo "$PRODUCT_PACKAGES" | tr ' ' '\n' | grep -i "recovery\|twrp"
+          echo "$PRODUCT_PACKAGES" | tr ' ' '\n' | grep -i "recovery\|twrp" || echo "No recovery/twrp in PRODUCT_PACKAGES"
           echo "=== DEBUG4: build recovery module directly ==="
-          mka recovery 2>&1 | tail -20 || echo "recovery module not found"
+          mka recovery 2>&1 | tail -20 || echo "recovery module build failed or not found"
           echo "=== DEBUG4 END ==="
 
       - name: Check build output
