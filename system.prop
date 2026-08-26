@@ -1,0 +1,7 @@
+# system.prop for Redmi Note 9 5G (cannon)
+ro.product.model=Redmi Note 9 5G
+ro.product.device=cannon
+ro.product.brand=xiaomi
+ro.product.manufacturer=xiaomi
+ro.mediatek.platform=MT6853
+ro.board.platform=mt6853
