@@ -91,6 +91,13 @@ jobs:
           echo "=== Checking for libjemalloc5 ==="
           grep -r "libjemalloc5" external/jemalloc/ 2>/dev/null | head -10 || echo "libjemalloc5 not found"
           echo "=== jemalloc cloned ==="
+          echo "=== Fix libc jemalloc5 dependency ==="
+          echo "=== Checking libc Android.bp for jemalloc5 ==="
+          grep -n "jemalloc5" bionic/libc/Android.bp 2>/dev/null | head -20 || echo "jemalloc5 not found in libc Android.bp"
+          echo "=== Removing libjemalloc5 dependency from libc ==="
+          sed -i 's/libjemalloc5/libjemalloc/g' bionic/libc/Android.bp
+          grep -n "jemalloc" bionic/libc/Android.bp 2>/dev/null | head -20 || echo "jemalloc not found after fix"
+          echo "=== libc jemalloc dependency fixed ==="
 
       - name: Copy device tree
         run: |
