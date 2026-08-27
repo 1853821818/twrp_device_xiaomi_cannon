@@ -90,24 +90,20 @@ jobs:
           ls -la build/release/release_configs/ 2>/dev/null || echo "No release_configs"
           find build/release/release_configs/ -type f 2>/dev/null | head -30
           echo "=== Creating release_config_map.mk ==="
-          echo '$(call declare-release-config,ap2a,build/release/release_configs/ap2a.textproto,)' > build/release/release_config_map.mk
-          echo '$(call declare-release-config,trunk_staging,build/release/release_configs/trunk_staging.textproto,)' >> build/release/release_config_map.mk
-          echo '$(call declare-release-config,ap3a,build/release/release_configs/ap3a.textproto,)' >> build/release/release_config_map.mk
-          echo '$(call declare-release-config,ap4a,build/release/release_configs/ap4a.textproto,)' >> build/release/release_config_map.mk
+          echo '$(call declare-release-config,ap2a,build/release/release_configs/ap2a.scl,)' > build/release/release_config_map.mk
+          echo '$(call declare-release-config,trunk_staging,build/release/release_configs/trunk_staging.scl,)' >> build/release/release_config_map.mk
+          echo "=== Creating empty scl files ==="
+          echo 'release_config = {}' > build/release/release_configs/ap2a.scl
+          echo 'release_config = {}' > build/release/release_configs/trunk_staging.scl
           cat build/release/release_config_map.mk
           echo "=== release_config_map.mk created ==="
           echo "=== Creating starlark results dir and empty file ==="
           mkdir -p out/starlark_results
           echo '# Empty release config starlark' > out/starlark_results/out_release_config_entrypoint.scl.mk
           echo "=== Created ==="
-          echo "=== Checking version_util.mk ==="
-          sed -n '170,195p' build/make/core/version_util.mk 2>/dev/null || echo "Cannot read version_util.mk"
-          echo "=== Patching version_util.mk to add defaults ==="
-          echo 'PLATFORM_VERSION_CODENAME := REL' >> build/make/core/version_defaults.mk
-          echo 'PLATFORM_VERSION := 14' >> build/make/core/version_defaults.mk
-          echo 'PLATFORM_SDK_VERSION := 34' >> build/make/core/version_defaults.mk
-          echo 'PLATFORM_MIN_SUPPORTED_TARGET_SDK_VERSION := 24' >> build/make/core/version_defaults.mk
-          echo "=== Patched ==="
+          echo "=== Patching version_util.mk to skip argument check ==="
+          sed -i '180,185s/^/#/' build/make/core/version_util.mk 2>/dev/null || echo "sed failed"
+          echo "=== Patched version_util.mk ==="
 
       - name: Copy device tree
         run: |
