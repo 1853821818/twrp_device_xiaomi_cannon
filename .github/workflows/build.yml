@@ -64,27 +64,27 @@ jobs:
         run: |
           export PATH=~/bin:$PATH
           cd ~/twrp
-          echo "=== Debug: full superproject line ==="
-          grep -i superproject .repo/manifest.xml
-          echo "=== Debug: removing superproject from manifest ==="
-          sed -i '/superproject/d' .repo/manifests/default.xml
-          grep -i superproject .repo/manifests/default.xml || echo "superproject removed"
-          echo "=== Debug: re-initializing repo without superproject ==="
-          repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b $MANIFEST_BRANCH
-          echo "=== Debug: checking superproject after re-init ==="
-          grep -i superproject .repo/manifest.xml || echo "superproject not found"
-          echo "=== Creating local manifest for jemalloc ==="
-          mkdir -p .repo/local_manifests
-          cat > .repo/local_manifests/fix_jemalloc.xml << 'EOF'
-          <?xml version="1.0" encoding="UTF-8"?>
-          <manifest>
-            <project path="external/jemalloc" name="xin3liang/platform_external_jemalloc" remote="github" revision="master" clone-depth="1" />
-          </manifest>
-          EOF
-          echo "=== Syncing source ==="
-          repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
+          echo "=== Creating fake jemalloc repo to prevent sync ==="
+          mkdir -p external/jemalloc
+          cd external/jemalloc
+          git init
+          git config user.email "fake@fake.com"
+          git config user.name "fake"
+          echo "fake" > README.md
+          git add README.md
+          git commit -m "fake jemalloc"
+          git remote add aosp https://android.googlesource.com/platform/external/jemalloc
+          cd ~/twrp
+          echo "=== Fake jemalloc created ==="
+          ls -la external/jemalloc/
+          echo "=== Syncing source (excluding jemalloc) ==="
+          repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --current-branch
           echo "=== Source synced ==="
-          ls -la external/jemalloc/ || echo "jemalloc not found after sync"
+          echo "=== Replacing fake jemalloc with real one ==="
+          rm -rf external/jemalloc
+          git clone --depth=1 https://github.com/xin3liang/platform_external_jemalloc.git external/jemalloc
+          ls -la external/jemalloc/
+          echo "=== jemalloc replaced ==="
 
       - name: Copy device tree
         run: |
