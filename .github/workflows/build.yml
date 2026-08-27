@@ -78,8 +78,8 @@ jobs:
         run: |
           export PATH=~/bin:$PATH
           cd ~/twrp
-          echo "=== Syncing source (this may take a while) ==="
-          repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
+          echo "=== Syncing source with --no-manifest-update (this may take a while) ==="
+          repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --no-manifest-update
           echo "=== Source synced ==="
           echo "=== Manually cloning jemalloc ==="
           git clone --depth=1 https://github.com/xin3liang/platform_external_jemalloc.git external/jemalloc
