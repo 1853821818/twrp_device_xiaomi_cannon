@@ -27,15 +27,15 @@ OUT_DIR=out
 ============================================
 === Lunch exit code: 0 ===
 === Building recoveryimage ===
-14:58:25 ************************************************************
-14:58:25 You are building on a machine with 15.6GB of RAM
-14:58:25 
-14:58:25 The minimum required amount of free memory is around 16GB,
-14:58:25 and even with that, some configurations may not work.
-14:58:25 
-14:58:25 If you run into segfaults or other errors, try reducing your
-14:58:25 -j value.
-14:58:25 ************************************************************
+15:09:48 ************************************************************
+15:09:48 You are building on a machine with 15.6GB of RAM
+15:09:48 
+15:09:48 The minimum required amount of free memory is around 16GB,
+15:09:48 and even with that, some configurations may not work.
+15:09:48 
+15:09:48 If you run into segfaults or other errors, try reducing your
+15:09:48 -j value.
+15:09:48 ************************************************************
 [1mbuild/make/core/soong_config.mk:194: [35mwarning: [0m[1mBOARD_PLAT_PUBLIC_SEPOLICY_DIR has been deprecated. Use SYSTEM_EXT_PUBLIC_SEPOLICY_DIRS instead.[0m
 [1mbuild/make/core/soong_config.mk:195: [35mwarning: [0m[1mBOARD_PLAT_PRIVATE_SEPOLICY_DIR has been deprecated. Use SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS instead.[0m
 ============================================
@@ -63,115 +63,115 @@ OUT_DIR=out
 ============================================
 [  0% 1/241] compile out/soong/.bootstrap/blueprint-deptools/pkg/github.com/google/blueprint/deptools.a
 [  0% 2/241] compile out/soong/.bootstrap/blueprint-parser/pkg/github.com/google/blueprint/parser.a
-[  1% 3/241] compile out/soong/.bootstrap/blueprint-parser/test/github.com/google/blueprint/parser.a
-[  1% 4/241] compile out/soong/.bootstrap/blueprint-pathtools/test/github.com/google/blueprint/pathtools.a
+[  1% 3/241] compile out/soong/.bootstrap/blueprint-pathtools/test/github.com/google/blueprint/pathtools.a
+[  1% 4/241] compile out/soong/.bootstrap/blueprint-parser/test/github.com/google/blueprint/parser.a
 [  2% 5/241] compile out/soong/.bootstrap/blueprint-pathtools/pkg/github.com/google/blueprint/pathtools.a
 [  2% 6/241] compile out/soong/.bootstrap/blueprint-proptools/pkg/github.com/google/blueprint/proptools.a
 [  2% 7/241] compile out/soong/.bootstrap/golang-protobuf-proto/test/github.com/golang/protobuf/proto.a
 [  3% 8/241] compile out/soong/.bootstrap/blueprint-proptools/test/github.com/google/blueprint/proptools.a
 [  3% 9/241] compile out/soong/.bootstrap/gotestmain/obj/gotestmain.a
-[  4% 10/241] compile out/soong/.bootstrap/golang-protobuf-proto/pkg/github.com/golang/protobuf/proto.a
-[  4% 11/241] compile out/soong/.bootstrap/gotestrunner/obj/gotestrunner.a
-[  4% 12/241] link out/soong/.bootstrap/gotestmain/obj/a.out
-[  5% 13/241] cp out/soong/.bootstrap/bin/gotestmain
-[  5% 14/241] gotestmain out/soong/.bootstrap/aidl-soong-rules/test/test.go
+[  4% 10/241] link out/soong/.bootstrap/gotestmain/obj/a.out
+[  4% 11/241] cp out/soong/.bootstrap/bin/gotestmain
+[  4% 12/241] compile out/soong/.bootstrap/golang-protobuf-proto/pkg/github.com/golang/protobuf/proto.a
+[  5% 13/241] gotestmain out/soong/.bootstrap/aidl-soong-rules/test/test.go
+[  5% 14/241] gotestmain out/soong/.bootstrap/blueprint-bootstrap-bpdoc/test/test.go
 [  6% 15/241] gotestmain out/soong/.bootstrap/blueprint/test/test.go
-[  6% 16/241] gotestmain out/soong/.bootstrap/blueprint-bootstrap-bpdoc/test/test.go
-[  7% 17/241] gotestmain out/soong/.bootstrap/blueprint-parser/test/test.go
+[  6% 16/241] gotestmain out/soong/.bootstrap/blueprint-parser/test/test.go
+[  7% 17/241] gotestmain out/soong/.bootstrap/blueprint-pathtools/test/test.go
 [  7% 18/241] compile out/soong/.bootstrap/blueprint-parser/test/test.a
-[  7% 19/241] link out/soong/.bootstrap/gotestrunner/obj/a.out
-[  8% 20/241] gotestmain out/soong/.bootstrap/blueprint-pathtools/test/test.go
-[  8% 21/241] compile out/soong/.bootstrap/blueprint/pkg/github.com/google/blueprint.a
-[  9% 22/241] compile out/soong/.bootstrap/blueprint-pathtools/test/test.a
-[  9% 23/241] compile out/soong/.bootstrap/blueprint/test/github.com/google/blueprint.a
-[  9% 24/241] compile out/soong/.bootstrap/blueprint/test/test.a
-[ 10% 25/241] link out/soong/.bootstrap/blueprint-parser/test/test
-[ 10% 26/241] compile out/soong/.bootstrap/blueprint-bootstrap-bpdoc/pkg/github.com/google/blueprint/bootstrap/bpdoc.a
-[ 11% 27/241] compile out/soong/.bootstrap/blueprint-bootstrap-bpdoc/test/github.com/google/blueprint/bootstrap/bpdoc.a
-[ 11% 28/241] compile out/soong/.bootstrap/blueprint-bootstrap-bpdoc/test/test.a
-[ 12% 29/241] compile out/soong/.bootstrap/blueprint-bootstrap/pkg/github.com/google/blueprint/bootstrap.a
-[ 12% 30/241] gotestmain out/soong/.bootstrap/blueprint-proptools/test/test.go
-[ 12% 31/241] link out/soong/.bootstrap/blueprint-pathtools/test/test
-[ 13% 32/241] gotestmain out/soong/.bootstrap/gki-soong-rules/test/test.go
-[ 13% 33/241] gotestmain out/soong/.bootstrap/golang-protobuf-proto/test/test.go
-[ 14% 34/241] compile out/soong/.bootstrap/blueprint-proptools/test/test.a
-[ 14% 35/241] compile out/soong/.bootstrap/golang-protobuf-proto/test/test.a
-[ 14% 36/241] link out/soong/.bootstrap/blueprint/test/test
-[ 15% 37/241] cp out/soong/.bootstrap/bin/gotestrunner
-[ 15% 38/241] test github.com/google/blueprint
-[ 16% 39/241] test github.com/google/blueprint/parser
-[ 16% 40/241] link out/soong/.bootstrap/blueprint-bootstrap-bpdoc/test/test
-[ 17% 41/241] test github.com/google/blueprint/pathtools
-[ 17% 42/241] test github.com/google/blueprint/bootstrap/bpdoc
-[ 17% 43/241] compile out/soong/.bootstrap/loadplugins/obj/loadplugins.a
-[ 18% 44/241] compile out/soong/.bootstrap/sbox_proto/pkg/android/soong/cmd/sbox/sbox_proto.a
-[ 18% 45/241] compile out/soong/.bootstrap/soong/pkg/android/soong.a
-[ 19% 46/241] link out/soong/.bootstrap/golang-protobuf-proto/test/test
-[ 19% 47/241] test github.com/golang/protobuf/proto
-[ 19% 48/241] gotestmain out/soong/.bootstrap/soong-android/test/test.go
-[ 20% 49/241] gotestmain out/soong/.bootstrap/soong-android-soongconfig/test/test.go
-[ 20% 50/241] link out/soong/.bootstrap/blueprint-proptools/test/test
-[ 21% 51/241] test github.com/google/blueprint/proptools
-[ 21% 52/241] gotestmain out/soong/.bootstrap/soong-apex/test/test.go
-[ 21% 53/241] link out/soong/.bootstrap/loadplugins/obj/a.out
-[ 22% 54/241] compile out/soong/.bootstrap/soong-android-soongconfig/test/android/soong/android/soongconfig.a
-[ 22% 55/241] cp out/soong/.bootstrap/bin/loadplugins
-[ 23% 56/241] compile out/soong/.bootstrap/soong-android-soongconfig/pkg/android/soong/android/soongconfig.a
+[  7% 19/241] compile out/soong/.bootstrap/blueprint-pathtools/test/test.a
+[  8% 20/241] compile out/soong/.bootstrap/blueprint/test/github.com/google/blueprint.a
+[  8% 21/241] compile out/soong/.bootstrap/blueprint/test/test.a
+[  9% 22/241] compile out/soong/.bootstrap/blueprint/pkg/github.com/google/blueprint.a
+[  9% 23/241] link out/soong/.bootstrap/blueprint-parser/test/test
+[  9% 24/241] link out/soong/.bootstrap/blueprint-pathtools/test/test
+[ 10% 25/241] gotestmain out/soong/.bootstrap/blueprint-proptools/test/test.go
+[ 10% 26/241] compile out/soong/.bootstrap/blueprint-bootstrap-bpdoc/test/github.com/google/blueprint/bootstrap/bpdoc.a
+[ 11% 27/241] compile out/soong/.bootstrap/blueprint-proptools/test/test.a
+[ 11% 28/241] compile out/soong/.bootstrap/blueprint-bootstrap-bpdoc/pkg/github.com/google/blueprint/bootstrap/bpdoc.a
+[ 12% 29/241] compile out/soong/.bootstrap/blueprint-bootstrap-bpdoc/test/test.a
+[ 12% 30/241] link out/soong/.bootstrap/blueprint/test/test
+[ 12% 31/241] gotestmain out/soong/.bootstrap/gki-soong-rules/test/test.go
+[ 13% 32/241] gotestmain out/soong/.bootstrap/golang-protobuf-proto/test/test.go
+[ 13% 33/241] compile out/soong/.bootstrap/golang-protobuf-proto/test/test.a
+[ 14% 34/241] compile out/soong/.bootstrap/blueprint-bootstrap/pkg/github.com/google/blueprint/bootstrap.a
+[ 14% 35/241] compile out/soong/.bootstrap/gotestrunner/obj/gotestrunner.a
+[ 14% 36/241] link out/soong/.bootstrap/blueprint-proptools/test/test
+[ 15% 37/241] compile out/soong/.bootstrap/loadplugins/obj/loadplugins.a
+[ 15% 38/241] link out/soong/.bootstrap/golang-protobuf-proto/test/test
+[ 16% 39/241] link out/soong/.bootstrap/blueprint-bootstrap-bpdoc/test/test
+[ 16% 40/241] compile out/soong/.bootstrap/soong/pkg/android/soong.a
+[ 17% 41/241] compile out/soong/.bootstrap/sbox_proto/pkg/android/soong/cmd/sbox/sbox_proto.a
+[ 17% 42/241] link out/soong/.bootstrap/gotestrunner/obj/a.out
+[ 17% 43/241] cp out/soong/.bootstrap/bin/gotestrunner
+[ 18% 44/241] gotestmain out/soong/.bootstrap/soong-android/test/test.go
+[ 18% 45/241] test github.com/google/blueprint
+[ 19% 46/241] test github.com/google/blueprint/bootstrap/bpdoc
+[ 19% 47/241] test github.com/google/blueprint/parser
+[ 19% 48/241] test github.com/google/blueprint/proptools
+[ 20% 49/241] test github.com/golang/protobuf/proto
+[ 20% 50/241] gotestmain out/soong/.bootstrap/soong-android-soongconfig/test/test.go
+[ 21% 51/241] compile out/soong/.bootstrap/soong-android-soongconfig/test/android/soong/android/soongconfig.a
+[ 21% 52/241] test github.com/google/blueprint/pathtools
+[ 21% 53/241] compile out/soong/.bootstrap/soong-android-soongconfig/test/test.a
+[ 22% 54/241] gotestmain out/soong/.bootstrap/soong-apex/test/test.go
+[ 22% 55/241] compile out/soong/.bootstrap/soong-android-soongconfig/pkg/android/soong/android/soongconfig.a
+[ 23% 56/241] link out/soong/.bootstrap/loadplugins/obj/a.out
 [ 23% 57/241] gotestmain out/soong/.bootstrap/soong-bazel/test/test.go
-[ 24% 58/241] gotestmain out/soong/.bootstrap/soong-bp2build/test/test.go
-[ 24% 59/241] compile out/soong/.bootstrap/soong-android-soongconfig/test/test.a
+[ 24% 58/241] cp out/soong/.bootstrap/bin/loadplugins
+[ 24% 59/241] gotestmain out/soong/.bootstrap/soong-bp2build/test/test.go
 [ 24% 60/241] gotestmain out/soong/.bootstrap/soong-bpf/test/test.go
-[ 25% 61/241] compile out/soong/.bootstrap/soong-bazel/test/android/soong/bazel.a
-[ 25% 62/241] gotestmain out/soong/.bootstrap/soong-cc/test/test.go
-[ 26% 63/241] compile out/soong/.bootstrap/soong-bazel/pkg/android/soong/bazel.a
-[ 26% 64/241] gotestmain out/soong/.bootstrap/soong-cc-config/test/test.go
-[ 26% 65/241] compile out/soong/.bootstrap/soong-bazel/test/test.a
-[ 27% 66/241] gotestmain out/soong/.bootstrap/soong-cquery/test/test.go
-[ 27% 67/241] compile out/soong/.bootstrap/soong-cquery/pkg/android/soong/bazel/cquery.a
-[ 28% 68/241] compile out/soong/.bootstrap/soong-cquery/test/android/soong/bazel/cquery.a
+[ 25% 61/241] gotestmain out/soong/.bootstrap/soong-cc/test/test.go
+[ 25% 62/241] gotestmain out/soong/.bootstrap/soong-cc-config/test/test.go
+[ 26% 63/241] compile out/soong/.bootstrap/soong-bazel/test/android/soong/bazel.a
+[ 26% 64/241] compile out/soong/.bootstrap/soong-bazel/pkg/android/soong/bazel.a
+[ 26% 65/241] gotestmain out/soong/.bootstrap/soong-cquery/test/test.go
+[ 27% 66/241] compile out/soong/.bootstrap/soong-cquery/test/android/soong/bazel/cquery.a
+[ 27% 67/241] compile out/soong/.bootstrap/soong-bazel/test/test.a
+[ 28% 68/241] compile out/soong/.bootstrap/soong-cquery/pkg/android/soong/bazel/cquery.a
 [ 28% 69/241] gotestmain out/soong/.bootstrap/soong-dexpreopt/test/test.go
-[ 29% 70/241] gotestmain out/soong/.bootstrap/soong-etc/test/test.go
-[ 29% 71/241] gotestmain out/soong/.bootstrap/soong-filesystem/test/test.go
-[ 29% 72/241] compile out/soong/.bootstrap/soong-cquery/test/test.a
+[ 29% 70/241] compile out/soong/.bootstrap/soong-cquery/test/test.a
+[ 29% 71/241] gotestmain out/soong/.bootstrap/soong-etc/test/test.go
+[ 29% 72/241] gotestmain out/soong/.bootstrap/soong-filesystem/test/test.go
 [ 30% 73/241] gotestmain out/soong/.bootstrap/soong-genrule/test/test.go
 [ 30% 74/241] gotestmain out/soong/.bootstrap/soong-java/test/test.go
 [ 31% 75/241] gotestmain out/soong/.bootstrap/soong-kernel/test/test.go
-[ 31% 76/241] gotestmain out/soong/.bootstrap/soong-linkerconfig/test/test.go
-[ 31% 77/241] gotestmain out/soong/.bootstrap/soong-python/test/test.go
-[ 32% 78/241] link out/soong/.bootstrap/soong-android-soongconfig/test/test
-[ 32% 79/241] compile out/soong/.bootstrap/soong-remoteexec/test/android/soong/remoteexec.a
+[ 31% 76/241] link out/soong/.bootstrap/soong-android-soongconfig/test/test
+[ 31% 77/241] gotestmain out/soong/.bootstrap/soong-linkerconfig/test/test.go
+[ 32% 78/241] test android/soong/android/soongconfig
+[ 32% 79/241] gotestmain out/soong/.bootstrap/soong-python/test/test.go
 [ 33% 80/241] gotestmain out/soong/.bootstrap/soong-remoteexec/test/test.go
-[ 33% 81/241] test android/soong/android/soongconfig
-[ 34% 82/241] link out/soong/.bootstrap/soong-bazel/test/test
-[ 34% 83/241] test android/soong/bazel
-[ 34% 84/241] compile out/soong/.bootstrap/soong-remoteexec/pkg/android/soong/remoteexec.a
-[ 35% 85/241] compile out/soong/.bootstrap/soong-remoteexec/test/test.a
-[ 35% 86/241] gotestmain out/soong/.bootstrap/soong-response/test/test.go
-[ 36% 87/241] compile out/soong/.bootstrap/soong-response/test/android/soong/response.a
-[ 36% 88/241] compile out/soong/.bootstrap/soong-response/pkg/android/soong/response.a
-[ 36% 89/241] link out/soong/.bootstrap/soong-cquery/test/test
-[ 37% 90/241] test android/soong/bazel/cquery
+[ 33% 81/241] compile out/soong/.bootstrap/soong-remoteexec/pkg/android/soong/remoteexec.a
+[ 34% 82/241] compile out/soong/.bootstrap/soong-remoteexec/test/android/soong/remoteexec.a
+[ 34% 83/241] compile out/soong/.bootstrap/soong-response/test/android/soong/response.a
+[ 34% 84/241] compile out/soong/.bootstrap/soong-remoteexec/test/test.a
+[ 35% 85/241] gotestmain out/soong/.bootstrap/soong-response/test/test.go
+[ 35% 86/241] link out/soong/.bootstrap/soong-bazel/test/test
+[ 36% 87/241] test android/soong/bazel
+[ 36% 88/241] compile out/soong/.bootstrap/soong-response/test/test.a
+[ 36% 89/241] compile out/soong/.bootstrap/soong-response/pkg/android/soong/response.a
+[ 37% 90/241] link out/soong/.bootstrap/soong-cquery/test/test
 [ 37% 91/241] gotestmain out/soong/.bootstrap/soong-rust/test/test.go
-[ 38% 92/241] gotestmain out/soong/.bootstrap/soong-sh/test/test.go
-[ 38% 93/241] gotestmain out/soong/.bootstrap/soong-sdk/test/test.go
-[ 39% 94/241] compile out/soong/.bootstrap/soong-response/test/test.a
+[ 38% 92/241] test android/soong/bazel/cquery
+[ 38% 93/241] gotestmain out/soong/.bootstrap/soong-sh/test/test.go
+[ 39% 94/241] gotestmain out/soong/.bootstrap/soong-sdk/test/test.go
 [ 39% 95/241] gotestmain out/soong/.bootstrap/soong-shared/test/test.go
 [ 39% 96/241] compile out/soong/.bootstrap/soong-shared/test/android/soong/shared.a
-[ 40% 97/241] compile out/soong/.bootstrap/soong-shared/pkg/android/soong/shared.a
-[ 40% 98/241] gotestmain out/soong/.bootstrap/soong-sysprop/test/test.go
-[ 41% 99/241] compile out/soong/.bootstrap/soong-shared/test/test.a
+[ 40% 97/241] compile out/soong/.bootstrap/soong-shared/test/test.a
+[ 40% 98/241] compile out/soong/.bootstrap/soong-shared/pkg/android/soong/shared.a
+[ 41% 99/241] gotestmain out/soong/.bootstrap/soong-sysprop/test/test.go
 [ 41% 100/241] link out/soong/.bootstrap/soong-remoteexec/test/test
 [ 41% 101/241] test android/soong/remoteexec
 [ 42% 102/241] gotestmain out/soong/.bootstrap/soong-xml/test/test.go
-[ 42% 103/241] compile out/soong/.bootstrap/soong-ui-metrics_proto/pkg/android/soong/ui/metrics/metrics_proto.a
-[ 43% 104/241] create out/soong/.bootstrap/soong_build/gen/plugin.go
-[ 43% 105/241] link out/soong/.bootstrap/soong-response/test/test
-[ 43% 106/241] test android/soong/response
+[ 42% 103/241] create out/soong/.bootstrap/soong_build/gen/plugin.go
+[ 43% 104/241] link out/soong/.bootstrap/soong-response/test/test
+[ 43% 105/241] test android/soong/response
+[ 43% 106/241] compile out/soong/.bootstrap/soong-ui-metrics_proto/pkg/android/soong/ui/metrics/metrics_proto.a
 [ 44% 107/241] link out/soong/.bootstrap/soong-shared/test/test
 [ 44% 108/241] test android/soong/shared
 [ 45% 109/241] compile out/soong/.bootstrap/soong-android/pkg/android/soong/android.a
-[ 45% 110/241] compile out/soong/.bootstrap/kernel-config-soong-rules/pkg/android/soong/kernel/configs.a
-[ 46% 111/241] compile out/soong/.bootstrap/soong-bloaty/pkg/android/soong/bloaty.a
+[ 45% 110/241] compile out/soong/.bootstrap/soong-bloaty/pkg/android/soong/bloaty.a
+[ 46% 111/241] compile out/soong/.bootstrap/kernel-config-soong-rules/pkg/android/soong/kernel/configs.a
 [ 46% 112/241] compile out/soong/.bootstrap/soong-cc-config/test/android/soong/cc/config.a
 [ 46% 113/241] compile out/soong/.bootstrap/soong-cc-config/test/test.a
 [ 47% 114/241] compile out/soong/.bootstrap/soong-cc-config/pkg/android/soong/cc/config.a
@@ -187,25 +187,25 @@ OUT_DIR=out
 [ 51% 124/241] compile out/soong/.bootstrap/soong-etc/pkg/android/soong/etc.a
 [ 51% 125/241] compile out/soong/.bootstrap/soong-android/test/android/soong/android.a
 [ 52% 126/241] compile out/soong/.bootstrap/soong-android/test/test.a
-[ 52% 127/241] compile out/soong/.bootstrap/soong-genrule/test/android/soong/genrule.a
-[ 53% 128/241] compile out/soong/.bootstrap/soong-genrule/pkg/android/soong/genrule.a
+[ 52% 127/241] compile out/soong/.bootstrap/soong-genrule/pkg/android/soong/genrule.a
+[ 53% 128/241] compile out/soong/.bootstrap/soong-genrule/test/android/soong/genrule.a
 [ 53% 129/241] compile out/soong/.bootstrap/soong-genrule/test/test.a
-[ 53% 130/241] link out/soong/.bootstrap/soong-etc/test/test
-[ 54% 131/241] test android/soong/etc
-[ 54% 132/241] compile out/soong/.bootstrap/soong-fs_config/pkg/android/soong/fs_config.a
-[ 55% 133/241] compile out/soong/.bootstrap/soong-icu/pkg/android/soong/icu.a
-[ 55% 134/241] compile out/soong/.bootstrap/soong-java-config/pkg/android/soong/java/config.a
+[ 53% 130/241] compile out/soong/.bootstrap/soong-fs_config/pkg/android/soong/fs_config.a
+[ 54% 131/241] compile out/soong/.bootstrap/soong-icu/pkg/android/soong/icu.a
+[ 54% 132/241] link out/soong/.bootstrap/soong-etc/test/test
+[ 55% 133/241] compile out/soong/.bootstrap/soong-java-config/pkg/android/soong/java/config.a
+[ 55% 134/241] test android/soong/etc
 [ 56% 135/241] compile out/soong/.bootstrap/soong-phony/pkg/android/soong/phony.a
-[ 56% 136/241] compile out/soong/.bootstrap/soong-libchrome/pkg/android/soong/external/libchrome.a
-[ 56% 137/241] compile out/soong/.bootstrap/soong-ca-certificates/pkg/android/soong/system/ca-certificates.a
+[ 56% 136/241] compile out/soong/.bootstrap/soong-ca-certificates/pkg/android/soong/system/ca-certificates.a
+[ 56% 137/241] compile out/soong/.bootstrap/soong-libchrome/pkg/android/soong/external/libchrome.a
 [ 57% 138/241] compile out/soong/.bootstrap/soong-tradefed/pkg/android/soong/tradefed.a
-[ 57% 139/241] link out/soong/.bootstrap/soong-android/test/test
-[ 58% 140/241] compile out/soong/.bootstrap/soong-rust-config/pkg/android/soong/rust/config.a
+[ 57% 139/241] compile out/soong/.bootstrap/soong-rust-config/pkg/android/soong/rust/config.a
+[ 58% 140/241] link out/soong/.bootstrap/soong-android/test/test
 [ 58% 141/241] link out/soong/.bootstrap/soong-genrule/test/test
 [ 58% 142/241] test android/soong/genrule
-[ 59% 143/241] test android/soong/android
-[ 59% 144/241] compile out/soong/.bootstrap/soong-python/test/android/soong/python.a
-[ 60% 145/241] compile out/soong/.bootstrap/soong-python/test/test.a
+[ 59% 143/241] compile out/soong/.bootstrap/soong-python/test/android/soong/python.a
+[ 59% 144/241] compile out/soong/.bootstrap/soong-python/test/test.a
+[ 60% 145/241] test android/soong/android
 [ 60% 146/241] compile out/soong/.bootstrap/soong-python/pkg/android/soong/python.a
 [ 60% 147/241] compile out/soong/.bootstrap/soong-twrp-generator/pkg/twrp/soong/generator.a
 [ 61% 148/241] compile out/soong/.bootstrap/soong-xml/test/android/soong/xml.a
@@ -217,15 +217,15 @@ OUT_DIR=out
 [ 63% 154/241] link out/soong/.bootstrap/soong-xml/test/test
 [ 64% 155/241] test android/soong/xml
 [ 64% 156/241] compile out/soong/.bootstrap/soong-cc/pkg/android/soong/cc.a
-[ 65% 157/241] compile out/soong/.bootstrap/soong-bpf/test/android/soong/bpf.a
-[ 65% 158/241] compile out/soong/.bootstrap/soong-bpf/pkg/android/soong/bpf.a
-[ 65% 159/241] compile out/soong/.bootstrap/soong-clang/pkg/android/soong/external/clang.a
-[ 66% 160/241] compile out/soong/.bootstrap/soong-cc/test/android/soong/cc.a
-[ 66% 161/241] compile out/soong/.bootstrap/soong-bpf/test/test.a
-[ 67% 162/241] compile out/soong/.bootstrap/soong-cc/test/test.a
+[ 65% 157/241] compile out/soong/.bootstrap/soong-cc/test/android/soong/cc.a
+[ 65% 158/241] compile out/soong/.bootstrap/soong-cc/test/test.a
+[ 65% 159/241] compile out/soong/.bootstrap/soong-bpf/pkg/android/soong/bpf.a
+[ 66% 160/241] compile out/soong/.bootstrap/soong-bpf/test/android/soong/bpf.a
+[ 66% 161/241] compile out/soong/.bootstrap/soong-clang/pkg/android/soong/external/clang.a
+[ 67% 162/241] compile out/soong/.bootstrap/soong-bpf/test/test.a
 [ 67% 163/241] compile out/soong/.bootstrap/soong-clang-prebuilts/pkg/android/soong/prebuilts/clang/host/linux-x86/clangprebuilts.a
-[ 68% 164/241] link out/soong/.bootstrap/soong-bpf/test/test
-[ 68% 165/241] link out/soong/.bootstrap/soong-cc/test/test
+[ 68% 164/241] link out/soong/.bootstrap/soong-cc/test/test
+[ 68% 165/241] link out/soong/.bootstrap/soong-bpf/test/test
 [ 68% 166/241] test android/soong/bpf
 [ 69% 167/241] compile out/soong/.bootstrap/soong-kernel/test/android/soong/kernel.a
 [ 69% 168/241] compile out/soong/.bootstrap/soong-kernel/test/test.a
@@ -241,13 +241,13 @@ OUT_DIR=out
 [ 73% 178/241] compile out/soong/.bootstrap/soong-java/test/android/soong/java.a
 [ 74% 179/241] compile out/soong/.bootstrap/soong-java/test/test.a
 [ 74% 180/241] compile out/soong/.bootstrap/hidl-soong-rules/pkg/android/soong/hidl.a
-[ 75% 181/241] link out/soong/.bootstrap/soong-linkerconfig/test/test
-[ 75% 182/241] test android/soong/linkerconfig
-[ 75% 183/241] compile out/soong/.bootstrap/soong-linkerconfig/pkg/android/soong/linkerconfig.a
-[ 76% 184/241] compile out/soong/.bootstrap/soong-llvm/pkg/android/soong/external/llvm.a
-[ 76% 185/241] compile out/soong/.bootstrap/soong-filesystem/pkg/android/soong/filesystem.a
-[ 77% 186/241] compile out/soong/.bootstrap/soong-filesystem/test/android/soong/filesystem.a
-[ 77% 187/241] compile out/soong/.bootstrap/soong-filesystem/test/test.a
+[ 75% 181/241] compile out/soong/.bootstrap/soong-linkerconfig/pkg/android/soong/linkerconfig.a
+[ 75% 182/241] link out/soong/.bootstrap/soong-linkerconfig/test/test
+[ 75% 183/241] compile out/soong/.bootstrap/soong-filesystem/test/android/soong/filesystem.a
+[ 76% 184/241] compile out/soong/.bootstrap/soong-filesystem/pkg/android/soong/filesystem.a
+[ 76% 185/241] test android/soong/linkerconfig
+[ 77% 186/241] compile out/soong/.bootstrap/soong-filesystem/test/test.a
+[ 77% 187/241] compile out/soong/.bootstrap/soong-llvm/pkg/android/soong/external/llvm.a
 [ 78% 188/241] link out/soong/.bootstrap/soong-java/test/test
 [ 78% 189/241] link out/soong/.bootstrap/soong-filesystem/test/test
 [ 78% 190/241] compile out/soong/.bootstrap/soong-rust/test/android/soong/rust.a
@@ -278,18 +278,18 @@ OUT_DIR=out
 [ 89% 215/241] compile out/soong/.bootstrap/soong-art/pkg/android/soong/art.a
 [ 89% 216/241] compile out/soong/.bootstrap/soong-bp2build/test/android/soong/bp2build.a
 [ 90% 217/241] compile out/soong/.bootstrap/soong-bp2build/test/test.a
-[ 90% 218/241] link out/soong/.bootstrap/soong-bp2build/test/test
-[ 90% 219/241] test android/soong/cc
+[ 90% 218/241] test android/soong/cc
+[ 90% 219/241] link out/soong/.bootstrap/soong-bp2build/test/test
 [ 91% 220/241] compile out/soong/.bootstrap/soong-bp2build/pkg/android/soong/bp2build.a
 [ 91% 221/241] test android/soong/bp2build
 [ 92% 222/241] compile out/soong/.bootstrap/soong-sdk/pkg/android/soong/sdk.a
-[ 92% 223/241] compile out/soong/.bootstrap/soong-suite-harness/pkg/android/soong/tradefed/suite_harness.a
-[ 92% 224/241] compile out/soong/.bootstrap/soong-sdk/test/android/soong/sdk.a
-[ 93% 225/241] compile out/soong/.bootstrap/soong-sdk/test/test.a
+[ 92% 223/241] compile out/soong/.bootstrap/soong-sdk/test/android/soong/sdk.a
+[ 92% 224/241] compile out/soong/.bootstrap/soong-sdk/test/test.a
+[ 93% 225/241] compile out/soong/.bootstrap/soong-suite-harness/pkg/android/soong/tradefed/suite_harness.a
 [ 93% 226/241] compile out/soong/.bootstrap/soong-sysprop/test/android/soong/sysprop.a
 [ 94% 227/241] compile out/soong/.bootstrap/soong-sysprop/test/test.a
-[ 94% 228/241] link out/soong/.bootstrap/soong-sysprop/test/test
-[ 95% 229/241] link out/soong/.bootstrap/soong-sdk/test/test
+[ 94% 228/241] link out/soong/.bootstrap/soong-sdk/test/test
+[ 95% 229/241] link out/soong/.bootstrap/soong-sysprop/test/test
 [ 95% 230/241] test android/soong/sysprop
 [ 95% 231/241] compile out/soong/.bootstrap/soong-sysprop/pkg/android/soong/sysprop.a
 [ 96% 232/241] compile out/soong/.bootstrap/soong-selinux/pkg/android/soong/selinux.a
@@ -302,15 +302,13 @@ OUT_DIR=out
 [ 99% 239/241] out/soong/.bootstrap/bin/soong_build out/soong/build.ninja
 FAILED: out/soong/build.ninja
 cd "$(dirname "out/soong/.bootstrap/bin/soong_build")" && BUILDER="$PWD/$(basename "out/soong/.bootstrap/bin/soong_build")" && cd / && env -i "$BUILDER"     --top "$TOP"     --out "out/soong"     -n "out"     -d "out/soong/build.ninja.d"     -t -l out/.module_paths/Android.bp.list -globFile out/soong/.bootstrap/build-globs.ninja -o out/soong/build.ninja --available_env out/soong/soong.environment.available --used_env out/soong/soong.environment.used Android.bp
-error: external/libcxxabi/Android.bp:96:1: encountered dependency cycle:
-error: external/libcxx/Android.bp:81:1:     module "libc++_static" variant "android_arm64_armv8-a_static" depends on module "libc++abi" variant "android_arm64_armv8-a_static"
-error: external/libcxxabi/Android.bp:96:1:     module "libc++abi" variant "android_arm64_armv8-a_static" depends on module "libc" variant "android_arm64_armv8-a_shared"
-error: bionic/libc/Android.bp:1639:1:     module "libc" variant "android_arm64_armv8-a_shared" depends on module "libc" variant "android_arm64_armv8-a_shared_current"
-error: bionic/libc/Android.bp:1639:1:     module "libc" variant "android_arm64_armv8-a_shared_current" depends on module "libc" variant "android_arm64_armv8-a_shared_30"
-error: bionic/libc/Android.bp:1639:1:     module "libc" variant "android_arm64_armv8-a_shared_30" depends on module "libc" variant "android_arm64_armv8-a_static"
-error: bionic/libc/Android.bp:1639:1:     module "libc" variant "android_arm64_armv8-a_static" depends on module "libjemalloc5" variant "android_arm64_armv8-a_static"
-error: external/jemalloc/Android.bp:1:1:     module "libjemalloc5" variant "android_arm64_armv8-a_static" depends on module "libc++_static" variant "android_arm64_armv8-a_static"
+error: bionic/libc/Android.bp:1639:1: encountered dependency cycle:
+error: external/libcxxabi/Android.bp:96:1:     module "libc++abi" variant "android_recovery_arm64_armv8-a_static" depends on module "libc" variant "android_recovery_arm64_armv8-a_shared"
+error: bionic/libc/Android.bp:1639:1:     module "libc" variant "android_recovery_arm64_armv8-a_shared" depends on module "libc" variant "android_recovery_arm64_armv8-a_static"
+error: bionic/libc/Android.bp:1639:1:     module "libc" variant "android_recovery_arm64_armv8-a_static" depends on module "libjemalloc5" variant "android_recovery_arm64_armv8-a_static"
+error: external/jemalloc/Android.bp:1:1:     module "libjemalloc5" variant "android_recovery_arm64_armv8-a_static" depends on module "libc++_static" variant "android_recovery_arm64_armv8-a_static"
+error: external/libcxx/Android.bp:81:1:     module "libc++_static" variant "android_recovery_arm64_armv8-a_static" depends on module "libc++abi" variant "android_recovery_arm64_armv8-a_static"
 [ 99% 240/241] test android/soong/apex
 [100% 241/241] test android/soong/sdk
 ninja: build stopped: subcommand failed.
-15:00:26 soong bootstrap failed with: exit status 1
+15:11:51 soong bootstrap failed with: exit status 1
