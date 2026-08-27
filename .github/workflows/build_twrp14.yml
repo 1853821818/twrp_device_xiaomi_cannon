@@ -1,5 +1,7 @@
 name: Build TWRP 14 for Redmi Note 9 5G (cannon)
 
+permissions: write-all
+
 on:
   workflow_dispatch:
     inputs:
@@ -143,9 +145,11 @@ jobs:
           git add build_full.log build_errors.log 2>/dev/null || true
           git commit -m "Add build logs for debugging" 2>/dev/null || echo "Nothing to commit"
           echo "=== Pushing logs ==="
-          git push 2>/dev/null || echo "Push failed (may be due to permissions)"
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:master 2>&1 || echo "Push failed"
           echo "=== Done ==="
           ls -la build_full.log build_errors.log 2>/dev/null || true
+          echo "=== build_errors.log content ==="
+          cat build_errors.log 2>/dev/null || echo "No build_errors.log"
 
       - name: Upload build logs (on failure)
         if: failure()
