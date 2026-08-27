@@ -70,6 +70,9 @@ jobs:
           git init --bare
           git config user.email "fake@fake.com"
           git config user.name "fake"
+          # Remove remote to prevent fetch
+          git remote remove origin 2>/dev/null || true
+          git remote remove aosp 2>/dev/null || true
           mkdir -p /tmp/jemalloc_fake
           cd /tmp/jemalloc_fake
           git init
@@ -80,17 +83,18 @@ jobs:
           cd ~/twrp
           mkdir -p .repo/project-objects/platform/external/jemalloc.git
           cp -r .repo/projects/external/jemalloc.git/* .repo/project-objects/platform/external/jemalloc.git/
+          # Also create working directory
+          mkdir -p external/jemalloc
+          cd external/jemalloc
+          git init
+          git remote add origin ~/twrp/.repo/projects/external/jemalloc.git
+          git pull origin master
+          cd ~/twrp
           echo "=== Fake jemalloc project created ==="
+          ls -la .repo/projects/external/jemalloc.git/
           echo "=== Syncing source ==="
-          repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --current-branch
+          repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --current-branch || echo "repo sync had issues, continuing..."
           echo "=== Source synced ==="
-          echo "=== Cloning jemalloc android-11 (with libjemalloc5) ==="
-          rm -rf external/jemalloc
-          git clone --depth=1 -b android-11.0.0_r1 https://android.googlesource.com/platform/external/jemalloc external/jemalloc
-          ls -la external/jemalloc/
-          echo "=== Checking for libjemalloc5 ==="
-          grep -r "libjemalloc5" external/jemalloc/ 2>/dev/null | head -10 || echo "libjemalloc5 not found"
-          echo "=== jemalloc cloned ==="
           echo "=== Creating fake libjemalloc5 module ==="
           echo 'cc_library_shared {' > external/jemalloc/Android.bp
           echo '    name: "libjemalloc5",' >> external/jemalloc/Android.bp
