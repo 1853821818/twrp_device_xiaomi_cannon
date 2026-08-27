@@ -1,4 +1,4 @@
-drwxr-xr-x 11 runner runner 4096 Aug 27 12:17 release
+drwxr-xr-x 11 runner runner 4096 Aug 27 12:32 release
 === Searching for release config ===
 build/make/tools/releasetools
 build/release
@@ -46,6 +46,7 @@ build/release/release_configs/trunk_staging.textproto
 195:    $(eval _all_release_configs.$(config).DECLARED_IN:= ) \
 196:    $(eval _all_release_configs.$(config).FILES:= ) \
 198:_all_release_configs:=
+239:_all_release_configs := ap2a trunk_staging
 === Full release_config.mk first 200 lines ===
 # Release configs are defined in reflease_config_map files, which map
 # the short name (e.g. -next) used in lunch to the starlark files
@@ -127,6 +128,6 @@ _all_release_configs:=
 applied_releases:=
 === Trying lunch twrp_cannon-ap2a-eng ===
 build/make/core/release_config.mk:145: error: No release config found for TARGET_RELEASE: ap2a. Available releases are: .
-12:17:23 dumpvars failed with: exit status 1
+12:33:19 dumpvars failed with: exit status 1
 build/make/core/release_config.mk:145: error: No release config found for TARGET_RELEASE: ap2a. Available releases are: .
-12:17:24 dumpvars failed with: exit status 1
+12:33:20 dumpvars failed with: exit status 1
