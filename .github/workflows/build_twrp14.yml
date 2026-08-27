@@ -1,4 +1,4 @@
-name: Build TWRP 14 for Redmi Note 9 5G (cannon)
+name: Build TWRP 12.1 for Redmi Note 9 5G (cannon)
 
 permissions: write-all
 
@@ -8,14 +8,14 @@ on:
       manifest_branch:
         description: 'TWRP Manifest Branch'
         required: true
-        default: 'twrp-14'
+        default: 'twrp-12.1'
       device:
         description: 'Device Codename'
         required: true
         default: 'cannon'
 
 env:
-  MANIFEST_BRANCH: ${{ github.event.inputs.manifest_branch || 'twrp-14' }}
+  MANIFEST_BRANCH: ${{ github.event.inputs.manifest_branch || 'twrp-12.1' }}
   DEVICE: ${{ github.event.inputs.device || 'cannon' }}
   OEM: xiaomi
   TWRP_DEVICE: twrp_cannon
@@ -60,8 +60,8 @@ jobs:
           export PATH=~/bin:$PATH
           mkdir -p ~/twrp
           cd ~/twrp
-          echo "=== Initializing repo with branch: twrp-14 ==="
-          repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-14
+          echo "=== Initializing repo with branch: twrp-12.1 ==="
+          repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-12.1
           echo "=== Repo initialized ==="
 
       - name: Sync TWRP source
@@ -72,119 +72,49 @@ jobs:
           repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
           echo "=== Source synced ==="
 
-      - name: Clone build/release for AOSP 14
-        run: |
-          cd ~/twrp
-          echo "=== Removing existing build/release ==="
-          rm -rf build/release
-          echo "=== Cloning build/release (android14-release) ==="
-          git clone --depth=1 -b android14-release https://android.googlesource.com/platform/build/release build/release 2>&1 || echo "android14-release failed"
-          if [ ! -d "build/release/release_configs" ]; then
-            echo "=== Trying default branch ==="
-            rm -rf build/release
-            git clone --depth=1 https://android.googlesource.com/platform/build/release build/release 2>&1
-          fi
-          echo "=== build/release contents ==="
-          ls -la build/release/ 2>/dev/null || echo "No build/release"
-          echo "=== release_configs contents ==="
-          ls -la build/release/release_configs/ 2>/dev/null || echo "No release_configs"
-          find build/release/release_configs/ -type f 2>/dev/null | head -30
-          echo "=== Creating release_config_map.mk ==="
-          echo '$(call declare-release-config,ap2a,build/release/release_configs/ap2a.scl,)' > build/release/release_config_map.mk
-          echo '$(call declare-release-config,trunk_staging,build/release/release_configs/trunk_staging.scl,)' >> build/release/release_config_map.mk
-          echo "=== Creating empty scl files ==="
-          echo 'release_config = {}' > build/release/release_configs/ap2a.scl
-          echo 'release_config = {}' > build/release/release_configs/trunk_staging.scl
-          cat build/release/release_config_map.mk
-          echo "=== release_config_map.mk created ==="
-          echo "=== Creating starlark results dir and empty file ==="
-          mkdir -p out/starlark_results
-          echo '# Empty release config starlark' > out/starlark_results/out_release_config_entrypoint.scl.mk
-          echo "=== Created ==="
-          echo "=== Patching version_util.mk to skip argument check ==="
-          sed -i '180,185s/^/#/' build/make/core/version_util.mk 2>/dev/null || echo "sed failed"
-          echo "=== Patched version_util.mk ==="
-
       - name: Copy device tree
         run: |
           echo "=== Copying device tree ==="
           mkdir -p ~/twrp/device/xiaomi
           cp -r $GITHUB_WORKSPACE/device/xiaomi/cannon ~/twrp/device/xiaomi/
           ls -la ~/twrp/device/xiaomi/cannon/
-          echo "=== Check AndroidProducts.mk ==="
-          cat ~/twrp/device/xiaomi/cannon/AndroidProducts.mk
-          echo "=== Check twrp_cannon.mk ==="
-          cat ~/twrp/device/xiaomi/cannon/twrp_cannon.mk
           echo "=== Device tree copied ==="
 
       - name: Build TWRP
         run: |
           export PATH=~/bin:$PATH
           export ALLOW_MISSING_DEPENDENCIES=true
-          export TARGET_RELEASE=ap2a
           cd ~/twrp
           {
-            echo "=== Checking source tree ==="
-            ls -la build/envsetup.sh 2>/dev/null || echo "No build/envsetup.sh"
-            echo "=== build directory contents ==="
-            ls -la build/ 2>/dev/null | head -30
-            echo "=== Searching for release config ==="
-            find build/ -name "*release*" -type d 2>/dev/null | head -20
-            find . -name "release_config.mk" 2>/dev/null | head -10
-            echo "=== Checking make/release ==="
-            ls -la build/make/release/ 2>/dev/null || echo "No build/make/release"
-            echo "=== TARGET_RELEASE: $TARGET_RELEASE ==="
-            echo "=== release_configs contents ==="
-            ls -la build/release/release_configs/ 2>/dev/null || echo "No release_configs dir"
-            find build/release/release_configs/ -type f 2>/dev/null | head -30
-            echo "=== release_config.mk lookup logic ==="
-            grep -n "_all_release_configs" build/make/core/release_config.mk 2>/dev/null | head -20
-            echo "=== Full release_config.mk first 200 lines ==="
-            head -200 build/make/core/release_config.mk 2>/dev/null
             echo "=== Setting up build environment ==="
             source build/envsetup.sh
-            echo "=== envsetup exit code: $? ==="
-            echo "=== Trying lunch twrp_cannon-ap2a-eng ==="
-            lunch twrp_cannon-ap2a-eng 2>&1
+            echo "=== Lunching: twrp_cannon-eng ==="
+            lunch twrp_cannon-eng
             echo "=== Lunch exit code: $? ==="
             echo "=== Building recoveryimage ==="
             mka recoveryimage -j$(nproc --all)
             echo "=== recoveryimage exit code: $? ==="
-            echo "=== Building bootimage ==="
-            mka bootimage -j$(nproc --all)
-            echo "=== bootimage exit code: $? ==="
             echo "=== Build complete ==="
           } 2>&1 | tee ~/twrp/build_full.log
           echo "=== Build exit code: ${PIPESTATUS[0]} ==="
-          echo "=== Listing out/target/product ==="
-          ls -la ~/twrp/out/target/product/ 2>/dev/null || echo "No out/target/product"
-          echo "=== Listing all img files in out ==="
-          find ~/twrp/out/ -name "*.img" -type f 2>/dev/null | head -50
-          echo "=== Listing all files in out/target/product ==="
-          find ~/twrp/out/target/product/ -type f 2>/dev/null | head -100
+          echo "=== Listing out directory ==="
+          find ~/twrp/out/target/product/$DEVICE/ -name "*.img" -type f 2>/dev/null | head -20
           echo "=== Saving error summary ==="
-          grep -i -E "error:|failed|fatal:|missing|cannot|no such|ninja: build stopped|lunch|invalid|release" ~/twrp/build_full.log | tail -150 > ~/twrp/build_errors.log || true
+          grep -i -E "error:|failed|fatal:|missing|cannot|no such|ninja: build stopped" ~/twrp/build_full.log | tail -80 > ~/twrp/build_errors.log || true
           cat ~/twrp/build_errors.log
+
       - name: Check build output
         run: |
           echo "=== Checking build output ==="
           ls -la ~/twrp/out/target/product/$DEVICE/ 2>/dev/null || echo "No device output dir"
           RECOVERY_IMG=~/twrp/out/target/product/$DEVICE/recovery.img
-          BOOT_IMG=~/twrp/out/target/product/$DEVICE/boot.img
           if [ -f "$RECOVERY_IMG" ]; then
             echo "=== recovery.img found ==="
             file "$RECOVERY_IMG"
             ls -lh "$RECOVERY_IMG"
-          elif [ -f "$BOOT_IMG" ]; then
-            echo "=== boot.img found (A/B recovery as boot) ==="
-            file "$BOOT_IMG"
-            ls -lh "$BOOT_IMG"
-            cp "$BOOT_IMG" ~/twrp/out/target/product/$DEVICE/recovery.img
-            echo "=== Copied boot.img to recovery.img ==="
           else
-            echo "=== No img files found, listing all ==="
+            echo "=== recovery.img NOT found, listing all img files ==="
             find ~/twrp/out/ -name "*.img" -type f 2>/dev/null
-            find ~/twrp/out/target/product/ -type f 2>/dev/null | head -50
             exit 1
           fi
 
@@ -195,16 +125,6 @@ jobs:
           path: ~/twrp/out/target/product/${{ env.DEVICE }}/recovery.img
           retention-days: 30
 
-      - name: Upload debug files
-        uses: actions/upload-artifact@v4
-        with:
-          name: debug-files-${{ env.DEVICE }}
-          path: |
-            ~/twrp/out/recovery_Android.mk
-            ~/twrp/out/product_packages.txt
-            ~/twrp/out/recovery_binaries.txt
-          retention-days: 7
-
       - name: Save build info
         if: always()
         run: |
@@ -214,10 +134,6 @@ jobs:
           cp ~/twrp/build_errors.log build_errors.log 2>/dev/null || echo "No build_errors.log"
           find ~/twrp/out/target/product/$DEVICE/ -type f 2>/dev/null > out_files.txt || true
           ls -laR ~/twrp/out/target/product/$DEVICE/ 2>/dev/null > out_dir.txt || true
-          echo "=== out_files.txt content ==="
-          cat out_files.txt 2>/dev/null | head -50 || echo "No out_files.txt"
-          echo "=== build_errors.log content ==="
-          cat build_errors.log 2>/dev/null | head -50 || echo "No build_errors.log"
           echo "=== Configuring git ==="
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
@@ -225,8 +141,7 @@ jobs:
           git add build_full.log build_errors.log out_files.txt out_dir.txt 2>/dev/null || true
           git commit -m "Add build info for debugging" 2>&1 || echo "Nothing to commit"
           echo "=== Pushing ==="
-          git push 2>&1 || echo "Push failed, trying with token"
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:master 2>&1 || echo "Push with token failed"
+          git push 2>&1 || echo "Push failed"
           echo "=== Done ==="
 
       - name: Upload build logs (on failure)
