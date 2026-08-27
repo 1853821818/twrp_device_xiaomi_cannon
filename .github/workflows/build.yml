@@ -58,12 +58,20 @@ jobs:
           cd ~/twrp
           echo "=== Initializing repo with branch: $MANIFEST_BRANCH ==="
           repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b $MANIFEST_BRANCH
-          echo "=== Removing jemalloc from manifest completely ==="
+          echo "=== Checking manifest files ==="
+          ls -la .repo/manifest.xml
+          ls -la .repo/manifests/
+          echo "=== Removing jemalloc from ALL manifest files ==="
           grep -v "external/jemalloc" .repo/manifests/default.xml > .repo/manifests/default.xml.tmp
           mv .repo/manifests/default.xml.tmp .repo/manifests/default.xml
+          if [ -f .repo/manifest.xml ]; then
+            grep -v "external/jemalloc" .repo/manifest.xml > .repo/manifest.xml.tmp
+            mv .repo/manifest.xml.tmp .repo/manifest.xml
+          fi
           rm -rf .repo/projects/external/jemalloc.git
           rm -rf .repo/project-objects/platform/external/jemalloc.git
-          grep -i "jemalloc" .repo/manifests/default.xml || echo "jemalloc removed from manifest"
+          echo "=== Checking jemalloc in manifests ==="
+          grep -ri "jemalloc" .repo/manifests/ .repo/manifest.xml 2>/dev/null || echo "jemalloc completely removed"
           echo "=== Repo initialized ==="
 
       - name: Sync TWRP source
