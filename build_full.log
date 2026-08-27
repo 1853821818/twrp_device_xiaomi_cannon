@@ -1,23 +1,23 @@
 === Checking source tree ===
-lrwxrwxrwx 1 runner runner 16 Aug 27 11:56 build/envsetup.sh -> make/envsetup.sh
+lrwxrwxrwx 1 runner runner 16 Aug 27 12:10 build/envsetup.sh -> make/envsetup.sh
 === build directory contents ===
 total 40
-drwxr-xr-x 10 runner runner 4096 Aug 27 12:04 .
-drwxr-xr-x 24 runner runner 4096 Aug 27 12:03 ..
-lrwxrwxrwx  1 runner runner   17 Aug 27 11:56 CleanSpec.mk -> make/CleanSpec.mk
-drwxr-xr-x 19 runner runner 4096 Aug 27 11:56 bazel
-drwxr-xr-x  8 runner runner 4096 Aug 27 11:56 bazel_common_rules
-drwxr-xr-x 16 runner runner 4096 Aug 27 11:56 blueprint
-lrwxrwxrwx  1 runner runner   25 Aug 27 11:56 buildspec.mk.default -> make/buildspec.mk.default
-lrwxrwxrwx  1 runner runner    9 Aug 27 11:56 core -> make/core
-lrwxrwxrwx  1 runner runner   16 Aug 27 11:56 envsetup.sh -> make/envsetup.sh
-drwxr-xr-x 10 runner runner 4096 Aug 27 11:56 make
-drwxr-xr-x  9 runner runner 4096 Aug 27 11:56 orchestrator
-drwxr-xr-x  3 runner runner 4096 Aug 27 11:56 pesto
-drwxr-xr-x 11 runner runner 4096 Aug 27 12:04 release
-drwxr-xr-x 51 runner runner 4096 Aug 27 11:56 soong
-lrwxrwxrwx  1 runner runner   11 Aug 27 11:56 target -> make/target
-lrwxrwxrwx  1 runner runner   10 Aug 27 11:56 tools -> make/tools
+drwxr-xr-x 10 runner runner 4096 Aug 27 12:17 .
+drwxr-xr-x 24 runner runner 4096 Aug 27 12:17 ..
+lrwxrwxrwx  1 runner runner   17 Aug 27 12:10 CleanSpec.mk -> make/CleanSpec.mk
+drwxr-xr-x 19 runner runner 4096 Aug 27 12:10 bazel
+drwxr-xr-x  8 runner runner 4096 Aug 27 12:10 bazel_common_rules
+drwxr-xr-x 16 runner runner 4096 Aug 27 12:10 blueprint
+lrwxrwxrwx  1 runner runner   25 Aug 27 12:10 buildspec.mk.default -> make/buildspec.mk.default
+lrwxrwxrwx  1 runner runner    9 Aug 27 12:10 core -> make/core
+lrwxrwxrwx  1 runner runner   16 Aug 27 12:10 envsetup.sh -> make/envsetup.sh
+drwxr-xr-x 10 runner runner 4096 Aug 27 12:10 make
+drwxr-xr-x  9 runner runner 4096 Aug 27 12:10 orchestrator
+drwxr-xr-x  3 runner runner 4096 Aug 27 12:10 pesto
+drwxr-xr-x 11 runner runner 4096 Aug 27 12:17 release
+drwxr-xr-x 51 runner runner 4096 Aug 27 12:10 soong
+lrwxrwxrwx  1 runner runner   11 Aug 27 12:10 target -> make/target
+lrwxrwxrwx  1 runner runner   10 Aug 27 12:10 tools -> make/tools
 === Searching for release config ===
 build/make/tools/releasetools
 build/release
@@ -34,20 +34,20 @@ build/release/gms_mainline_go/required/release_configs
 ./build/make/core/release_config.mk
 === Checking make/release ===
 No build/make/release
-=== TARGET_RELEASE: ap1a ===
+=== TARGET_RELEASE: ap2a ===
 === release_configs contents ===
 total 44
-drwxr-xr-x  2 runner runner 4096 Aug 27 12:04 .
-drwxr-xr-x 11 runner runner 4096 Aug 27 12:04 ..
--rw-r--r--  1 runner runner   63 Aug 27 12:04 ap2a.textproto
--rw-r--r--  1 runner runner  103 Aug 27 12:04 ap3a.textproto
--rw-r--r--  1 runner runner   98 Aug 27 12:04 ap4a.textproto
--rw-r--r--  1 runner runner   98 Aug 27 12:04 bp1a.textproto
--rw-r--r--  1 runner runner  139 Aug 27 12:04 eng.textproto
--rw-r--r--  1 runner runner  155 Aug 27 12:04 root.textproto
--rw-r--r--  1 runner runner  135 Aug 27 12:04 trunk_staging.textproto
--rw-r--r--  1 runner runner  141 Aug 27 12:04 user.textproto
--rw-r--r--  1 runner runner  151 Aug 27 12:04 userdebug.textproto
+drwxr-xr-x  2 runner runner 4096 Aug 27 12:17 .
+drwxr-xr-x 11 runner runner 4096 Aug 27 12:17 ..
+-rw-r--r--  1 runner runner   63 Aug 27 12:17 ap2a.textproto
+-rw-r--r--  1 runner runner  103 Aug 27 12:17 ap3a.textproto
+-rw-r--r--  1 runner runner   98 Aug 27 12:17 ap4a.textproto
+-rw-r--r--  1 runner runner   98 Aug 27 12:17 bp1a.textproto
+-rw-r--r--  1 runner runner  139 Aug 27 12:17 eng.textproto
+-rw-r--r--  1 runner runner  155 Aug 27 12:17 root.textproto
+-rw-r--r--  1 runner runner  135 Aug 27 12:17 trunk_staging.textproto
+-rw-r--r--  1 runner runner  141 Aug 27 12:17 user.textproto
+-rw-r--r--  1 runner runner  151 Aug 27 12:17 userdebug.textproto
 build/release/release_configs/user.textproto
 build/release/release_configs/userdebug.textproto
 build/release/release_configs/root.textproto
@@ -58,29 +58,238 @@ build/release/release_configs/ap2a.textproto
 build/release/release_configs/ap3a.textproto
 build/release/release_configs/trunk_staging.textproto
 === release_config.mk lookup logic ===
-140-    # of such a bug, we want to at least get consistent, valid results.
-141-    TARGET_RELEASE = trunk_staging
-142-endif
-143-
-144-ifeq ($(filter $(_all_release_configs), $(TARGET_RELEASE)),)
+106:    $(if $(strip $(4)),$(eval _all_release_configs.$(strip $(1)).ALIAS := true))
+107:    $(eval _all_release_configs := $(sort $(_all_release_configs) $(strip $(1))))
+109:      $(if $(filter $(_all_release_configs), $(strip $(3))),
+110:        $(if $(filter $(_all_release_configs.$(strip $(1)).OVERRIDES),$(strip $(3))),,
+111:          $(eval _all_release_configs.$(strip $(1)).OVERRIDES := $(_all_release_configs.$(strip $(1)).OVERRIDES) $(strip $(3)))), \
+115:    $(eval _all_release_configs.$(strip $(1)).DECLARED_IN := $(_included) $(_all_release_configs.$(strip $(1)).DECLARED_IN))
+116:    $(eval _all_release_configs.$(strip $(1)).FILES := $(_all_release_configs.$(strip $(1)).FILES) $(strip $(2)))
+136:        $(error No release config set for target; please set TARGET_RELEASE, or if building on the command line use 'lunch <target>-<release>-<build_type>', where release is one of: $(_all_release_configs))
+144:ifeq ($(filter $(_all_release_configs), $(TARGET_RELEASE)),)
 145:    $(error No release config found for TARGET_RELEASE: $(TARGET_RELEASE). Available releases are: $(_all_release_configs))
-146-endif
-147-
-148-# Choose flag files
-149-# Don't sort this, use it in the order they gave us.
-150-# Do allow duplicate entries, retaining only the first usage.
+160:    $(foreach o,$(_all_release_configs.$(r).OVERRIDES),$(call _apply-release-config-overrides,$(o)))\
+162:    $(foreach f,$(_all_release_configs.$(r).FILES), \
+189:$(foreach r,$(_all_release_configs),\
+190:  $(if $(_all_release_configs.$(r).ALIAS),$(if $(_all_release_configs.$(r).FILES),\
+191:    $(error Alias release config "$(r)" may not specify release config files $(_all_release_configs.$(r).FILES))\
+194:$(foreach config, $(_all_release_configs), \
+195:    $(eval _all_release_configs.$(config).DECLARED_IN:= ) \
+196:    $(eval _all_release_configs.$(config).FILES:= ) \
+198:_all_release_configs:=
+=== Full release_config.mk first 200 lines ===
+# Copyright (C) 2023 The Android Open Source Project
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+# -----------------------------------------------------------------
+# Choose the flag files
+# -----------------------------------------------------------------
+# Release configs are defined in reflease_config_map files, which map
+# the short name (e.g. -next) used in lunch to the starlark files
+# defining the build flag values.
+#
+# (If you're thinking about aconfig flags, there is one build flag,
+# RELEASE_ACONFIG_VALUE_SETS, that sets which aconfig_value_set
+# module to use to set the aconfig flag values.)
+#
+# The short release config names *can* appear multiple times, to allow
+# for AOSP and vendor specific flags under the same name, but the
+# individual flag values must appear in exactly one config.  Vendor
+# does not override AOSP, or anything like that.  This is because
+# vendor code usually includes prebuilts, and having vendor compile
+# with different flags from AOSP increases the likelihood of flag
+# mismatch.
+
+# Do this first, because we're going to unset TARGET_RELEASE before
+# including anyone, so they don't start making conditionals based on it.
+# This logic is in make because starlark doesn't understand optional
+# vendor files.
+
+# If this is a google source tree, restrict it to only the one file
+# which has OWNERS control.  If it isn't let others define their own.
+# TODO: Remove wildcard for build/release one when all branch manifests
+# have updated.
+config_map_files := $(wildcard build/release/release_config_map.mk) \
+    $(if $(wildcard vendor/google/release/release_config_map.mk), \
+        vendor/google/release/release_config_map.mk, \
+        $(sort \
+            $(wildcard device/*/release/release_config_map.mk) \
+            $(wildcard device/*/*/release/release_config_map.mk) \
+            $(wildcard vendor/*/release/release_config_map.mk) \
+            $(wildcard vendor/*/*/release/release_config_map.mk) \
+        ) \
+    )
+
+# PRODUCT_RELEASE_CONFIG_MAPS is set by Soong using an initial run of product
+# config to capture only the list of config maps needed by the build.
+# Keep them in the order provided, but remove duplicates.
+$(foreach map,$(PRODUCT_RELEASE_CONFIG_MAPS), \
+    $(if $(filter $(map),$(config_map_files)),,$(eval config_map_files += $(map))) \
+)
+
+# Declare an alias release-config
+#
+# This should be used to declare a release as an alias of another, meaning no
+# release config files should be present.
+#
+# $1 config name
+# $2 release config for which it is an alias
+define alias-release-config
+    $(call _declare-release-config,$(1),,$(2),true)
+endef
+
+# Declare or extend a release-config.
+#
+# The order of processing is:
+# 1. Recursively apply any overridden release configs.  Only apply each config
+#    the first time we reach it.
+# 2. Apply any files for this release config, in the order they were added to
+#    the declaration.
+#
+# Example:
+#   With these declarations:
+#     $(declare-release-config foo, foo.scl)
+#     $(declare-release-config bar, bar.scl, foo)
+#     $(declare-release-config baz, baz.scl, bar)
+#     $(declare-release-config bif, bif.scl, foo baz)
+#     $(declare-release-config bop, bop.scl, bar baz)
+#
+#   TARGET_RELEASE:
+#     - bar will use: foo.scl bar.scl
+#     - baz will use: foo.scl bar.scl baz.scl
+#     - bif will use: foo.scl bar.scl baz.scl bif.scl
+#     - bop will use: foo.scl bar.scl baz.scl bop.scl
+#
+# $1 config name
+# $2 release config files
+# $3 overridden release config
+define declare-release-config
+    $(call _declare-release-config,$(1),$(2),$(3),)
+endef
+
+define _declare-release-config
+    $(if $(strip $(2)$(3)),,  \
+        $(error declare-release-config: config $(strip $(1)) must have release config files, override another release config, or both) \
+    )
+    $(if $(strip $(4)),$(eval _all_release_configs.$(strip $(1)).ALIAS := true))
+    $(eval _all_release_configs := $(sort $(_all_release_configs) $(strip $(1))))
+    $(if $(strip $(3)), \
+      $(if $(filter $(_all_release_configs), $(strip $(3))),
+        $(if $(filter $(_all_release_configs.$(strip $(1)).OVERRIDES),$(strip $(3))),,
+          $(eval _all_release_configs.$(strip $(1)).OVERRIDES := $(_all_release_configs.$(strip $(1)).OVERRIDES) $(strip $(3)))), \
+        $(error No release config $(strip $(3))) \
+      ) \
+    )
+    $(eval _all_release_configs.$(strip $(1)).DECLARED_IN := $(_included) $(_all_release_configs.$(strip $(1)).DECLARED_IN))
+    $(eval _all_release_configs.$(strip $(1)).FILES := $(_all_release_configs.$(strip $(1)).FILES) $(strip $(2)))
+endef
+
+# Include the config map files and populate _flag_declaration_files.
+_flag_declaration_files :=
+$(foreach f, $(config_map_files), \
+    $(eval FLAG_DECLARATION_FILES:= ) \
+    $(eval _included := $(f)) \
+    $(eval include $(f)) \
+    $(eval _flag_declaration_files += $(FLAG_DECLARATION_FILES)) \
+)
+FLAG_DECLARATION_FILES :=
+
+ifeq ($(TARGET_RELEASE),)
+    # We allow some internal paths to explicitly set TARGET_RELEASE to the
+    # empty string.  For the most part, 'make' treats unset and empty string as
+    # the same.  But the following line differentiates, and will only assign
+    # if the variable was completely unset.
+    TARGET_RELEASE ?= was_unset
+    ifeq ($(TARGET_RELEASE),was_unset)
+        $(error No release config set for target; please set TARGET_RELEASE, or if building on the command line use 'lunch <target>-<release>-<build_type>', where release is one of: $(_all_release_configs))
+    endif
+    # Instead of leaving this string empty, we want to default to a valid
+    # setting.  Full builds coming through this path is a bug, but in case
+    # of such a bug, we want to at least get consistent, valid results.
+    TARGET_RELEASE = trunk_staging
+endif
+
+ifeq ($(filter $(_all_release_configs), $(TARGET_RELEASE)),)
+    $(error No release config found for TARGET_RELEASE: $(TARGET_RELEASE). Available releases are: $(_all_release_configs))
+endif
+
+# Choose flag files
+# Don't sort this, use it in the order they gave us.
+# Do allow duplicate entries, retaining only the first usage.
+flag_value_files :=
+
+# Apply overrides recursively
+#
+# $1 release config that we override
+applied_releases :=
+define _apply-release-config-overrides
+$(foreach r,$(1), \
+  $(if $(filter $(r),$(applied_releases)),, \
+    $(foreach o,$(_all_release_configs.$(r).OVERRIDES),$(call _apply-release-config-overrides,$(o)))\
+    $(eval applied_releases += $(r))\
+    $(foreach f,$(_all_release_configs.$(r).FILES), \
+      $(if $(filter $(f),$(flag_value_files)),,$(eval flag_value_files += $(f)))\
+    )\
+  )\
+)
+endef
+$(call _apply-release-config-overrides,$(TARGET_RELEASE))
+# Unset variables so they can't use them
+define declare-release-config
+$(error declare-release-config can only be called from inside release_config_map.mk files)
+endef
+define apply-release-config-overrides
+$(error invalid use of apply-release-config-overrides)
+endef
+
+# TODO: Remove this check after enough people have sourced lunch that we don't
+# need to worry about it trying to do get_build_vars TARGET_RELEASE. Maybe after ~9/2023
+ifneq ($(CALLED_FROM_SETUP),true)
+define TARGET_RELEASE
+$(error TARGET_RELEASE may not be accessed directly. Use individual flags.)
+endef
+else
+TARGET_RELEASE:=
+endif
+.KATI_READONLY := TARGET_RELEASE
+
+# Verify that alias configs do not have config files.
+$(foreach r,$(_all_release_configs),\
+  $(if $(_all_release_configs.$(r).ALIAS),$(if $(_all_release_configs.$(r).FILES),\
+    $(error Alias release config "$(r)" may not specify release config files $(_all_release_configs.$(r).FILES))\
+)))
+
+$(foreach config, $(_all_release_configs), \
+    $(eval _all_release_configs.$(config).DECLARED_IN:= ) \
+    $(eval _all_release_configs.$(config).FILES:= ) \
+)
+_all_release_configs:=
+config_map_files:=
+applied_releases:=
 === Setting up build environment ===
 Warning: completion file /home/runner/twrp/tools/asuite/asuite.sh not found
 === envsetup exit code: 0 ===
-=== Trying lunch twrp_cannon-ap1a-eng ===
+=== Trying lunch twrp_cannon-ap2a-eng ===
 In file included from build/make/core/config.mk:380:
 In file included from build/make/core/envsetup.mk:51:
-build/make/core/release_config.mk:145: error: No release config found for TARGET_RELEASE: ap1a. Available releases are: .
-12:06:55 dumpvars failed with: exit status 1
+build/make/core/release_config.mk:145: error: No release config found for TARGET_RELEASE: ap2a. Available releases are: .
+12:17:23 dumpvars failed with: exit status 1
 Device cannon not found. Attempting to retrieve device repository from TeamWin Github (http://github.com/TeamWin).
 Repository for cannon not found in the TeamWin Github repository list.
 If this is in error, you may need to manually add it to your .repo/local_manifests/roomservice.xml
 In file included from build/make/core/config.mk:380:
 In file included from build/make/core/envsetup.mk:51:
-build/make/core/release_config.mk:145: error: No release config found for TARGET_RELEASE: ap1a. Available releases are: .
-12:06:57 dumpvars failed with: exit status 1
+build/make/core/release_config.mk:145: error: No release config found for TARGET_RELEASE: ap2a. Available releases are: .
+12:17:24 dumpvars failed with: exit status 1
