@@ -88,22 +88,16 @@ jobs:
         run: |
           export PATH=~/bin:$PATH
           export ALLOW_MISSING_DEPENDENCIES=true
+          export TARGET_RELEASE=ap1a
           cd ~/twrp
           {
             echo "=== Checking source tree ==="
             ls -la build/envsetup.sh 2>/dev/null || echo "No build/envsetup.sh"
-            ls -la device/ 2>/dev/null || echo "No device dir"
-            echo "=== Checking device tree ==="
-            ls -la device/xiaomi/cannon/ 2>/dev/null || echo "No device/xiaomi/cannon"
+            ls -la build/release/ 2>/dev/null || echo "No build/release"
+            echo "=== TARGET_RELEASE: $TARGET_RELEASE ==="
             echo "=== Setting up build environment ==="
             source build/envsetup.sh
             echo "=== envsetup exit code: $? ==="
-            echo "=== Checking lunch function ==="
-            type lunch 2>&1 || echo "lunch not found"
-            echo "=== All lunch targets ==="
-            lunch 2>&1 || echo "lunch command failed"
-            echo "=== Lunch targets with cannon ==="
-            lunch 2>&1 | grep -i cannon || echo "No cannon targets"
             echo "=== Trying lunch twrp_cannon-eng ==="
             lunch twrp_cannon-eng 2>&1
             echo "=== Lunch exit code: $? ==="
@@ -123,7 +117,7 @@ jobs:
           echo "=== Listing all files in out/target/product ==="
           find ~/twrp/out/target/product/ -type f 2>/dev/null | head -100
           echo "=== Saving error summary ==="
-          grep -i -E "error:|failed|fatal:|missing|cannot|no such|ninja: build stopped|lunch|invalid|envsetup" ~/twrp/build_full.log | tail -150 > ~/twrp/build_errors.log || true
+          grep -i -E "error:|failed|fatal:|missing|cannot|no such|ninja: build stopped|lunch|invalid|release" ~/twrp/build_full.log | tail -150 > ~/twrp/build_errors.log || true
           cat ~/twrp/build_errors.log
       - name: Check build output
         run: |
