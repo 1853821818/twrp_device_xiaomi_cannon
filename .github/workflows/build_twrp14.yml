@@ -75,20 +75,20 @@ jobs:
       - name: Clone build/release for AOSP 14
         run: |
           cd ~/twrp
-          echo "=== Checking build/release ==="
-          if [ ! -d "build/release" ]; then
-            echo "=== Cloning build/release ==="
-            git clone --depth=1 https://android.googlesource.com/platform/build/release build/release 2>&1 || echo "Clone failed, trying alternative"
+          echo "=== Removing existing build/release ==="
+          rm -rf build/release
+          echo "=== Cloning build/release (android14-release) ==="
+          git clone --depth=1 -b android14-release https://android.googlesource.com/platform/build/release build/release 2>&1 || echo "android14-release failed"
+          if [ ! -d "build/release/release_configs" ]; then
+            echo "=== Trying default branch ==="
+            rm -rf build/release
+            git clone --depth=1 https://android.googlesource.com/platform/build/release build/release 2>&1
           fi
           echo "=== build/release contents ==="
           ls -la build/release/ 2>/dev/null || echo "No build/release"
           echo "=== release_configs contents ==="
           ls -la build/release/release_configs/ 2>/dev/null || echo "No release_configs"
-          echo "=== All mk files in release_configs ==="
-          find build/release/release_configs/ -name "*.mk" 2>/dev/null | head -30
-          echo "=== Checking release_config.mk ==="
-          grep -n "Available releases" build/make/core/release_config.mk 2>/dev/null | head -5
-          grep -n "release_config" build/make/core/release_config.mk 2>/dev/null | head -20
+          find build/release/release_configs/ -type f 2>/dev/null | head -30
 
       - name: Copy device tree
         run: |
@@ -106,7 +106,7 @@ jobs:
         run: |
           export PATH=~/bin:$PATH
           export ALLOW_MISSING_DEPENDENCIES=true
-          export TARGET_RELEASE=ap1a
+          export TARGET_RELEASE=ap2a
           cd ~/twrp
           {
             echo "=== Checking source tree ==="
@@ -123,12 +123,14 @@ jobs:
             ls -la build/release/release_configs/ 2>/dev/null || echo "No release_configs dir"
             find build/release/release_configs/ -type f 2>/dev/null | head -30
             echo "=== release_config.mk lookup logic ==="
-            grep -n -A5 -B5 "Available releases" build/make/core/release_config.mk 2>/dev/null | head -40
+            grep -n "_all_release_configs" build/make/core/release_config.mk 2>/dev/null | head -20
+            echo "=== Full release_config.mk first 200 lines ==="
+            head -200 build/make/core/release_config.mk 2>/dev/null
             echo "=== Setting up build environment ==="
             source build/envsetup.sh
             echo "=== envsetup exit code: $? ==="
-            echo "=== Trying lunch twrp_cannon-ap1a-eng ==="
-            lunch twrp_cannon-ap1a-eng 2>&1
+            echo "=== Trying lunch twrp_cannon-ap2a-eng ==="
+            lunch twrp_cannon-ap2a-eng 2>&1
             echo "=== Lunch exit code: $? ==="
             echo "=== Building recoveryimage ==="
             mka recoveryimage -j$(nproc --all)
