@@ -30,6 +30,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: device/xiaomi/cannon
+          persist-credentials: true
+          fetch-depth: 0
 
       - name: Prepare build environment
         run: |
@@ -147,22 +149,25 @@ jobs:
         if: always()
         run: |
           echo "=== Saving build info ==="
-          cp ~/twrp/build_full.log $GITHUB_WORKSPACE/build_full.log 2>/dev/null || echo "No build_full.log"
-          cp ~/twrp/build_errors.log $GITHUB_WORKSPACE/build_errors.log 2>/dev/null || echo "No build_errors.log"
-          find ~/twrp/out/target/product/$DEVICE/ -type f 2>/dev/null > $GITHUB_WORKSPACE/out_files.txt || true
-          ls -laR ~/twrp/out/target/product/$DEVICE/ 2>/dev/null > $GITHUB_WORKSPACE/out_dir.txt || true
-          cd $GITHUB_WORKSPACE
+          cd $GITHUB_WORKSPACE/device/xiaomi/cannon
+          cp ~/twrp/build_full.log build_full.log 2>/dev/null || echo "No build_full.log"
+          cp ~/twrp/build_errors.log build_errors.log 2>/dev/null || echo "No build_errors.log"
+          find ~/twrp/out/target/product/$DEVICE/ -type f 2>/dev/null > out_files.txt || true
+          ls -laR ~/twrp/out/target/product/$DEVICE/ 2>/dev/null > out_dir.txt || true
+          echo "=== out_files.txt content ==="
+          cat out_files.txt 2>/dev/null | head -50 || echo "No out_files.txt"
+          echo "=== build_errors.log content ==="
+          cat build_errors.log 2>/dev/null | head -50 || echo "No build_errors.log"
           echo "=== Configuring git ==="
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           echo "=== Committing build info ==="
           git add build_full.log build_errors.log out_files.txt out_dir.txt 2>/dev/null || true
-          git commit -m "Add build info for debugging" 2>/dev/null || echo "Nothing to commit"
+          git commit -m "Add build info for debugging" 2>&1 || echo "Nothing to commit"
           echo "=== Pushing ==="
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:master 2>&1 || echo "Push failed"
+          git push 2>&1 || echo "Push failed, trying with token"
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:master 2>&1 || echo "Push with token failed"
           echo "=== Done ==="
-          echo "=== out_files.txt content ==="
-          cat out_files.txt 2>/dev/null | head -50 || echo "No out_files.txt"
 
       - name: Upload build logs (on failure)
         if: failure()
