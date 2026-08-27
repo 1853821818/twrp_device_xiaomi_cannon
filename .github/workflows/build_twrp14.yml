@@ -80,6 +80,10 @@ jobs:
           echo 'cc_library_static {' > external/jemalloc/Android.bp
           echo '    name: "libjemalloc5",' >> external/jemalloc/Android.bp
           echo '    srcs: [],' >> external/jemalloc/Android.bp
+          echo '    vendor: true,' >> external/jemalloc/Android.bp
+          echo '    recovery_available: true,' >> external/jemalloc/Android.bp
+          echo '    shared_libs: [],' >> external/jemalloc/Android.bp
+          echo '    static_libs: [],' >> external/jemalloc/Android.bp
           echo '}' >> external/jemalloc/Android.bp
           cat external/jemalloc/Android.bp
           echo "=== Fake libjemalloc5 module created ==="
