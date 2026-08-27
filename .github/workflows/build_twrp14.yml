@@ -92,39 +92,54 @@ jobs:
           {
             echo "=== Setting up build environment ==="
             source build/envsetup.sh
+            echo "=== Available lunch targets ==="
+            lunch 2>&1 | grep -i cannon || echo "No cannon targets found"
             echo "=== Lunching: $TWRP_DEVICE-eng ==="
             lunch $TWRP_DEVICE-eng
+            LUNCH_EXIT=$?
+            echo "=== Lunch exit code: $LUNCH_EXIT ==="
+            if [ $LUNCH_EXIT -ne 0 ]; then
+              echo "=== Lunch failed, trying eng ==="
+              lunch $TWRP_DEVICE-eng 2>&1
+            fi
             echo "=== Building recoveryimage ==="
             mka recoveryimage -j$(nproc --all)
+            echo "=== recoveryimage exit code: $? ==="
+            echo "=== Building bootimage ==="
+            mka bootimage -j$(nproc --all)
+            echo "=== bootimage exit code: $? ==="
             echo "=== Build complete ==="
           } 2>&1 | tee ~/twrp/build_full.log
           echo "=== Build exit code: ${PIPESTATUS[0]} ==="
-          echo "=== Listing out directory ==="
-          find ~/twrp/out/target/product/$DEVICE/ -name "*.img" -type f 2>/dev/null | head -50
-          echo "=== Listing all files in out/target/product ==="
-          ls -laR ~/twrp/out/target/product/$DEVICE/ 2>/dev/null | head -200
+          echo "=== Listing out/target/product ==="
+          ls -la ~/twrp/out/target/product/ 2>/dev/null || echo "No out/target/product"
+          echo "=== Listing all img files in out ==="
+          find ~/twrp/out/ -name "*.img" -type f 2>/dev/null | head -50
+          echo "=== Listing all files in out/target/product/$DEVICE ==="
+          ls -laR ~/twrp/out/target/product/$DEVICE/ 2>/dev/null | head -300
           echo "=== Saving error summary ==="
-          grep -i -E "error:|failed|fatal:|missing|cannot|no such|ninja: build stopped" ~/twrp/build_full.log | tail -50 > ~/twrp/build_errors.log || true
+          grep -i -E "error:|failed|fatal:|missing|cannot|no such|ninja: build stopped|lunch" ~/twrp/build_full.log | tail -80 > ~/twrp/build_errors.log || true
           cat ~/twrp/build_errors.log
-          echo "=== Output errors as annotations ==="
-          while IFS= read -r line; do
-            echo "::error::${line}"
-          done < ~/twrp/build_errors.log
-          echo "=== Output out files as annotations ==="
-          find ~/twrp/out/target/product/$DEVICE/ -type f 2>/dev/null | while IFS= read -r line; do
-            echo "::notice::${line}"
-          done
       - name: Check build output
         run: |
           echo "=== Checking build output ==="
-          ls -la ~/twrp/out/target/product/$DEVICE/
-          if [ -f ~/twrp/out/target/product/$DEVICE/recovery.img ]; then
+          ls -la ~/twrp/out/target/product/$DEVICE/ 2>/dev/null || echo "No device output dir"
+          RECOVERY_IMG=~/twrp/out/target/product/$DEVICE/recovery.img
+          BOOT_IMG=~/twrp/out/target/product/$DEVICE/boot.img
+          if [ -f "$RECOVERY_IMG" ]; then
             echo "=== recovery.img found ==="
-            file ~/twrp/out/target/product/$DEVICE/recovery.img
-            ls -lh ~/twrp/out/target/product/$DEVICE/recovery.img
+            file "$RECOVERY_IMG"
+            ls -lh "$RECOVERY_IMG"
+          elif [ -f "$BOOT_IMG" ]; then
+            echo "=== boot.img found (A/B recovery as boot) ==="
+            file "$BOOT_IMG"
+            ls -lh "$BOOT_IMG"
+            cp "$BOOT_IMG" ~/twrp/out/target/product/$DEVICE/recovery.img
+            echo "=== Copied boot.img to recovery.img ==="
           else
-            echo "=== recovery.img NOT found, listing all img files ==="
-            find ~/twrp/out/target/product/$DEVICE/ -name "*.img" -type f
+            echo "=== No img files found, listing all ==="
+            find ~/twrp/out/ -name "*.img" -type f 2>/dev/null
+            find ~/twrp/out/target/product/ -type f 2>/dev/null | head -50
             exit 1
           fi
 
