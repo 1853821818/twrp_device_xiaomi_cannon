@@ -93,8 +93,19 @@ jobs:
           export PATH=~/bin:$PATH
           cd ~/twrp
           echo "=== Syncing full AOSP + TWRP source ==="
-          repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
+          repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags 2>&1 | tail -50
+          SYNC_EXIT=$?
+          echo "=== repo sync exit code: $SYNC_EXIT ==="
+          if [ $SYNC_EXIT -ne 0 ]; then
+            echo "=== repo sync FAILED, exiting ==="
+            exit 1
+          fi
           echo "=== Source synced ==="
+          echo "=== Checking key files ==="
+          ls -la bionic/libc/Android.bp 2>/dev/null && echo "bionic/libc/Android.bp exists" || echo "bionic/libc/Android.bp MISSING"
+          ls -la bootable/recovery/ 2>/dev/null | head -5 && echo "bootable/recovery exists" || echo "bootable/recovery MISSING"
+          wc -l bionic/libc/Android.bp 2>/dev/null
+          echo "=== Key files check done ==="
 
       - name: Copy device tree
         run: |
