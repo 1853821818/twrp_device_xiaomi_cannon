@@ -119,6 +119,11 @@ jobs:
             echo "=== Checking make/release ==="
             ls -la build/make/release/ 2>/dev/null || echo "No build/make/release"
             echo "=== TARGET_RELEASE: $TARGET_RELEASE ==="
+            echo "=== release_configs contents ==="
+            ls -la build/release/release_configs/ 2>/dev/null || echo "No release_configs dir"
+            find build/release/release_configs/ -type f 2>/dev/null | head -30
+            echo "=== release_config.mk lookup logic ==="
+            grep -n -A5 -B5 "Available releases" build/make/core/release_config.mk 2>/dev/null | head -40
             echo "=== Setting up build environment ==="
             source build/envsetup.sh
             echo "=== envsetup exit code: $? ==="
