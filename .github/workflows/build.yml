@@ -58,19 +58,20 @@ jobs:
           cd ~/twrp
           echo "=== Initializing repo with branch: $MANIFEST_BRANCH ==="
           repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b $MANIFEST_BRANCH
-          echo "=== Exporting and modifying manifest ==="
-          repo manifest -o custom_manifest.xml
-          grep -v "external/jemalloc" custom_manifest.xml > custom_manifest_no_jemalloc.xml
-          mv custom_manifest_no_jemalloc.xml custom_manifest.xml
-          grep -i "jemalloc" custom_manifest.xml || echo "jemalloc removed from manifest"
+          echo "=== Creating custom manifest without jemalloc ==="
+          cp .repo/manifests/default.xml .repo/manifests/custom_manifest.xml
+          sed -i '/external\/jemalloc/d' .repo/manifests/custom_manifest.xml
+          grep -i "jemalloc" .repo/manifests/custom_manifest.xml || echo "jemalloc removed from manifest"
+          echo "=== Re-initializing repo with custom manifest ==="
+          repo init -m custom_manifest.xml
           echo "=== Repo initialized ==="
 
       - name: Sync TWRP source
         run: |
           export PATH=~/bin:$PATH
           cd ~/twrp
-          echo "=== Syncing source with custom manifest (this may take a while) ==="
-          repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags -m custom_manifest.xml
+          echo "=== Syncing source (this may take a while) ==="
+          repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
           echo "=== Source synced ==="
           echo "=== Manually cloning jemalloc ==="
           git clone --depth=1 https://github.com/xin3liang/platform_external_jemalloc.git external/jemalloc
