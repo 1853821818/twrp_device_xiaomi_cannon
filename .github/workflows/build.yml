@@ -84,6 +84,12 @@ jobs:
           cp -r .repo/projects/external/jemalloc.git/* .repo/project-objects/platform/external/jemalloc.git/
           echo "=== Fake jemalloc project created ==="
           ls -la .repo/projects/external/jemalloc.git/
+          echo "=== Removing jemalloc from project.list ==="
+          if [ -f .repo/project.list ]; then
+            grep -v "external/jemalloc" .repo/project.list > .repo/project.list.tmp
+            mv .repo/project.list.tmp .repo/project.list
+            echo "jemalloc removed from project.list"
+          fi
           echo "=== Syncing source ==="
           repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --current-branch
           echo "=== Source synced ==="
