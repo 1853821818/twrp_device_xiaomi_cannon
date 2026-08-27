@@ -1,5 +1,1 @@
-FAILED: out/soong/build.ninja
-error: bionic/libc/Android.bp:1937:15: property "visibility" already defined
-error: bionic/libc/Android.bp:1921:15: <-- previous definition here
-ninja: build stopped: subcommand failed.
-16:59:24 soong bootstrap failed with: exit status 1
+[31merror:[0m bionic/libc/Android.bp:1828:9: expected "}", found String
