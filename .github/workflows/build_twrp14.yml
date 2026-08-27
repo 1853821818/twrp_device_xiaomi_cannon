@@ -72,6 +72,19 @@ jobs:
           repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
           echo "=== Source synced ==="
 
+      - name: Clone build/release for AOSP 14
+        run: |
+          cd ~/twrp
+          echo "=== Checking build/release ==="
+          if [ ! -d "build/release" ]; then
+            echo "=== Cloning build/release ==="
+            git clone --depth=1 https://android.googlesource.com/platform/build/release build/release 2>&1 || echo "Clone failed, trying alternative"
+          fi
+          echo "=== build/release contents ==="
+          ls -la build/release/ 2>/dev/null || echo "No build/release"
+          echo "=== Available releases ==="
+          ls -la build/release/*/ 2>/dev/null | head -30 || echo "No release configs"
+
       - name: Copy device tree
         run: |
           echo "=== Copying device tree ==="
