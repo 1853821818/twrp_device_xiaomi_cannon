@@ -93,16 +93,49 @@ jobs:
       - name: Fix jemalloc visibility
         run: |
           cd ~/twrp
-          echo "=== Fixing libc_headers visibility ==="
-          if [ -f bionic/libc/Android.bp ]; then
-            sed -i 's/name: "libc_headers",/name: "libc_headers",\n    visibility: ["\/\/visibility:public"],/' bionic/libc/Android.bp
-            echo "libc_headers visibility fixed"
-          fi
-          if [ -f external/jemalloc/Android.bp ]; then
-            sed -i 's/name: "libjemalloc5",/name: "libjemalloc5",\n    visibility: ["\/\/visibility:public"],/' external/jemalloc/Android.bp
-            echo "libjemalloc5 visibility fixed"
-          fi
-          echo "=== Visibility fixes done ==="
+          echo "=== Fixing module visibility ==="
+          python3 << 'PYEOF'
+import re
+
+def fix_visibility(filepath, module_names):
+    """Safely set visibility to public for specified modules."""
+    try:
+        with open(filepath, 'r') as f:
+            content = f.read()
+    except FileNotFoundError:
+        print(f"  {filepath} not found, skipping")
+        return
+    
+    for module_name in module_names:
+        # Find the module block and check if it has visibility
+        pattern = rf'(name:\s*"{module_name}",\s*)([^}}]*?)(\n\}})'
+        match = re.search(pattern, content, re.DOTALL)
+        if match:
+            if 'visibility:' not in match.group(2):
+                # Add visibility before closing brace
+                replacement = match.group(1) + match.group(2) + ',\n    visibility: ["//visibility:public"]' + match.group(3)
+                content = content[:match.start()] + replacement + content[match.end():]
+                print(f"  Added visibility to {module_name} in {filepath}")
+            else:
+                # Replace existing visibility with public
+                old_vis = re.search(r'visibility:\s*\[([^\]]+)\]', match.group(2))
+                if old_vis and '//visibility:public' not in old_vis.group(1):
+                    content = content.replace(old_vis.group(0), 'visibility: ["//visibility:public"]')
+                    print(f"  Updated visibility to public for {module_name} in {filepath}")
+                else:
+                    print(f"  {module_name} already has public visibility in {filepath}")
+    
+    with open(filepath, 'w') as f:
+        f.write(content)
+
+# Fix libc_headers visibility in bionic/libc/Android.bp
+fix_visibility('bionic/libc/Android.bp', ['libc_headers'])
+
+# Fix all jemalloc modules visibility
+fix_visibility('external/jemalloc/Android.bp', ['libjemalloc5', 'libjemalloc', 'jemalloc'])
+
+print("=== Visibility fixes done ===")
+PYEOF
 
       - name: Copy device tree
         run: |
