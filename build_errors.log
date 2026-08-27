@@ -1,7 +1,11 @@
-No build/release
+=== Searching for release config ===
+build/make/tools/releasetools
+./build/make/core/release_config.mk
+=== Checking make/release ===
+No build/make/release
 === TARGET_RELEASE: ap1a ===
 === Trying lunch twrp_cannon-ap1a-eng ===
 build/make/core/release_config.mk:145: error: No release config found for TARGET_RELEASE: ap1a. Available releases are: .
-10:54:06 dumpvars failed with: exit status 1
+11:12:43 dumpvars failed with: exit status 1
 build/make/core/release_config.mk:145: error: No release config found for TARGET_RELEASE: ap1a. Available releases are: .
-10:54:07 dumpvars failed with: exit status 1
+11:12:43 dumpvars failed with: exit status 1
