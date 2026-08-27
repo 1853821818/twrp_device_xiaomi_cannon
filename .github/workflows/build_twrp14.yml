@@ -90,21 +90,22 @@ jobs:
           export ALLOW_MISSING_DEPENDENCIES=true
           cd ~/twrp
           {
+            echo "=== Checking source tree ==="
+            ls -la build/envsetup.sh 2>/dev/null || echo "No build/envsetup.sh"
+            ls -la device/ 2>/dev/null || echo "No device dir"
             echo "=== Checking device tree ==="
             ls -la device/xiaomi/cannon/ 2>/dev/null || echo "No device/xiaomi/cannon"
-            echo "=== Checking AndroidProducts.mk ==="
-            cat device/xiaomi/cannon/AndroidProducts.mk 2>/dev/null || echo "No AndroidProducts.mk"
             echo "=== Setting up build environment ==="
             source build/envsetup.sh
-            echo "=== All lunch targets (first 50) ==="
-            lunch 2>&1 | head -50
+            echo "=== envsetup exit code: $? ==="
+            echo "=== Checking lunch function ==="
+            type lunch 2>&1 || echo "lunch not found"
+            echo "=== All lunch targets ==="
+            lunch 2>&1 || echo "lunch command failed"
             echo "=== Lunch targets with cannon ==="
             lunch 2>&1 | grep -i cannon || echo "No cannon targets"
             echo "=== Trying lunch twrp_cannon-eng ==="
             lunch twrp_cannon-eng 2>&1
-            echo "=== Lunch exit code: $? ==="
-            echo "=== Trying lunch twrp_cannon-userdebug ==="
-            lunch twrp_cannon-userdebug 2>&1
             echo "=== Lunch exit code: $? ==="
             echo "=== Building recoveryimage ==="
             mka recoveryimage -j$(nproc --all)
@@ -122,7 +123,7 @@ jobs:
           echo "=== Listing all files in out/target/product ==="
           find ~/twrp/out/target/product/ -type f 2>/dev/null | head -100
           echo "=== Saving error summary ==="
-          grep -i -E "error:|failed|fatal:|missing|cannot|no such|ninja: build stopped|lunch|invalid" ~/twrp/build_full.log | tail -100 > ~/twrp/build_errors.log || true
+          grep -i -E "error:|failed|fatal:|missing|cannot|no such|ninja: build stopped|lunch|invalid|envsetup" ~/twrp/build_full.log | tail -150 > ~/twrp/build_errors.log || true
           cat ~/twrp/build_errors.log
       - name: Check build output
         run: |
