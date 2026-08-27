@@ -64,7 +64,8 @@ jobs:
           cat > .repo/local_manifests/jemalloc.xml << 'EOF'
           <?xml version="1.0" encoding="UTF-8"?>
           <manifest>
-            <project path="external/jemalloc" name="platform/external/jemalloc" remote="aosp" revision="master" />
+            <remote name="github" fetch="https://github.com/" />
+            <project path="external/jemalloc" name="xin3liang/platform_external_jemalloc" remote="github" revision="master" clone-depth="1" />
           </manifest>
           EOF
           echo "=== Local manifests added ==="
