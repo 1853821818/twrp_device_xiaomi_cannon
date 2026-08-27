@@ -56,50 +56,26 @@ jobs:
           export PATH=~/bin:$PATH
           mkdir -p ~/twrp
           cd ~/twrp
-          echo "=== Initializing repo with branch: $MANIFEST_BRANCH ==="
-          repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b $MANIFEST_BRANCH
+          echo "=== Initializing repo with branch: $MANIFEST_BRANCH (no superproject) ==="
+          repo init --depth=1 --no-superproject -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b $MANIFEST_BRANCH
           echo "=== Repo initialized ==="
 
       - name: Sync TWRP source
         run: |
           export PATH=~/bin:$PATH
           cd ~/twrp
-          echo "=== Creating fake jemalloc project in .repo/projects ==="
-          mkdir -p .repo/projects/external/jemalloc.git
-          cd .repo/projects/external/jemalloc.git
-          git init --bare
-          git config user.email "fake@fake.com"
-          git config user.name "fake"
-          # Create a fake commit
-          mkdir -p /tmp/jemalloc_fake
-          cd /tmp/jemalloc_fake
-          git init
-          echo "fake" > README.md
-          git add README.md
-          git commit -m "fake jemalloc"
-          git push ~/twrp/.repo/projects/external/jemalloc.git master
-          cd ~/twrp
-          # Also create project-objects
-          mkdir -p .repo/project-objects/platform/external/jemalloc.git
-          cp -r .repo/projects/external/jemalloc.git/* .repo/project-objects/platform/external/jemalloc.git/
-          echo "=== Fake jemalloc project created ==="
-          ls -la .repo/projects/external/jemalloc.git/
-          echo "=== Removing jemalloc from project.list ==="
-          if [ -f .repo/project.list ]; then
-            grep -v "external/jemalloc" .repo/project.list > .repo/project.list.tmp
-            mv .repo/project.list.tmp .repo/project.list
-            echo "jemalloc removed from project.list"
-          fi
           echo "=== Syncing source ==="
-          repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --current-branch
+          repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
           echo "=== Source synced ==="
-          echo "=== Replacing fake jemalloc with real AOSP one (android-12.0.0_r1) ==="
+          echo "=== Checking if jemalloc exists ==="
+          ls -la external/jemalloc/ 2>/dev/null || echo "jemalloc not synced (expected with --no-superproject)"
+          echo "=== Cloning jemalloc with libjemalloc5 (android-11.0.0_r1) ==="
           rm -rf external/jemalloc
-          git clone --depth=1 -b android-12.0.0_r1 https://android.googlesource.com/platform/external/jemalloc external/jemalloc
+          git clone --depth=1 -b android-11.0.0_r1 https://android.googlesource.com/platform/external/jemalloc external/jemalloc
           ls -la external/jemalloc/
-          echo "=== Checking for libjemalloc5 in Android.bp ==="
+          echo "=== Checking for libjemalloc5 ==="
           grep -r "libjemalloc5" external/jemalloc/ 2>/dev/null | head -10 || echo "libjemalloc5 not found"
-          echo "=== jemalloc replaced ==="
+          echo "=== jemalloc cloned ==="
 
       - name: Copy device tree
         run: |
