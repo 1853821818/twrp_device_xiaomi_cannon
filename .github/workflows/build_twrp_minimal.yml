@@ -80,20 +80,17 @@ jobs:
         run: |
           cd ~/twrp
           echo "=== Fixing jemalloc dependency in bionic/libc ==="
-          grep -n "libjemalloc5\|jemalloc" bionic/libc/Android.bp | head -20 || echo "No jemalloc references found"
-          mkdir -p external/jemalloc/include
-          echo 'cc_library_headers {' > external/jemalloc/Android.bp
-          echo '    name: "libjemalloc5",' >> external/jemalloc/Android.bp
-          echo '    vendor: true,' >> external/jemalloc/Android.bp
-          echo '    recovery_available: true,' >> external/jemalloc/Android.bp
-          echo '    visibility: ["//visibility:public"],' >> external/jemalloc/Android.bp
-          echo '    export_include_dirs: ["include"],' >> external/jemalloc/Android.bp
-          echo '}' >> external/jemalloc/Android.bp
-          cat external/jemalloc/Android.bp
-          echo "Fake libjemalloc5 headers module created"
-          echo "=== Checking libc dependencies ==="
+          echo "=== Before fix ==="
           grep -n "libjemalloc5" bionic/libc/Android.bp | head -10
-          echo "=== Jemalloc fix done ==="
+          
+          # Remove libjemalloc5 from whole_static_libs in the malloc_low_memory section
+          # This forces libc to use scudo instead of jemalloc
+          sed -i 's/"libjemalloc5",//g' bionic/libc/Android.bp
+          sed -i 's/"libc_jemalloc_wrapper",//g' bionic/libc/Android.bp
+          
+          echo "=== After fix ==="
+          grep -n "libjemalloc5\|jemalloc" bionic/libc/Android.bp | head -10 || echo "No jemalloc references found"
+          echo "=== Jemalloc dependency removed ==="
 
       - name: Copy device tree
         run: |
