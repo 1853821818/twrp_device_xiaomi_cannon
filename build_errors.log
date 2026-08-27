@@ -1,5 +1,30 @@
-COMMON_LUNCH_CHOICES := \
-=== All lunch targets (first 50) ===
+lrwxrwxrwx 1 runner runner 16 Aug 27 10:21 build/envsetup.sh -> make/envsetup.sh
+=== envsetup exit code: 0 ===
+=== Checking lunch function ===
+lunch is a function
+lunch () 
+        echo "usage: lunch [target]" 1>&2;
+    local used_lunch_menu=0;
+        print_lunch_menu;
+        used_lunch_menu=1;
+            local choices=($(TARGET_BUILD_APPS= TARGET_PRODUCT= TARGET_RELEASE= TARGET_BUILD_VARIANT= get_build_var COMMON_LUNCH_CHOICES 2>/dev/null));
+        echo "Invalid lunch combo: $selection";
+    if [ $used_lunch_menu -eq 1 ]; then
+        echo "Hint: next time you can simply run 'lunch $selection'";
+=== All lunch targets ===
+Warning: Cannot display lunch menu.
+Note: You can invoke lunch with an explicit target:
+  usage: lunch [target]
+In file included from build/make/core/envsetup.mk:51:
+build/make/core/release_config.mk:145: error: No release config found for TARGET_RELEASE: trunk_staging. Available releases are: .
+10:27:44 dumpvars failed with: exit status 1
+In file included from build/make/core/envsetup.mk:51:
+build/make/core/release_config.mk:145: error: No release config found for TARGET_RELEASE: trunk_staging. Available releases are: .
+10:27:45 dumpvars failed with: exit status 1
+In file included from build/make/core/envsetup.mk:51:
+build/make/core/release_config.mk:145: error: No release config found for TARGET_RELEASE: trunk_staging. Available releases are: .
+10:27:46 dumpvars failed with: exit status 1
+lunch command failed
 === Lunch targets with cannon ===
 === Trying lunch twrp_cannon-eng ===
 Invalid lunch combo: twrp_cannon-eng
