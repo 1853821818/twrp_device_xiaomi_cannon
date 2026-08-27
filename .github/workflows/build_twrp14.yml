@@ -84,7 +84,6 @@ jobs:
           echo '  <project name="TeamWin/android_external_zlib" path="external/zlib" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
           echo '  <project name="TeamWin/android_system_update_engine" path="system/update_engine" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
           echo '  <project name="TeamWin/android_system_vold" path="system/vold" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
-          echo '  <project name="TeamWin/android_bootable_recovery" path="bootable/recovery" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
           echo '</manifest>' >> .repo/local_manifests/twrp.xml
           cat .repo/local_manifests/twrp.xml
           echo "=== TWRP local manifest created ==="
