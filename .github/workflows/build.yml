@@ -65,8 +65,11 @@ jobs:
           export PATH=~/bin:$PATH
           cd ~/twrp
           echo "=== Syncing source (this may take a while) ==="
-          repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags || echo "Repo sync had some failures, continuing..."
-          echo "=== Source synced ==="
+          set +e
+          repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
+          echo "Repo sync exit code: $?"
+          set -e
+          echo "=== Source synced (ignoring failures) ==="
           echo "=== Manually cloning jemalloc ==="
           rm -rf external/jemalloc
           git clone --depth=1 https://github.com/xin3liang/platform_external_jemalloc.git external/jemalloc
