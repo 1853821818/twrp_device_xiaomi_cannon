@@ -58,6 +58,9 @@ jobs:
           cd ~/twrp
           echo "=== Initializing repo with branch: $MANIFEST_BRANCH ==="
           repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b $MANIFEST_BRANCH
+          echo "=== Removing jemalloc from manifest ==="
+          sed -i '/external\/jemalloc/d' .repo/manifests/default.xml
+          grep -i "jemalloc" .repo/manifests/default.xml || echo "jemalloc removed from manifest"
           echo "=== Repo initialized ==="
 
       - name: Sync TWRP source
@@ -65,13 +68,9 @@ jobs:
           export PATH=~/bin:$PATH
           cd ~/twrp
           echo "=== Syncing source (this may take a while) ==="
-          set +e
           repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
-          echo "Repo sync exit code: $?"
-          set -e
-          echo "=== Source synced (ignoring failures) ==="
+          echo "=== Source synced ==="
           echo "=== Manually cloning jemalloc ==="
-          rm -rf external/jemalloc
           git clone --depth=1 https://github.com/xin3liang/platform_external_jemalloc.git external/jemalloc
           ls -la external/jemalloc/
           echo "=== jemalloc cloned ==="
