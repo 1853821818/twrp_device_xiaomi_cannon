@@ -1,1 +1,1 @@
-[31merror:[0m bionic/libc/Android.bp:160:5: variable "defaults" is not set
+[31merror:[0m bionic/libc/Android.bp:132:17: expected ":", found ","

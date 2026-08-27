@@ -27,15 +27,15 @@ OUT_DIR=out
 ============================================
 === Lunch exit code: 0 ===
 === Building recoveryimage ===
-21:31:13 ************************************************************
-21:31:13 You are building on a machine with 15.6GB of RAM
-21:31:13 
-21:31:13 The minimum required amount of free memory is around 16GB,
-21:31:13 and even with that, some configurations may not work.
-21:31:13 
-21:31:13 If you run into segfaults or other errors, try reducing your
-21:31:13 -j value.
-21:31:13 ************************************************************
+21:47:43 ************************************************************
+21:47:43 You are building on a machine with 15.6GB of RAM
+21:47:43 
+21:47:43 The minimum required amount of free memory is around 16GB,
+21:47:43 and even with that, some configurations may not work.
+21:47:43 
+21:47:43 If you run into segfaults or other errors, try reducing your
+21:47:43 -j value.
+21:47:43 ************************************************************
 [1mbuild/make/core/soong_config.mk:194: [35mwarning: [0m[1mBOARD_PLAT_PUBLIC_SEPOLICY_DIR has been deprecated. Use SYSTEM_EXT_PUBLIC_SEPOLICY_DIRS instead.[0m
 [1mbuild/make/core/soong_config.mk:195: [35mwarning: [0m[1mBOARD_PLAT_PRIVATE_SEPOLICY_DIR has been deprecated. Use SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS instead.[0m
 ============================================
@@ -61,4 +61,4 @@ HOST_BUILD_TYPE=release
 BUILD_ID=SP2A.220405.004
 OUT_DIR=out
 ============================================
-[31merror:[0m bionic/libc/Android.bp:160:5: variable "defaults" is not set
+[31merror:[0m bionic/libc/Android.bp:132:17: expected ":", found ","
