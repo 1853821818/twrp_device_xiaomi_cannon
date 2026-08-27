@@ -1,5 +1,7 @@
 === Setting up build environment ===
 Warning: completion file /home/runner/twrp/tools/asuite/asuite.sh not found
+=== Available lunch targets ===
+No cannon targets found
 === Lunching: twrp_cannon-eng ===
 
 Invalid lunch combo: twrp_cannon-eng
