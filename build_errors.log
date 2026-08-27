@@ -1,4 +1,5 @@
 FAILED: out/soong/build.ninja
-error: external/jemalloc/Android.bp:180:1: module "libjemalloc5" variant "android_recovery_arm64_armv8-a_static": depends on //bionic/libc:libc_headers which is not visible to this module
+error: bionic/libc/Android.bp:1937:15: property "visibility" already defined
+error: bionic/libc/Android.bp:1921:15: <-- previous definition here
 ninja: build stopped: subcommand failed.
-16:46:13 soong bootstrap failed with: exit status 1
+16:59:24 soong bootstrap failed with: exit status 1
