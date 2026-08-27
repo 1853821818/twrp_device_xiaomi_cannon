@@ -82,8 +82,13 @@ jobs:
           fi
           echo "=== build/release contents ==="
           ls -la build/release/ 2>/dev/null || echo "No build/release"
-          echo "=== Available releases ==="
-          ls -la build/release/*/ 2>/dev/null | head -30 || echo "No release configs"
+          echo "=== release_configs contents ==="
+          ls -la build/release/release_configs/ 2>/dev/null || echo "No release_configs"
+          echo "=== All mk files in release_configs ==="
+          find build/release/release_configs/ -name "*.mk" 2>/dev/null | head -30
+          echo "=== Checking release_config.mk ==="
+          grep -n "Available releases" build/make/core/release_config.mk 2>/dev/null | head -5
+          grep -n "release_config" build/make/core/release_config.mk 2>/dev/null | head -20
 
       - name: Copy device tree
         run: |
