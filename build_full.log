@@ -1,23 +1,23 @@
 === Checking source tree ===
-lrwxrwxrwx 1 runner runner 16 Aug 27 13:05 build/envsetup.sh -> make/envsetup.sh
+lrwxrwxrwx 1 runner runner 16 Aug 27 13:19 build/envsetup.sh -> make/envsetup.sh
 === build directory contents ===
 total 40
-drwxr-xr-x 10 runner runner 4096 Aug 27 13:11 .
-drwxr-xr-x 25 runner runner 4096 Aug 27 13:11 ..
-lrwxrwxrwx  1 runner runner   17 Aug 27 13:05 CleanSpec.mk -> make/CleanSpec.mk
-drwxr-xr-x 19 runner runner 4096 Aug 27 13:05 bazel
-drwxr-xr-x  8 runner runner 4096 Aug 27 13:05 bazel_common_rules
-drwxr-xr-x 16 runner runner 4096 Aug 27 13:05 blueprint
-lrwxrwxrwx  1 runner runner   25 Aug 27 13:05 buildspec.mk.default -> make/buildspec.mk.default
-lrwxrwxrwx  1 runner runner    9 Aug 27 13:05 core -> make/core
-lrwxrwxrwx  1 runner runner   16 Aug 27 13:05 envsetup.sh -> make/envsetup.sh
-drwxr-xr-x 10 runner runner 4096 Aug 27 13:05 make
-drwxr-xr-x  9 runner runner 4096 Aug 27 13:05 orchestrator
-drwxr-xr-x  3 runner runner 4096 Aug 27 13:05 pesto
-drwxr-xr-x 11 runner runner 4096 Aug 27 13:11 release
-drwxr-xr-x 51 runner runner 4096 Aug 27 13:05 soong
-lrwxrwxrwx  1 runner runner   11 Aug 27 13:05 target -> make/target
-lrwxrwxrwx  1 runner runner   10 Aug 27 13:05 tools -> make/tools
+drwxr-xr-x 10 runner runner 4096 Aug 27 13:26 .
+drwxr-xr-x 25 runner runner 4096 Aug 27 13:26 ..
+lrwxrwxrwx  1 runner runner   17 Aug 27 13:19 CleanSpec.mk -> make/CleanSpec.mk
+drwxr-xr-x 19 runner runner 4096 Aug 27 13:18 bazel
+drwxr-xr-x  8 runner runner 4096 Aug 27 13:19 bazel_common_rules
+drwxr-xr-x 16 runner runner 4096 Aug 27 13:19 blueprint
+lrwxrwxrwx  1 runner runner   25 Aug 27 13:19 buildspec.mk.default -> make/buildspec.mk.default
+lrwxrwxrwx  1 runner runner    9 Aug 27 13:19 core -> make/core
+lrwxrwxrwx  1 runner runner   16 Aug 27 13:19 envsetup.sh -> make/envsetup.sh
+drwxr-xr-x 10 runner runner 4096 Aug 27 13:19 make
+drwxr-xr-x  9 runner runner 4096 Aug 27 13:19 orchestrator
+drwxr-xr-x  3 runner runner 4096 Aug 27 13:19 pesto
+drwxr-xr-x 11 runner runner 4096 Aug 27 13:26 release
+drwxr-xr-x 51 runner runner 4096 Aug 27 13:19 soong
+lrwxrwxrwx  1 runner runner   11 Aug 27 13:19 target -> make/target
+lrwxrwxrwx  1 runner runner   10 Aug 27 13:19 tools -> make/tools
 === Searching for release config ===
 build/make/tools/releasetools
 build/release
@@ -36,20 +36,24 @@ build/release/gms_mainline_go/required/release_configs
 No build/make/release
 === TARGET_RELEASE: ap2a ===
 === release_configs contents ===
-total 44
-drwxr-xr-x  2 runner runner 4096 Aug 27 13:11 .
-drwxr-xr-x 11 runner runner 4096 Aug 27 13:11 ..
--rw-r--r--  1 runner runner   63 Aug 27 13:11 ap2a.textproto
--rw-r--r--  1 runner runner  103 Aug 27 13:11 ap3a.textproto
--rw-r--r--  1 runner runner   98 Aug 27 13:11 ap4a.textproto
--rw-r--r--  1 runner runner   98 Aug 27 13:11 bp1a.textproto
--rw-r--r--  1 runner runner  139 Aug 27 13:11 eng.textproto
--rw-r--r--  1 runner runner  155 Aug 27 13:11 root.textproto
--rw-r--r--  1 runner runner  135 Aug 27 13:11 trunk_staging.textproto
--rw-r--r--  1 runner runner  141 Aug 27 13:11 user.textproto
--rw-r--r--  1 runner runner  151 Aug 27 13:11 userdebug.textproto
+total 52
+drwxr-xr-x  2 runner runner 4096 Aug 27 13:26 .
+drwxr-xr-x 11 runner runner 4096 Aug 27 13:26 ..
+-rw-r--r--  1 runner runner   20 Aug 27 13:26 ap2a.scl
+-rw-r--r--  1 runner runner   63 Aug 27 13:26 ap2a.textproto
+-rw-r--r--  1 runner runner  103 Aug 27 13:26 ap3a.textproto
+-rw-r--r--  1 runner runner   98 Aug 27 13:26 ap4a.textproto
+-rw-r--r--  1 runner runner   98 Aug 27 13:26 bp1a.textproto
+-rw-r--r--  1 runner runner  139 Aug 27 13:26 eng.textproto
+-rw-r--r--  1 runner runner  155 Aug 27 13:26 root.textproto
+-rw-r--r--  1 runner runner   20 Aug 27 13:26 trunk_staging.scl
+-rw-r--r--  1 runner runner  135 Aug 27 13:26 trunk_staging.textproto
+-rw-r--r--  1 runner runner  141 Aug 27 13:26 user.textproto
+-rw-r--r--  1 runner runner  151 Aug 27 13:26 userdebug.textproto
 build/release/release_configs/user.textproto
 build/release/release_configs/userdebug.textproto
+build/release/release_configs/trunk_staging.scl
+build/release/release_configs/ap2a.scl
 build/release/release_configs/root.textproto
 build/release/release_configs/bp1a.textproto
 build/release/release_configs/eng.textproto
@@ -282,14 +286,16 @@ applied_releases:=
 Warning: completion file /home/runner/twrp/tools/asuite/asuite.sh not found
 === envsetup exit code: 0 ===
 === Trying lunch twrp_cannon-ap2a-eng ===
+date: bad date 
 In file included from build/make/core/config.mk:380:
-In file included from build/make/core/envsetup.mk:74:
-build/make/core/version_util.mk:182: error: Argument missing.
-13:12:10 dumpvars failed with: exit status 1
+In file included from build/make/core/envsetup.mk:369:
+build/make/core/product_config.mk:610: error: Argument missing.
+13:26:59 dumpvars failed with: exit status 1
 Device cannon not found. Attempting to retrieve device repository from TeamWin Github (http://github.com/TeamWin).
 Repository for cannon not found in the TeamWin Github repository list.
 If this is in error, you may need to manually add it to your .repo/local_manifests/roomservice.xml
+date: bad date 
 In file included from build/make/core/config.mk:380:
-In file included from build/make/core/envsetup.mk:74:
-build/make/core/version_util.mk:182: error: Argument missing.
-13:12:11 dumpvars failed with: exit status 1
+In file included from build/make/core/envsetup.mk:369:
+build/make/core/product_config.mk:610: error: Argument missing.
+13:27:00 dumpvars failed with: exit status 1

@@ -1,4 +1,4 @@
-drwxr-xr-x 11 runner runner 4096 Aug 27 13:11 release
+drwxr-xr-x 11 runner runner 4096 Aug 27 13:26 release
 === Searching for release config ===
 build/make/tools/releasetools
 build/release
@@ -19,6 +19,8 @@ No build/make/release
 === release_configs contents ===
 build/release/release_configs/user.textproto
 build/release/release_configs/userdebug.textproto
+build/release/release_configs/trunk_staging.scl
+build/release/release_configs/ap2a.scl
 build/release/release_configs/root.textproto
 build/release/release_configs/bp1a.textproto
 build/release/release_configs/eng.textproto
@@ -126,7 +128,7 @@ $(foreach config, $(_all_release_configs), \
 _all_release_configs:=
 applied_releases:=
 === Trying lunch twrp_cannon-ap2a-eng ===
-build/make/core/version_util.mk:182: error: Argument missing.
-13:12:10 dumpvars failed with: exit status 1
-build/make/core/version_util.mk:182: error: Argument missing.
-13:12:11 dumpvars failed with: exit status 1
+build/make/core/product_config.mk:610: error: Argument missing.
+13:26:59 dumpvars failed with: exit status 1
+build/make/core/product_config.mk:610: error: Argument missing.
+13:27:00 dumpvars failed with: exit status 1
