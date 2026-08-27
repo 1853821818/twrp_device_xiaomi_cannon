@@ -82,29 +82,21 @@ jobs:
           echo "=== Fixing jemalloc dependency in bionic/libc ==="
           echo "=== Before fix ==="
           grep -n "libjemalloc5\|jemalloc" bionic/libc/Android.bp | head -20
-          
-          # Write Python fix script
-          cat > /tmp/fix_jemalloc.py << 'PYEOF'
-import re
-with open('bionic/libc/Android.bp', 'r') as f:
-    content = f.read()
-content = content.replace('"libjemalloc5",\n', '')
-content = content.replace('"libjemalloc5"', '')
-content = content.replace('"libc_jemalloc_wrapper",\n', '')
-content = content.replace('"libc_jemalloc_wrapper"', '')
-content = re.sub(r'whole_static_libs:\s*\[\s*\]', '', content)
-content = re.sub(r'static_libs:\s*\[\s*\]', '', content)
-with open('bionic/libc/Android.bp', 'w') as f:
-    f.write(content)
-print("File modified successfully")
-PYEOF
-          
-          python3 /tmp/fix_jemalloc.py
-          
+          echo 'import re' > /tmp/fix.py
+          echo 'with open("bionic/libc/Android.bp", "r") as f:' >> /tmp/fix.py
+          echo '    content = f.read()' >> /tmp/fix.py
+          echo 'content = content.replace("\"libjemalloc5\",\n", "")' >> /tmp/fix.py
+          echo 'content = content.replace("\"libjemalloc5\"", "")' >> /tmp/fix.py
+          echo 'content = content.replace("\"libc_jemalloc_wrapper\",\n", "")' >> /tmp/fix.py
+          echo 'content = content.replace("\"libc_jemalloc_wrapper\"", "")' >> /tmp/fix.py
+          echo 'content = re.sub(r"whole_static_libs:\s*\[\s*\]", "", content)' >> /tmp/fix.py
+          echo 'content = re.sub(r"static_libs:\s*\[\s*\]", "", content)' >> /tmp/fix.py
+          echo 'with open("bionic/libc/Android.bp", "w") as f:' >> /tmp/fix.py
+          echo '    f.write(content)' >> /tmp/fix.py
+          echo 'print("Done")' >> /tmp/fix.py
+          python3 /tmp/fix.py
           echo "=== After fix ==="
           grep -n "libjemalloc5\|jemalloc" bionic/libc/Android.bp | head -10 || echo "No jemalloc references found"
-          echo "=== Checking file syntax around line 160 ==="
-          sed -n '155,170p' bionic/libc/Android.bp
           echo "=== Jemalloc fix done ==="
 
       - name: Copy device tree
