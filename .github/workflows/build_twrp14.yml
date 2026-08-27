@@ -1,0 +1,293 @@
+name: Build TWRP 14 for Redmi Note 9 5G (cannon)
+
+on:
+  workflow_dispatch:
+    inputs:
+      manifest_branch:
+        description: 'TWRP Manifest Branch'
+        required: true
+        default: 'twrp-14'
+      device:
+        description: 'Device Codename'
+        required: true
+        default: 'cannon'
+
+env:
+  MANIFEST_BRANCH: ${{ github.event.inputs.manifest_branch || 'twrp-14' }}
+  DEVICE: ${{ github.event.inputs.device || 'cannon' }}
+  OEM: xiaomi
+  TWRP_DEVICE: twrp_cannon
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 240
+
+    steps:
+      - name: Checkout device tree
+        uses: actions/checkout@v4
+        with:
+          path: device/xiaomi/cannon
+
+      - name: Prepare build environment
+        run: |
+          echo "=== Installing dependencies ==="
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq \
+            git-core gnupg flex bison build-essential zip curl zlib1g-dev \
+            gcc-multilib g++-multilib libc6-dev-i386 lib32ncurses5-dev \
+            x11proto-core-dev libx11-dev lib32z1-dev libgl1-mesa-dev \
+            libxml2-utils xsltproc unzip fontconfig python3 python3-pip \
+            libncurses5 libssl-dev libelf-dev bc cpio rsync
+          echo "=== Dependencies installed ==="
+
+      - name: Install repo tool
+        run: |
+          mkdir -p ~/bin
+          curl -sL https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+          chmod a+x ~/bin/repo
+          echo "$HOME/bin" >> $GITHUB_PATH
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git config --global color.ui false
+
+      - name: Initialize TWRP manifest
+        run: |
+          export PATH=~/bin:$PATH
+          mkdir -p ~/twrp
+          cd ~/twrp
+          echo "=== Initializing repo with branch: twrp-14 ==="
+          repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-14
+          echo "=== Repo initialized ==="
+
+      - name: Sync TWRP source
+        run: |
+          export PATH=~/bin:$PATH
+          cd ~/twrp
+          echo "=== Syncing source ==="
+          repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
+          echo "=== Source synced ==="
+
+      - name: Copy device tree
+        run: |
+          echo "=== Copying device tree ==="
+          mkdir -p ~/twrp/device/xiaomi
+          cp -r $GITHUB_WORKSPACE/device/xiaomi/cannon ~/twrp/device/xiaomi/
+          ls -la ~/twrp/device/xiaomi/cannon/
+          echo "=== Check AndroidProducts.mk ==="
+          cat ~/twrp/device/xiaomi/cannon/AndroidProducts.mk
+          echo "=== Check twrp_cannon.mk ==="
+          cat ~/twrp/device/xiaomi/cannon/twrp_cannon.mk
+          echo "=== Device tree copied ==="
+
+      - name: Build TWRP
+        run: |
+          export PATH=~/bin:$PATH
+          export ALLOW_MISSING_DEPENDENCIES=true
+          cd ~/twrp
+          echo "=== Setting up build environment ==="
+          source build/envsetup.sh
+          echo "=== Lunching: $TWRP_DEVICE-eng ==="
+          lunch $TWRP_DEVICE-eng
+          echo "=== DEBUG: PRODUCT_PACKAGES after lunch ==="
+          echo "$PRODUCT_PACKAGES" | tr ' ' '\n' | sort | head -50
+          echo "=== DEBUG: TWRP common.mk content ==="
+          cat vendor/twrp/config/common.mk
+          echo "=== DEBUG: common.mk line count ==="
+          wc -l vendor/twrp/config/common.mk
+          echo "=== DEBUG: check packages.mk ==="
+          ls -la vendor/twrp/config/packages.mk 2>/dev/null || echo "packages.mk NOT FOUND"
+          cat vendor/twrp/config/packages.mk 2>/dev/null || echo "Cannot read packages.mk"
+          echo "=== DEBUG: check all files in vendor/twrp/config ==="
+          ls -la vendor/twrp/config/
+          echo "=== DEBUG END ==="
+          echo "=== Creating directories for recovery ramdisk ==="
+          mkdir -p out/target/product/$DEVICE/root
+          mkdir -p out/target/product/$DEVICE/recovery/root/system/etc
+          echo "=== Building recoveryimage ==="
+          mka recoveryimage -j$(nproc --all)
+          echo "=== Build complete ==="
+          echo "=== DEBUG: recovery/root contents ==="
+          ls -la out/target/product/$DEVICE/recovery/root/ 2>/dev/null || echo "No recovery/root dir"
+          echo "=== DEBUG: system/bin contents ==="
+          ls -la out/target/product/$DEVICE/recovery/root/system/bin/ 2>/dev/null || echo "No system/bin dir"
+          echo "=== DEBUG: sbin contents ==="
+          ls -la out/target/product/$DEVICE/recovery/root/sbin/ 2>/dev/null || echo "No sbin dir"
+          echo "=== DEBUG: find twrp/recovery binaries ==="
+          find out/target/product/$DEVICE/recovery/root/ -name "twrp" -o -name "recovery" -type f 2>/dev/null || echo "No twrp/recovery binary found"
+          echo "=== DEBUG: all executables in recovery/root ==="
+          find out/target/product/$DEVICE/recovery/root/ -type f -executable 2>/dev/null | head -50
+          echo "=== DEBUG END ==="
+          echo "=== DEBUG2: ramdisk-files.txt ==="
+          cat out/target/product/$DEVICE/recovery/root/ramdisk-files.txt 2>/dev/null | head -100
+          echo "=== DEBUG2: search recovery binary in out ==="
+          find out/ -name "recovery" -type f 2>/dev/null | head -20
+          find out/ -name "twrp" -type f 2>/dev/null | head -20
+          echo "=== DEBUG2: search executables in bootable/recovery intermediates ==="
+          find out/soong/.intermediates/bootable/recovery/ -type f -executable 2>/dev/null | head -30
+          echo "=== DEBUG2: system dir contents ==="
+          find out/target/product/$DEVICE/recovery/root/system/ -type f 2>/dev/null | head -30
+          echo "=== DEBUG2 END ==="
+          echo "=== DEBUG3: bootable/recovery files ==="
+          ls -la bootable/recovery/ 2>/dev/null | head -30
+          echo "=== DEBUG3: Android.bp in recovery ==="
+          find bootable/recovery/ -name "Android.bp" -o -name "Android.mk" 2>/dev/null | head -20
+          echo "=== DEBUG3: search recovery module in Android.bp ==="
+          grep -r "cc_binary\|name.*recovery\|name.*twrp" bootable/recovery/Android.bp 2>/dev/null | head -20
+          echo "=== DEBUG3: all executables in out ==="
+          find out/ -type f -executable 2>/dev/null | grep -i "recovery\|twrp" | head -20
+          echo "=== DEBUG3: ninja targets ==="
+          find out/ -name "*.ninja" -exec grep -l "recovery" {} \; 2>/dev/null | head -5
+          echo "=== DEBUG3 END ==="
+          echo "=== DEBUG4: search BUILD_EXECUTABLE in Android.mk ==="
+          grep -n "BUILD_EXECUTABLE\|LOCAL_MODULE.*recovery\|LOCAL_MODULE.*twrp\|name.*recovery\|name.*twrp" bootable/recovery/Android.mk 2>/dev/null | head -30
+          echo "=== DEBUG4: search cc_binary in all Android.bp ==="
+          grep -rn "cc_binary" bootable/recovery/ --include="*.bp" 2>/dev/null | head -20
+          echo "=== DEBUG4: full Android.bp ==="
+          cat bootable/recovery/Android.bp 2>/dev/null
+          echo "=== DEBUG4: PRODUCT_PACKAGES ==="
+          echo "$PRODUCT_PACKAGES" | tr ' ' '\n' | grep -i "recovery\|twrp" || echo "No recovery/twrp in PRODUCT_PACKAGES"
+          echo "=== DEBUG4: build recovery module directly ==="
+          mka recovery 2>&1 | tail -20 || echo "recovery module build failed or not found"
+          echo "=== DEBUG4 END ==="
+          echo "=== DEBUG5: check if recovery binary exists ==="
+          find out/ -name "recovery" -type f 2>/dev/null | head -10
+          find out/ -name "recovery*" -type f 2>/dev/null | head -20
+          echo "=== DEBUG5: check Android.mk recovery module context ==="
+          sed -n '90,110p' bootable/recovery/Android.mk
+          echo "---"
+          sed -n '640,660p' bootable/recovery/Android.mk
+          echo "=== DEBUG5: check if TW_BUILD_TWRP or similar flags ==="
+          grep -n "TW_BUILD\|TWRP_BUILD\|ifeq.*recovery\|ifndef.*recovery" bootable/recovery/Android.mk | head -20
+          echo "=== DEBUG5: list all modules in PRODUCT_PACKAGES ==="
+          echo "$PRODUCT_PACKAGES" | tr ' ' '\n' | sort | head -50
+          echo "=== DEBUG5 END ==="
+          echo "=== FIX: find recovery binary and copy to ramdisk ==="
+          RECOVERY_BIN=$(find out/target/product/$DEVICE/obj/EXECUTABLES/recovery_intermediates/ -name "recovery" -type f 2>/dev/null | head -1)
+          echo "Found recovery binary: $RECOVERY_BIN"
+          if [ -n "$RECOVERY_BIN" ]; then
+            echo "Copying recovery to system/bin/"
+            mkdir -p out/target/product/$DEVICE/recovery/root/system/bin
+            cp -f "$RECOVERY_BIN" out/target/product/$DEVICE/recovery/root/system/bin/recovery
+            chmod 755 out/target/product/$DEVICE/recovery/root/system/bin/recovery
+            ls -la out/target/product/$DEVICE/recovery/root/system/bin/
+            echo "Rebuilding recovery.img with recovery binary"
+            mka recoveryimage -j$(nproc --all)
+            echo "Recovery.img rebuilt"
+          else
+            echo "WARNING: recovery binary not found in intermediates"
+            find out/ -name "recovery" -type f 2>/dev/null | head -10
+          fi
+          echo "=== FIX END ==="
+          echo "=== DEBUG6: inspect recovery_intermediates ==="
+          ls -la out/target/product/$DEVICE/obj/EXECUTABLES/recovery_intermediates/ 2>/dev/null || echo "No recovery_intermediates dir"
+          echo "=== DEBUG6: find any recovery binary anywhere ==="
+          find out/ -name "recovery" -type f -executable 2>/dev/null | head -20
+          find out/ -name "recovery*" -type f -size +1M 2>/dev/null | head -20
+          echo "=== DEBUG6: check if recovery module was built ==="
+          find out/ -path "*recovery*" -name "*.o" 2>/dev/null | head -10
+          echo "=== DEBUG6: full recovery module in Android.mk ==="
+          sed -n '95,115p' bootable/recovery/Android.mk
+          echo "---"
+          sed -n '635,650p' bootable/recovery/Android.mk
+          echo "=== DEBUG6 END ==="
+          echo "=== DEBUG7: full recovery module definition ==="
+          grep -n "LOCAL_MODULE := recovery" bootable/recovery/Android.mk
+          echo "--- Lines 90-120 ---"
+          sed -n '90,120p' bootable/recovery/Android.mk
+          echo "--- Lines 630-660 ---"
+          sed -n '630,660p' bootable/recovery/Android.mk
+          echo "--- Check if recovery is in PRODUCT_PACKAGES ---"
+          grep -rn "recovery" device/xiaomi/cannon/*.mk 2>/dev/null || echo "No recovery in device mk"
+          echo "--- Check build variables ---"
+          grep -rn "BOARD_INCLUDE_RECOVERY_DTBO\|BOARD_USES_RECOVERY_AS_BOOT\|TARGET_NO_RECOVERY\|BOARD_HAS_NO_RECOVERY" device/xiaomi/cannon/*.mk build/make/core/*.mk 2>/dev/null | head -20
+          echo "--- Try building recovery module directly ---"
+          mka recovery -j$(nproc --all) 2>&1 | tail -30 || echo "mka recovery failed"
+          echo "--- Check if recovery binary exists after direct build ---"
+          find out/ -name "recovery" -type f -executable 2>/dev/null | head -10
+          echo "=== DEBUG7 END ==="
+          echo "=== DEBUG8: check TWRP common.mk for recovery package ==="
+          grep -n "recovery\|PRODUCT_PACKAGES" vendor/twrp/config/common.mk 2>/dev/null | head -30
+          echo "=== DEBUG8: check build/make for recoveryimage build process ==="
+          grep -rn "recovery.*binary\|recovery.*system/bin\|PRODUCT_PACKAGES.*recovery" build/make/core/Makefile 2>/dev/null | head -20
+          echo "=== DEBUG8: check if recovery is in any product makefile ==="
+          grep -rn "PRODUCT_PACKAGES.*recovery\|recovery.*PRODUCT_PACKAGES" build/target/product/ vendor/twrp/config/ 2>/dev/null | head -20
+          echo "=== DEBUG8: full recovery/root directory tree ==="
+          find out/target/product/$DEVICE/recovery/root/ -type f 2>/dev/null | sort
+          echo "=== DEBUG8: check recovery module in all Android.mk/bp ==="
+          grep -rn "LOCAL_MODULE := recovery\|name.*\"recovery\"" bootable/recovery/ 2>/dev/null | head -20
+          echo "=== DEBUG8 END ==="
+          echo "=== DEBUG9: list all modules in bootable/recovery ==="
+          grep -rn "LOCAL_MODULE\s*:=\|name:\s*\"" bootable/recovery/ --include="*.mk" --include="*.bp" 2>/dev/null | grep -i "recovery\|twrp\|teamwin" | head -30
+          echo "=== DEBUG9: check if twrp or teamwin binary exists ==="
+          find out/ -name "twrp" -o -name "teamwin" -type f 2>/dev/null | head -10
+          echo "=== DEBUG9: check all executables in out/target/product ==="
+          find out/target/product/$DEVICE/ -type f -executable 2>/dev/null | head -30
+          echo "=== DEBUG9: check recovery/root/sbin ==="
+          ls -la out/target/product/$DEVICE/recovery/root/sbin/ 2>/dev/null || echo "No sbin dir"
+          echo "=== DEBUG9: check recovery/root/system/bin ==="
+          ls -la out/target/product/$DEVICE/recovery/root/system/bin/ 2>/dev/null || echo "No system/bin dir"
+          echo "=== DEBUG9: full Android.mk around line 100 ==="
+          sed -n '95,130p' bootable/recovery/Android.mk
+          echo "=== DEBUG9 END ==="
+          echo "=== DEBUG10: full Android.mk recovery module definition ==="
+          cat bootable/recovery/Android.mk | head -200
+          echo "=== DEBUG10: check if recovery is in PRODUCT_PACKAGES after lunch ==="
+          echo "$PRODUCT_PACKAGES" | tr ' ' '\n' | grep -i "recovery\|twrp\|teamwin" || echo "No recovery/twrp in PRODUCT_PACKAGES"
+          echo "=== DEBUG10: try mka recovery with verbose output ==="
+          mka recovery 2>&1 | tail -50 || echo "mka recovery failed"
+          echo "=== DEBUG10: check recovery_intermediates after mka recovery ==="
+          ls -la out/target/product/$DEVICE/obj/EXECUTABLES/recovery_intermediates/ 2>/dev/null || echo "No recovery_intermediates dir"
+          echo "=== DEBUG10 END ==="
+          echo "=== DEBUG11: save Android.mk and build info ==="
+          cp bootable/recovery/Android.mk out/recovery_Android.mk
+          echo "$PRODUCT_PACKAGES" | tr ' ' '\n' | sort > out/product_packages.txt
+          find out/ -name "recovery" -type f 2>/dev/null > out/recovery_binaries.txt || true
+          echo "=== DEBUG11 END ==="
+          echo "=== DEBUG12: try mma to build recovery directly ==="
+          cd bootable/recovery
+          mma 2>&1 | tail -100 || echo "mma failed"
+          cd ~/twrp
+          echo "=== Check if recovery binary was built ==="
+          find out/ -name "recovery" -type f 2>/dev/null | head -10
+          ls -la out/target/product/$DEVICE/obj/EXECUTABLES/recovery_intermediates/ 2>/dev/null || echo "No recovery_intermediates dir"
+          echo "=== DEBUG12 END ==="
+
+      - name: Check build output
+        run: |
+          echo "=== Checking build output ==="
+          ls -la ~/twrp/out/target/product/$DEVICE/
+          if [ -f ~/twrp/out/target/product/$DEVICE/recovery.img ]; then
+            echo "=== recovery.img found ==="
+            file ~/twrp/out/target/product/$DEVICE/recovery.img
+            ls -lh ~/twrp/out/target/product/$DEVICE/recovery.img
+          else
+            echo "=== recovery.img NOT found, listing all img files ==="
+            find ~/twrp/out/target/product/$DEVICE/ -name "*.img" -type f
+            exit 1
+          fi
+
+      - name: Upload recovery image
+        uses: actions/upload-artifact@v4
+        with:
+          name: twrp-${{ env.DEVICE }}-${{ env.MANIFEST_BRANCH }}
+          path: ~/twrp/out/target/product/${{ env.DEVICE }}/recovery.img
+          retention-days: 30
+
+      - name: Upload debug files
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-files-${{ env.DEVICE }}
+          path: |
+            ~/twrp/out/recovery_Android.mk
+            ~/twrp/out/product_packages.txt
+            ~/twrp/out/recovery_binaries.txt
+          retention-days: 7
+
+      - name: Upload build logs (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs-${{ env.DEVICE }}
+          path: ~/twrp/out/target/product/${{ env.DEVICE }}/obj/RECOVERY_RAMDISK/
+          retention-days: 7
