@@ -96,6 +96,10 @@ jobs:
           echo '$(call declare-release-config,ap4a,build/release/release_configs/ap4a.textproto,)' >> build/release/release_config_map.mk
           cat build/release/release_config_map.mk
           echo "=== release_config_map.mk created ==="
+          echo "=== Creating starlark results dir and empty file ==="
+          mkdir -p out/starlark_results
+          echo '# Empty release config starlark' > out/starlark_results/out_release_config_entrypoint.scl.mk
+          echo "=== Created ==="
 
       - name: Copy device tree
         run: |
