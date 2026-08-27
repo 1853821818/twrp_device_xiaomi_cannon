@@ -80,25 +80,17 @@ jobs:
         run: |
           cd ~/twrp
           echo "=== Fixing jemalloc dependency in bionic/libc ==="
-          # Check if jemalloc is referenced
           grep -n "libjemalloc5\|jemalloc" bionic/libc/Android.bp | head -20 || echo "No jemalloc references found"
-          
-          # Create a minimal fake jemalloc5 module that won't cause dependency cycles
-          mkdir -p external/jemalloc
-          cat > external/jemalloc/Android.bp << 'EOF'
-cc_library_headers {
-    name: "libjemalloc5",
-    vendor: true,
-    recovery_available: true,
-    visibility: ["//visibility:public"],
-    export_include_dirs: ["include"],
-}
-EOF
           mkdir -p external/jemalloc/include
+          echo 'cc_library_headers {' > external/jemalloc/Android.bp
+          echo '    name: "libjemalloc5",' >> external/jemalloc/Android.bp
+          echo '    vendor: true,' >> external/jemalloc/Android.bp
+          echo '    recovery_available: true,' >> external/jemalloc/Android.bp
+          echo '    visibility: ["//visibility:public"],' >> external/jemalloc/Android.bp
+          echo '    export_include_dirs: ["include"],' >> external/jemalloc/Android.bp
+          echo '}' >> external/jemalloc/Android.bp
+          cat external/jemalloc/Android.bp
           echo "Fake libjemalloc5 headers module created"
-          
-          # Also need to check if libc requires static libjemalloc5
-          # If so, we need a different approach
           echo "=== Checking libc dependencies ==="
           grep -n "libjemalloc5" bionic/libc/Android.bp | head -10
           echo "=== Jemalloc fix done ==="
