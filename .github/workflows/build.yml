@@ -92,9 +92,19 @@ jobs:
           cd ~/twrp
           echo "=== Fake jemalloc project created ==="
           ls -la .repo/projects/external/jemalloc.git/
+          echo "=== Removing jemalloc remote fetch config ==="
+          cat .repo/projects/external/jemalloc.git/config
+          git -C .repo/projects/external/jemalloc.git config --remove-section remote.aosp 2>/dev/null || true
+          git -C .repo/projects/external/jemalloc.git config --remove-section remote.origin 2>/dev/null || true
+          echo "=== jemalloc remote config removed ==="
+          cat .repo/projects/external/jemalloc.git/config
           echo "=== Syncing source ==="
-          repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --current-branch || echo "repo sync had issues, continuing..."
-          echo "=== Source synced ==="
+          set +e
+          repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --current-branch
+          SYNC_EXIT=$?
+          set -e
+          echo "repo sync exit code: $SYNC_EXIT"
+          echo "=== Source synced (or continued after errors) ==="
           echo "=== Creating fake libjemalloc5 module ==="
           echo 'cc_library_shared {' > external/jemalloc/Android.bp
           echo '    name: "libjemalloc5",' >> external/jemalloc/Android.bp
