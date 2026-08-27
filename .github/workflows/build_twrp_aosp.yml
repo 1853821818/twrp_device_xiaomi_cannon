@@ -120,6 +120,13 @@ jobs:
           export PATH=~/bin:$PATH
           export ALLOW_MISSING_DEPENDENCIES=true
           cd ~/twrp
+          # Remove old logs first
+          rm -f ~/twrp/build_full.log ~/twrp/build_errors.log
+          echo "=== Checking bionic/libc/Android.bp around line 1828 ==="
+          sed -n '1820,1840p' bionic/libc/Android.bp 2>/dev/null || echo "Cannot read file"
+          echo "=== File line count ==="
+          wc -l bionic/libc/Android.bp 2>/dev/null
+          echo "=== Starting build ==="
           {
             echo "=== Setting up build environment ==="
             source build/envsetup.sh
