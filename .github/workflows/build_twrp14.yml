@@ -75,16 +75,12 @@ jobs:
       - name: Add missing dependencies via local manifest
         run: |
           cd ~/twrp
-          echo "=== Checking default remote ==="
-          grep -r "remote" .repo/manifests/default.xml 2>/dev/null | head -10 || echo "No default.xml"
           echo "=== Creating local manifest for missing deps ==="
           mkdir -p .repo/local_manifests
-          cat > .repo/local_manifests/missing_deps.xml << 'XMLEOF'
-<?xml version="1.0" encoding="UTF-8"?>
-<manifest>
-  <project name="platform/external/jemalloc" path="external/jemalloc" revision="refs/tags/android-12.1.0_r27" />
-</manifest>
-XMLEOF
+          echo '<?xml version="1.0" encoding="UTF-8"?>' > .repo/local_manifests/missing_deps.xml
+          echo '<manifest>' >> .repo/local_manifests/missing_deps.xml
+          echo '  <project name="platform/external/jemalloc" path="external/jemalloc" revision="refs/tags/android-12.1.0_r27" />' >> .repo/local_manifests/missing_deps.xml
+          echo '</manifest>' >> .repo/local_manifests/missing_deps.xml
           cat .repo/local_manifests/missing_deps.xml
           echo "=== Syncing missing deps ==="
           export PATH=~/bin:$PATH
