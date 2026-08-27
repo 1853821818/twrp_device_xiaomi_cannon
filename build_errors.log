@@ -1,4 +1,4 @@
-drwxr-xr-x 11 runner runner 4096 Aug 27 12:47 release
+drwxr-xr-x 11 runner runner 4096 Aug 27 12:58 release
 === Searching for release config ===
 build/make/tools/releasetools
 build/release
@@ -126,7 +126,7 @@ $(foreach config, $(_all_release_configs), \
 _all_release_configs:=
 applied_releases:=
 === Trying lunch twrp_cannon-ap2a-eng ===
-build/make/core/release_config.mk:237: error: out/starlark_results/out_release_config_entrypoint.scl.mk: No such file or directory
-12:48:23 dumpvars failed with: exit status 1
-build/make/core/release_config.mk:237: error: out/starlark_results/out_release_config_entrypoint.scl.mk: No such file or directory
-12:48:24 dumpvars failed with: exit status 1
+build/make/core/version_util.mk:182: error: Argument missing.
+12:58:42 dumpvars failed with: exit status 1
+build/make/core/version_util.mk:182: error: Argument missing.
+12:58:43 dumpvars failed with: exit status 1
