@@ -92,15 +92,13 @@ jobs:
           grep -r "libjemalloc5" external/jemalloc/ 2>/dev/null | head -10 || echo "libjemalloc5 not found"
           echo "=== jemalloc cloned ==="
           echo "=== Creating fake libjemalloc5 module ==="
-          cat > external/jemalloc/Android.bp << 'EOF'
-cc_library_shared {
-    name: "libjemalloc5",
-    srcs: [],
-    shared_libs: [],
-    system_shared_libs: [],
-    cflags: [],
-}
-EOF
+          echo 'cc_library_shared {' > external/jemalloc/Android.bp
+          echo '    name: "libjemalloc5",' >> external/jemalloc/Android.bp
+          echo '    srcs: [],' >> external/jemalloc/Android.bp
+          echo '    shared_libs: [],' >> external/jemalloc/Android.bp
+          echo '    system_shared_libs: [],' >> external/jemalloc/Android.bp
+          echo '    cflags: [],' >> external/jemalloc/Android.bp
+          echo '}' >> external/jemalloc/Android.bp
           echo "=== Fake libjemalloc5 module created ==="
           cat external/jemalloc/Android.bp
 
