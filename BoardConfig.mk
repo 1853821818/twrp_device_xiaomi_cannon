@@ -164,6 +164,10 @@ TARGET_USES_MKE2FS := true
 # Malloc - use default scudo instead of jemalloc
 # MALLOC_SVELTE := true
 
+# Fix TWRP compile errors
+COMMON_GLOBAL_CFLAGS += -Wno-error=format-extra-args
+COMMON_GLOBAL_CPPFLAGS += -Wno-error=format-extra-args
+
 # HIDL
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := hardware/interfaces/compatibility_matrices/compatibility_matrix.5.xml
 
