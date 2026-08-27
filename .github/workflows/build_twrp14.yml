@@ -98,8 +98,8 @@ jobs:
             echo "=== Setting up build environment ==="
             source build/envsetup.sh
             echo "=== envsetup exit code: $? ==="
-            echo "=== Trying lunch twrp_cannon-eng ==="
-            lunch twrp_cannon-eng 2>&1
+            echo "=== Trying lunch twrp_cannon-ap1a-eng ==="
+            lunch twrp_cannon-ap1a-eng 2>&1
             echo "=== Lunch exit code: $? ==="
             echo "=== Building recoveryimage ==="
             mka recoveryimage -j$(nproc --all)
