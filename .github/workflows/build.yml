@@ -44,12 +44,14 @@ jobs:
       - name: Install repo tool
         run: |
           mkdir -p ~/bin
-          curl -sL https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+          # Use older repo version that doesn't use superproject
+          curl -sL https://storage.googleapis.com/git-repo-downloads/repo-2.15 > ~/bin/repo
           chmod a+x ~/bin/repo
           echo "$HOME/bin" >> $GITHUB_PATH
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           git config --global color.ui false
+          repo --version
 
       - name: Initialize TWRP manifest
         run: |
