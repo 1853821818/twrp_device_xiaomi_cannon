@@ -64,23 +64,23 @@ jobs:
         run: |
           export PATH=~/bin:$PATH
           cd ~/twrp
-          echo "=== Debug: checking manifest for jemalloc ==="
-          repo manifest | grep -i jemalloc || echo "jemalloc not in repo manifest output"
-          echo "=== Debug: checking .repo/manifest.xml ==="
-          grep -i jemalloc .repo/manifest.xml || echo "jemalloc not in .repo/manifest.xml"
-          echo "=== Debug: checking superproject ==="
+          echo "=== Debug: full superproject line ==="
           grep -i superproject .repo/manifest.xml
-          echo "=== Creating local manifest to remove and replace jemalloc ==="
+          echo "=== Debug: removing superproject from manifest ==="
+          sed -i '/superproject/d' .repo/manifests/default.xml
+          grep -i superproject .repo/manifests/default.xml || echo "superproject removed"
+          echo "=== Debug: re-initializing repo without superproject ==="
+          repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b $MANIFEST_BRANCH
+          echo "=== Debug: checking superproject after re-init ==="
+          grep -i superproject .repo/manifest.xml || echo "superproject not found"
+          echo "=== Creating local manifest for jemalloc ==="
           mkdir -p .repo/local_manifests
           cat > .repo/local_manifests/fix_jemalloc.xml << 'EOF'
           <?xml version="1.0" encoding="UTF-8"?>
           <manifest>
-            <remove-project name="platform/external/jemalloc" />
             <project path="external/jemalloc" name="xin3liang/platform_external_jemalloc" remote="github" revision="master" clone-depth="1" />
           </manifest>
           EOF
-          echo "=== Debug: local manifest created ==="
-          cat .repo/local_manifests/fix_jemalloc.xml
           echo "=== Syncing source ==="
           repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
           echo "=== Source synced ==="
