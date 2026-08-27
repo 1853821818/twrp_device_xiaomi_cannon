@@ -111,15 +111,23 @@ jobs:
       - name: Check build output
         run: |
           echo "=== Checking build output ==="
-          ls -la ~/twrp/out/target/product/$DEVICE/ 2>/dev/null || echo "No device output dir"
+          echo "=== All img files in out ==="
+          find ~/twrp/out/ -name "*.img" -type f 2>/dev/null
+          echo "=== All files in device output ==="
+          ls -laR ~/twrp/out/target/product/$DEVICE/ 2>/dev/null | head -100
+          echo "=== Looking for recovery ==="
+          find ~/twrp/out/ -iname "*recovery*" -type f 2>/dev/null
+          echo "=== Looking for boot ==="
+          find ~/twrp/out/ -iname "*boot*" -type f 2>/dev/null | head -20
           RECOVERY_IMG=~/twrp/out/target/product/$DEVICE/recovery.img
           if [ -f "$RECOVERY_IMG" ]; then
             echo "=== recovery.img found ==="
             file "$RECOVERY_IMG"
             ls -lh "$RECOVERY_IMG"
           else
-            echo "=== recovery.img NOT found, listing all img files ==="
-            find ~/twrp/out/ -name "*.img" -type f 2>/dev/null
+            echo "=== recovery.img NOT found in standard location ==="
+            echo "=== Trying other locations ==="
+            find ~/twrp/out/target/product/ -name "recovery*.img" -type f 2>/dev/null
             exit 1
           fi
 
