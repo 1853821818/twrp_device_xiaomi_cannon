@@ -75,18 +75,20 @@ jobs:
       - name: Add missing dependencies via local manifest
         run: |
           cd ~/twrp
-          echo "=== Creating fake libjemalloc5 module ==="
-          mkdir -p external/jemalloc
-          echo 'cc_library_static {' > external/jemalloc/Android.bp
-          echo '    name: "libjemalloc5",' >> external/jemalloc/Android.bp
-          echo '    srcs: [],' >> external/jemalloc/Android.bp
-          echo '    stl: "none",' >> external/jemalloc/Android.bp
-          echo '    nocrt: true,' >> external/jemalloc/Android.bp
-          echo '    vendor: true,' >> external/jemalloc/Android.bp
-          echo '    recovery_available: true,' >> external/jemalloc/Android.bp
-          echo '}' >> external/jemalloc/Android.bp
-          cat external/jemalloc/Android.bp
-          echo "=== Fake libjemalloc5 module created ==="
+          echo "=== Creating local manifest for jemalloc_new ==="
+          mkdir -p .repo/local_manifests
+          echo '<?xml version="1.0" encoding="UTF-8"?>' > .repo/local_manifests/missing_deps.xml
+          echo '<manifest>' >> .repo/local_manifests/missing_deps.xml
+          echo '  <project name="platform/external/jemalloc_new" path="external/jemalloc" revision="refs/tags/android-12.1.0_r27" />' >> .repo/local_manifests/missing_deps.xml
+          echo '</manifest>' >> .repo/local_manifests/missing_deps.xml
+          cat .repo/local_manifests/missing_deps.xml
+          echo "=== Syncing jemalloc_new ==="
+          export PATH=~/bin:$PATH
+          repo sync -j$(nproc --all) --force-sync external/jemalloc 2>&1 | tail -20
+          echo "=== Checking jemalloc ==="
+          ls -la external/jemalloc/ 2>/dev/null | head -10
+          ls external/jemalloc/Android.bp 2>/dev/null && echo "Android.bp found" || echo "No Android.bp"
+          echo "=== Done ==="
 
       - name: Copy device tree
         run: |
