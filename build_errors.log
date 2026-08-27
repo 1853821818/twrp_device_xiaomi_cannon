@@ -1,11 +1,23 @@
+drwxr-xr-x 11 runner runner 4096 Aug 27 11:23 release
 === Searching for release config ===
 build/make/tools/releasetools
+build/release
+build/release/gms_mainline/rkpd/release_configs
+build/release/gms_mainline/uwb/release_configs
+build/release/gms_mainline/optional/release_configs
+build/release/gms_mainline/required/release_configs
+build/release/release_configs
+build/release/automotive/release_configs
+build/release/gms_mainline_go/rkpd/release_configs
+build/release/gms_mainline_go/uwb/release_configs
+build/release/gms_mainline_go/optional/release_configs
+build/release/gms_mainline_go/required/release_configs
 ./build/make/core/release_config.mk
 === Checking make/release ===
 No build/make/release
 === TARGET_RELEASE: ap1a ===
 === Trying lunch twrp_cannon-ap1a-eng ===
 build/make/core/release_config.mk:145: error: No release config found for TARGET_RELEASE: ap1a. Available releases are: .
-11:12:43 dumpvars failed with: exit status 1
+11:24:07 dumpvars failed with: exit status 1
 build/make/core/release_config.mk:145: error: No release config found for TARGET_RELEASE: ap1a. Available releases are: .
-11:12:43 dumpvars failed with: exit status 1
+11:24:08 dumpvars failed with: exit status 1
