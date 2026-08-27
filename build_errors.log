@@ -1,10 +1,8 @@
-FAILED: out/soong/build.ninja
-error: bionic/libc/Android.bp:1639:1: encountered dependency cycle:
-error: external/jemalloc/Android.bp:1:1:     module "libjemalloc5" variant "android_recovery_arm64_armv8-a_static" depends on module "libc" variant "android_recovery_arm64_armv8-a_shared"
-error: bionic/libc/Android.bp:1639:1:     module "libc" variant "android_recovery_arm64_armv8-a_shared" depends on module "libc" variant "android_recovery_arm64_armv8-a_shared_current"
-error: bionic/libc/Android.bp:1639:1:     module "libc" variant "android_recovery_arm64_armv8-a_shared_current" depends on module "libc" variant "android_recovery_arm64_armv8-a_shared_30"
-error: bionic/libc/Android.bp:1639:1:     module "libc" variant "android_recovery_arm64_armv8-a_shared_30" depends on module "libc" variant "android_recovery_arm64_armv8-a_shared_29"
-error: bionic/libc/Android.bp:1639:1:     module "libc" variant "android_recovery_arm64_armv8-a_shared_29" depends on module "libc" variant "android_recovery_arm64_armv8-a_static"
-error: bionic/libc/Android.bp:1639:1:     module "libc" variant "android_recovery_arm64_armv8-a_static" depends on module "libjemalloc5" variant "android_recovery_arm64_armv8-a_static"
+out/build-twrp_cannon-cleanspec.ninja is missing, regenerating...
+out/build-twrp_cannon.ninja is missing, regenerating...
+out/build-twrp_cannon-package.ninja is missing, regenerating...
+FAILED: out/soong/.intermediates/bionic/libc/libc/android_arm64_armv8-a_shared/libc.so.toc
+echo "module libc missing dependencies: libjemalloc5{os:android,image:,arch:arm64_armv8-a,sdk:,link:static}" && false
+module libc missing dependencies: libjemalloc5{os:android,image:,arch:arm64_armv8-a,sdk:,link:static}
 ninja: build stopped: subcommand failed.
-15:37:33 soong bootstrap failed with: exit status 1
+15:52:10 ninja failed with: exit status 1
