@@ -90,6 +90,20 @@ jobs:
           ls external/jemalloc/Android.bp 2>/dev/null && echo "Android.bp found" || echo "No Android.bp"
           echo "=== Done ==="
 
+      - name: Fix jemalloc visibility
+        run: |
+          cd ~/twrp
+          echo "=== Fixing libc_headers visibility ==="
+          if [ -f bionic/libc/Android.bp ]; then
+            sed -i 's/name: "libc_headers",/name: "libc_headers",\n    visibility: ["\/\/visibility:public"],/' bionic/libc/Android.bp
+            echo "libc_headers visibility fixed"
+          fi
+          if [ -f external/jemalloc/Android.bp ]; then
+            sed -i 's/name: "libjemalloc5",/name: "libjemalloc5",\n    visibility: ["\/\/visibility:public"],/' external/jemalloc/Android.bp
+            echo "libjemalloc5 visibility fixed"
+          fi
+          echo "=== Visibility fixes done ==="
+
       - name: Copy device tree
         run: |
           echo "=== Copying device tree ==="
