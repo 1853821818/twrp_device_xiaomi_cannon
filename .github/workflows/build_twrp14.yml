@@ -129,6 +129,24 @@ jobs:
             ~/twrp/out/recovery_binaries.txt
           retention-days: 7
 
+      - name: Commit build logs on failure
+        if: failure()
+        run: |
+          echo "=== Copying build logs to workspace ==="
+          cp ~/twrp/build_full.log $GITHUB_WORKSPACE/build_full.log 2>/dev/null || echo "No build_full.log"
+          cp ~/twrp/build_errors.log $GITHUB_WORKSPACE/build_errors.log 2>/dev/null || echo "No build_errors.log"
+          cd $GITHUB_WORKSPACE
+          echo "=== Configuring git ==="
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          echo "=== Committing logs ==="
+          git add build_full.log build_errors.log 2>/dev/null || true
+          git commit -m "Add build logs for debugging" 2>/dev/null || echo "Nothing to commit"
+          echo "=== Pushing logs ==="
+          git push 2>/dev/null || echo "Push failed (may be due to permissions)"
+          echo "=== Done ==="
+          ls -la build_full.log build_errors.log 2>/dev/null || true
+
       - name: Upload build logs (on failure)
         if: failure()
         uses: actions/upload-artifact@v4
