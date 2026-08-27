@@ -89,9 +89,15 @@ jobs:
           echo "=== release_configs contents ==="
           ls -la build/release/release_configs/ 2>/dev/null || echo "No release_configs"
           find build/release/release_configs/ -type f 2>/dev/null | head -30
-          echo "=== Patching release_config.mk to add default ap2a ==="
-          echo '_all_release_configs := ap2a trunk_staging' >> build/make/core/release_config.mk
-          echo "=== Patched ==="
+          echo "=== Creating release_config_map.mk ==="
+          cat > build/release/release_config_map.mk << 'MAPEOF'
+$(call declare-release-config,ap2a,build/release/release_configs/ap2a.textproto,)
+$(call declare-release-config,trunk_staging,build/release/release_configs/trunk_staging.textproto,)
+$(call declare-release-config,ap3a,build/release/release_configs/ap3a.textproto,)
+$(call declare-release-config,ap4a,build/release/release_configs/ap4a.textproto,)
+MAPEOF
+          cat build/release/release_config_map.mk
+          echo "=== release_config_map.mk created ==="
 
       - name: Copy device tree
         run: |
