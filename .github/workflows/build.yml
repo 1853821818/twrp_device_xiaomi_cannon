@@ -6,14 +6,14 @@ on:
       manifest_branch:
         description: 'TWRP Manifest Branch'
         required: true
-        default: 'twrp-12.1'
+        default: 'twrp-14'
       device:
         description: 'Device Codename'
         required: true
         default: 'cannon'
 
 env:
-  MANIFEST_BRANCH: ${{ github.event.inputs.manifest_branch || 'twrp-12' }}
+  MANIFEST_BRANCH: ${{ github.event.inputs.manifest_branch || 'twrp-14' }}
   DEVICE: ${{ github.event.inputs.device || 'cannon' }}
   OEM: xiaomi
   TWRP_DEVICE: twrp_cannon
@@ -56,16 +56,9 @@ jobs:
           export PATH=~/bin:$PATH
           mkdir -p ~/twrp
           cd ~/twrp
-          echo "=== Initializing repo with branch: twrp-12.1 ==="
-          repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-12.1
-          echo "=== Exporting manifest ==="
-          repo manifest -o /tmp/original_manifest.xml
-          echo "=== Removing jemalloc from manifest ==="
-          grep -v "external/jemalloc" /tmp/original_manifest.xml > /tmp/new_manifest.xml
-          echo "=== Re-initializing with modified manifest ==="
-          cp /tmp/new_manifest.xml .repo/manifests/custom_manifest.xml
-          repo init -m custom_manifest.xml
-          echo "=== Repo initialized with modified manifest ==="
+          echo "=== Initializing repo with branch: twrp-14 ==="
+          repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-14
+          echo "=== Repo initialized ==="
 
       - name: Sync TWRP source
         run: |
@@ -74,19 +67,6 @@ jobs:
           echo "=== Syncing source ==="
           repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
           echo "=== Source synced ==="
-          echo "=== Checking if jemalloc exists ==="
-          ls -la external/jemalloc/ 2>/dev/null || echo "jemalloc not synced (expected)"
-          echo "=== Creating jemalloc directory with fake libjemalloc5 ==="
-          mkdir -p external/jemalloc
-          echo 'cc_library_shared {' > external/jemalloc/Android.bp
-          echo '    name: "libjemalloc5",' >> external/jemalloc/Android.bp
-          echo '    srcs: [],' >> external/jemalloc/Android.bp
-          echo '    shared_libs: [],' >> external/jemalloc/Android.bp
-          echo '    system_shared_libs: [],' >> external/jemalloc/Android.bp
-          echo '    cflags: [],' >> external/jemalloc/Android.bp
-          echo '}' >> external/jemalloc/Android.bp
-          echo "=== Fake libjemalloc5 module created ==="
-          cat external/jemalloc/Android.bp
 
       - name: Copy device tree
         run: |
