@@ -93,7 +93,13 @@ jobs:
           {
             echo "=== Checking source tree ==="
             ls -la build/envsetup.sh 2>/dev/null || echo "No build/envsetup.sh"
-            ls -la build/release/ 2>/dev/null || echo "No build/release"
+            echo "=== build directory contents ==="
+            ls -la build/ 2>/dev/null | head -30
+            echo "=== Searching for release config ==="
+            find build/ -name "*release*" -type d 2>/dev/null | head -20
+            find . -name "release_config.mk" 2>/dev/null | head -10
+            echo "=== Checking make/release ==="
+            ls -la build/make/release/ 2>/dev/null || echo "No build/make/release"
             echo "=== TARGET_RELEASE: $TARGET_RELEASE ==="
             echo "=== Setting up build environment ==="
             source build/envsetup.sh
