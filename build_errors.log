@@ -1,9 +1,10 @@
 FAILED: out/soong/build.ninja
 error: bionic/libc/Android.bp:1639:1: encountered dependency cycle:
-error: external/libcxxabi/Android.bp:96:1:     module "libc++abi" variant "android_recovery_arm64_armv8-a_static" depends on module "libc" variant "android_recovery_arm64_armv8-a_shared"
-error: bionic/libc/Android.bp:1639:1:     module "libc" variant "android_recovery_arm64_armv8-a_shared" depends on module "libc" variant "android_recovery_arm64_armv8-a_static"
+error: external/jemalloc/Android.bp:1:1:     module "libjemalloc5" variant "android_recovery_arm64_armv8-a_static" depends on module "libc" variant "android_recovery_arm64_armv8-a_shared"
+error: bionic/libc/Android.bp:1639:1:     module "libc" variant "android_recovery_arm64_armv8-a_shared" depends on module "libc" variant "android_recovery_arm64_armv8-a_shared_current"
+error: bionic/libc/Android.bp:1639:1:     module "libc" variant "android_recovery_arm64_armv8-a_shared_current" depends on module "libc" variant "android_recovery_arm64_armv8-a_shared_30"
+error: bionic/libc/Android.bp:1639:1:     module "libc" variant "android_recovery_arm64_armv8-a_shared_30" depends on module "libc" variant "android_recovery_arm64_armv8-a_shared_29"
+error: bionic/libc/Android.bp:1639:1:     module "libc" variant "android_recovery_arm64_armv8-a_shared_29" depends on module "libc" variant "android_recovery_arm64_armv8-a_static"
 error: bionic/libc/Android.bp:1639:1:     module "libc" variant "android_recovery_arm64_armv8-a_static" depends on module "libjemalloc5" variant "android_recovery_arm64_armv8-a_static"
-error: external/jemalloc/Android.bp:1:1:     module "libjemalloc5" variant "android_recovery_arm64_armv8-a_static" depends on module "libc++_static" variant "android_recovery_arm64_armv8-a_static"
-error: external/libcxx/Android.bp:81:1:     module "libc++_static" variant "android_recovery_arm64_armv8-a_static" depends on module "libc++abi" variant "android_recovery_arm64_armv8-a_static"
 ninja: build stopped: subcommand failed.
-15:11:51 soong bootstrap failed with: exit status 1
+15:37:33 soong bootstrap failed with: exit status 1
