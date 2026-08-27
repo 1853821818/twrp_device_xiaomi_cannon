@@ -5,4 +5,4 @@ FAILED: out/soong/.intermediates/bionic/libc/libc/android_arm64_armv8-a_shared/l
 echo "module libc missing dependencies: libjemalloc5" && false
 module libc missing dependencies: libjemalloc5
 ninja: build stopped: subcommand failed.
-14:19:38 ninja failed with: exit status 1
+14:37:29 ninja failed with: exit status 1
