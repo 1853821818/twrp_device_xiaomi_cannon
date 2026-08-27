@@ -1,4 +1,4 @@
-drwxr-xr-x 11 runner runner 4096 Aug 27 11:23 release
+drwxr-xr-x 11 runner runner 4096 Aug 27 11:36 release
 === Searching for release config ===
 build/make/tools/releasetools
 build/release
@@ -18,6 +18,6 @@ No build/make/release
 === TARGET_RELEASE: ap1a ===
 === Trying lunch twrp_cannon-ap1a-eng ===
 build/make/core/release_config.mk:145: error: No release config found for TARGET_RELEASE: ap1a. Available releases are: .
-11:24:07 dumpvars failed with: exit status 1
+11:37:06 dumpvars failed with: exit status 1
 build/make/core/release_config.mk:145: error: No release config found for TARGET_RELEASE: ap1a. Available releases are: .
-11:24:08 dumpvars failed with: exit status 1
+11:37:07 dumpvars failed with: exit status 1

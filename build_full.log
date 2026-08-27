@@ -1,23 +1,23 @@
 === Checking source tree ===
-lrwxrwxrwx 1 runner runner 16 Aug 27 11:16 build/envsetup.sh -> make/envsetup.sh
+lrwxrwxrwx 1 runner runner 16 Aug 27 11:29 build/envsetup.sh -> make/envsetup.sh
 === build directory contents ===
 total 40
-drwxr-xr-x 10 runner runner 4096 Aug 27 11:23 .
-drwxr-xr-x 24 runner runner 4096 Aug 27 11:23 ..
-lrwxrwxrwx  1 runner runner   17 Aug 27 11:16 CleanSpec.mk -> make/CleanSpec.mk
-drwxr-xr-x 19 runner runner 4096 Aug 27 11:16 bazel
-drwxr-xr-x  8 runner runner 4096 Aug 27 11:16 bazel_common_rules
-drwxr-xr-x 16 runner runner 4096 Aug 27 11:16 blueprint
-lrwxrwxrwx  1 runner runner   25 Aug 27 11:16 buildspec.mk.default -> make/buildspec.mk.default
-lrwxrwxrwx  1 runner runner    9 Aug 27 11:16 core -> make/core
-lrwxrwxrwx  1 runner runner   16 Aug 27 11:16 envsetup.sh -> make/envsetup.sh
-drwxr-xr-x 10 runner runner 4096 Aug 27 11:16 make
-drwxr-xr-x  9 runner runner 4096 Aug 27 11:16 orchestrator
-drwxr-xr-x  3 runner runner 4096 Aug 27 11:16 pesto
-drwxr-xr-x 11 runner runner 4096 Aug 27 11:23 release
-drwxr-xr-x 51 runner runner 4096 Aug 27 11:17 soong
-lrwxrwxrwx  1 runner runner   11 Aug 27 11:16 target -> make/target
-lrwxrwxrwx  1 runner runner   10 Aug 27 11:16 tools -> make/tools
+drwxr-xr-x 10 runner runner 4096 Aug 27 11:36 .
+drwxr-xr-x 24 runner runner 4096 Aug 27 11:36 ..
+lrwxrwxrwx  1 runner runner   17 Aug 27 11:29 CleanSpec.mk -> make/CleanSpec.mk
+drwxr-xr-x 19 runner runner 4096 Aug 27 11:29 bazel
+drwxr-xr-x  8 runner runner 4096 Aug 27 11:29 bazel_common_rules
+drwxr-xr-x 16 runner runner 4096 Aug 27 11:29 blueprint
+lrwxrwxrwx  1 runner runner   25 Aug 27 11:29 buildspec.mk.default -> make/buildspec.mk.default
+lrwxrwxrwx  1 runner runner    9 Aug 27 11:29 core -> make/core
+lrwxrwxrwx  1 runner runner   16 Aug 27 11:29 envsetup.sh -> make/envsetup.sh
+drwxr-xr-x 10 runner runner 4096 Aug 27 11:29 make
+drwxr-xr-x  9 runner runner 4096 Aug 27 11:29 orchestrator
+drwxr-xr-x  3 runner runner 4096 Aug 27 11:29 pesto
+drwxr-xr-x 11 runner runner 4096 Aug 27 11:36 release
+drwxr-xr-x 51 runner runner 4096 Aug 27 11:29 soong
+lrwxrwxrwx  1 runner runner   11 Aug 27 11:29 target -> make/target
+lrwxrwxrwx  1 runner runner   10 Aug 27 11:29 tools -> make/tools
 === Searching for release config ===
 build/make/tools/releasetools
 build/release
@@ -42,11 +42,11 @@ Warning: completion file /home/runner/twrp/tools/asuite/asuite.sh not found
 In file included from build/make/core/config.mk:380:
 In file included from build/make/core/envsetup.mk:51:
 build/make/core/release_config.mk:145: error: No release config found for TARGET_RELEASE: ap1a. Available releases are: .
-11:24:07 dumpvars failed with: exit status 1
+11:37:06 dumpvars failed with: exit status 1
 Device cannon not found. Attempting to retrieve device repository from TeamWin Github (http://github.com/TeamWin).
 Repository for cannon not found in the TeamWin Github repository list.
 If this is in error, you may need to manually add it to your .repo/local_manifests/roomservice.xml
 In file included from build/make/core/config.mk:380:
 In file included from build/make/core/envsetup.mk:51:
 build/make/core/release_config.mk:145: error: No release config found for TARGET_RELEASE: ap1a. Available releases are: .
-11:24:08 dumpvars failed with: exit status 1
+11:37:07 dumpvars failed with: exit status 1
