@@ -84,8 +84,6 @@ jobs:
           echo '    nocrt: true,' >> external/jemalloc/Android.bp
           echo '    vendor: true,' >> external/jemalloc/Android.bp
           echo '    recovery_available: true,' >> external/jemalloc/Android.bp
-          echo '    system_shared_libs: [],' >> external/jemalloc/Android.bp
-          echo '    system_static_libs: [],' >> external/jemalloc/Android.bp
           echo '}' >> external/jemalloc/Android.bp
           cat external/jemalloc/Android.bp
           echo "=== Fake libjemalloc5 module created ==="
