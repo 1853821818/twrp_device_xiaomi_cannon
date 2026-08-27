@@ -1,0 +1,179 @@
+name: Build TWRP AOSP 12.1 for Redmi Note 9 5G (cannon)
+
+permissions: write-all
+
+on:
+  workflow_dispatch:
+    inputs:
+      manifest_branch:
+        description: 'TWRP Manifest Branch'
+        required: true
+        default: 'twrp-12.1'
+      device:
+        description: 'Device Codename'
+        required: true
+        default: 'cannon'
+
+env:
+  MANIFEST_BRANCH: ${{ github.event.inputs.manifest_branch || 'twrp-12.1' }}
+  DEVICE: ${{ github.event.inputs.device || 'cannon' }}
+  OEM: xiaomi
+  TWRP_DEVICE: twrp_cannon
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 360
+
+    steps:
+      - name: Checkout device tree
+        uses: actions/checkout@v4
+        with:
+          path: device/xiaomi/cannon
+          persist-credentials: true
+          fetch-depth: 0
+
+      - name: Prepare build environment
+        run: |
+          echo "=== Installing dependencies ==="
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq \
+            git-core gnupg flex bison build-essential zip curl zlib1g-dev \
+            gcc-multilib g++-multilib libc6-dev-i386 lib32ncurses5-dev \
+            x11proto-core-dev libx11-dev lib32z1-dev libgl1-mesa-dev \
+            libxml2-utils xsltproc unzip fontconfig python3 python3-pip \
+            libncurses5 libssl-dev libelf-dev bc cpio rsync
+          echo "=== Dependencies installed ==="
+
+      - name: Install repo tool
+        run: |
+          mkdir -p ~/bin
+          curl -sL https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+          chmod a+x ~/bin/repo
+          echo "$HOME/bin" >> $GITHUB_PATH
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git config --global color.ui false
+
+      - name: Initialize AOSP manifest
+        run: |
+          export PATH=~/bin:$PATH
+          mkdir -p ~/twrp
+          cd ~/twrp
+          echo "=== Initializing full AOSP 12.1 manifest ==="
+          repo init --depth=1 -u https://android.googlesource.com/platform/manifest -b android-12.1.0_r27
+          echo "=== Repo initialized ==="
+
+      - name: Add TWRP via local manifest
+        run: |
+          cd ~/twrp
+          echo "=== Creating local manifest for TWRP ==="
+          mkdir -p .repo/local_manifests
+          echo '<?xml version="1.0" encoding="UTF-8"?>' > .repo/local_manifests/twrp.xml
+          echo '<manifest>' >> .repo/local_manifests/twrp.xml
+          echo '  <project name="TeamWin/android_bootable_recovery" path="bootable/recovery" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
+          echo '  <project name="TeamWin/android_system_core" path="system/core" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
+          echo '  <project name="TeamWin/android_external_busybox" path="external/busybox" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
+          echo '  <project name="TeamWin/android_external_magisk" path="external/magisk" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
+          echo '  <project name="TeamWin/android_external_gptfdisk" path="external/gptfdisk" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
+          echo '  <project name="TeamWin/android_external_jansson" path="external/jansson" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
+          echo '  <project name="TeamWin/android_external_libcrepair" path="external/libcrepair" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
+          echo '  <project name="TeamWin/android_external_libselinux" path="external/libselinux" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
+          echo '  <project name="TeamWin/android_external_libsepol" path="external/libsepol" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
+          echo '  <project name="TeamWin/android_external_lz4" path="external/lz4" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
+          echo '  <project name="TeamWin/android_external_zlib" path="external/zlib" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
+          echo '  <project name="TeamWin/android_system_update_engine" path="system/update_engine" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
+          echo '  <project name="TeamWin/android_system_vold" path="system/vold" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
+          echo '</manifest>' >> .repo/local_manifests/twrp.xml
+          cat .repo/local_manifests/twrp.xml
+          echo "=== TWRP local manifest created ==="
+
+      - name: Sync source
+        run: |
+          export PATH=~/bin:$PATH
+          cd ~/twrp
+          echo "=== Syncing full AOSP + TWRP source ==="
+          repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
+          echo "=== Source synced ==="
+
+      - name: Copy device tree
+        run: |
+          echo "=== Copying device tree ==="
+          mkdir -p ~/twrp/device/xiaomi
+          cp -r $GITHUB_WORKSPACE/device/xiaomi/cannon ~/twrp/device/xiaomi/
+          ls -la ~/twrp/device/xiaomi/cannon/
+          echo "=== Device tree copied ==="
+
+      - name: Build TWRP
+        run: |
+          export PATH=~/bin:$PATH
+          export ALLOW_MISSING_DEPENDENCIES=true
+          cd ~/twrp
+          {
+            echo "=== Setting up build environment ==="
+            source build/envsetup.sh
+            echo "=== Lunching: twrp_cannon-eng ==="
+            lunch twrp_cannon-eng
+            echo "=== Lunch exit code: $? ==="
+            echo "=== Building recoveryimage ==="
+            mka recoveryimage -j$(nproc --all)
+            echo "=== recoveryimage exit code: $? ==="
+            echo "=== Build complete ==="
+          } 2>&1 | tee ~/twrp/build_full.log
+          echo "=== Build exit code: ${PIPESTATUS[0]} ==="
+          echo "=== Listing out directory ==="
+          find ~/twrp/out/target/product/$DEVICE/ -name "*.img" -type f 2>/dev/null | head -20
+          echo "=== Saving error summary ==="
+          grep -i -E "error:|failed|fatal:|missing|cannot|no such|ninja: build stopped" ~/twrp/build_full.log | tail -80 > ~/twrp/build_errors.log || true
+          cat ~/twrp/build_errors.log
+
+      - name: Check build output
+        run: |
+          echo "=== Checking build output ==="
+          ls -la ~/twrp/out/target/product/$DEVICE/ 2>/dev/null || echo "No device output dir"
+          RECOVERY_IMG=~/twrp/out/target/product/$DEVICE/recovery.img
+          if [ -f "$RECOVERY_IMG" ]; then
+            echo "=== recovery.img found ==="
+            file "$RECOVERY_IMG"
+            ls -lh "$RECOVERY_IMG"
+          else
+            echo "=== recovery.img NOT found, listing all img files ==="
+            find ~/twrp/out/ -name "*.img" -type f 2>/dev/null
+            exit 1
+          fi
+
+      - name: Upload recovery image
+        uses: actions/upload-artifact@v4
+        with:
+          name: twrp-${{ env.DEVICE }}-${{ env.MANIFEST_BRANCH }}
+          path: ~/twrp/out/target/product/${{ env.DEVICE }}/recovery.img
+          retention-days: 30
+
+      - name: Save build info
+        if: always()
+        run: |
+          echo "=== Saving build info ==="
+          cd $GITHUB_WORKSPACE/device/xiaomi/cannon
+          cp ~/twrp/build_full.log build_full.log 2>/dev/null || echo "No build_full.log"
+          cp ~/twrp/build_errors.log build_errors.log 2>/dev/null || echo "No build_errors.log"
+          find ~/twrp/out/target/product/$DEVICE/ -type f 2>/dev/null > out_files.txt || true
+          ls -laR ~/twrp/out/target/product/$DEVICE/ 2>/dev/null > out_dir.txt || true
+          echo "=== Configuring git ==="
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          echo "=== Committing build info ==="
+          git add build_full.log build_errors.log out_files.txt out_dir.txt 2>/dev/null || true
+          git commit -m "Add build info for debugging" 2>&1 || echo "Nothing to commit"
+          echo "=== Pushing ==="
+          git push 2>&1 || echo "Push failed"
+          echo "=== Done ==="
+
+      - name: Upload build logs (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs-${{ env.DEVICE }}
+          path: |
+            ~/twrp/build_full.log
+            ~/twrp/build_errors.log
+          retention-days: 7
