@@ -105,7 +105,18 @@ jobs:
           mkdir -p out/target/product/$DEVICE/root
           mkdir -p out/target/product/$DEVICE/recovery/root/system/etc
           echo "=== Building recoveryimage ==="
-          mka recoveryimage -j$(nproc --all)
+          set +e
+          mka recoveryimage -j$(nproc --all) 2>&1 | tee /tmp/build.log
+          BUILD_EXIT=$?
+          set -e
+          echo "Build exit code: $BUILD_EXIT"
+          if [ $BUILD_EXIT -ne 0 ]; then
+            echo "=== Build failed, saving error log ==="
+            grep -i -E "error|failed|fatal|missing|cannot|no such" /tmp/build.log | tail -100 > /tmp/errors.log
+            cat /tmp/errors.log
+            cp /tmp/build.log ~/twrp/build_full.log
+            cp /tmp/errors.log ~/twrp/build_errors.log
+          fi
           echo "=== Build complete ==="
           echo "=== DEBUG: recovery/root contents ==="
           ls -la out/target/product/$DEVICE/recovery/root/ 2>/dev/null || echo "No recovery/root dir"
@@ -289,5 +300,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build-logs-${{ env.DEVICE }}
-          path: ~/twrp/out/target/product/${{ env.DEVICE }}/obj/RECOVERY_RAMDISK/
+          path: |
+            ~/twrp/build_full.log
+            ~/twrp/build_errors.log
           retention-days: 7
