@@ -89,6 +89,12 @@ jobs:
           echo "=== release_configs contents ==="
           ls -la build/release/release_configs/ 2>/dev/null || echo "No release_configs"
           find build/release/release_configs/ -type f 2>/dev/null | head -30
+          echo "=== Creating manual release config mk ==="
+          cat > build/release/release_configs/ap2a.mk << 'EOF'
+$(call _declare-release-config,ap2a,build/release/release_configs/ap2a.textproto,,)
+EOF
+          cat build/release/release_configs/ap2a.mk
+          echo "=== Done creating release config ==="
 
       - name: Copy device tree
         run: |
