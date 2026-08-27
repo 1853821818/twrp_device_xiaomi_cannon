@@ -81,12 +81,8 @@ jobs:
           echo '    name: "libjemalloc5",' >> external/jemalloc/Android.bp
           echo '    srcs: [],' >> external/jemalloc/Android.bp
           echo '}' >> external/jemalloc/Android.bp
-          echo 'cc_library_static {' >> external/jemalloc/Android.bp
-          echo '    name: "libc_jemalloc_wrapper",' >> external/jemalloc/Android.bp
-          echo '    srcs: [],' >> external/jemalloc/Android.bp
-          echo '}' >> external/jemalloc/Android.bp
           cat external/jemalloc/Android.bp
-          echo "=== Fake modules created ==="
+          echo "=== Fake libjemalloc5 module created ==="
 
       - name: Copy device tree
         run: |
