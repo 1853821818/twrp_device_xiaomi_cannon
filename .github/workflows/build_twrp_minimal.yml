@@ -1,0 +1,184 @@
+name: Build TWRP Minimal 12.1 for Redmi Note 9 5G (cannon)
+
+permissions: write-all
+
+on:
+  workflow_dispatch:
+    inputs:
+      manifest_branch:
+        description: 'TWRP Manifest Branch'
+        required: true
+        default: 'twrp-12.1'
+      device:
+        description: 'Device Codename'
+        required: true
+        default: 'cannon'
+
+env:
+  MANIFEST_BRANCH: ${{ github.event.inputs.manifest_branch || 'twrp-12.1' }}
+  DEVICE: ${{ github.event.inputs.device || 'cannon' }}
+  OEM: xiaomi
+  TWRP_DEVICE: twrp_cannon
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 240
+
+    steps:
+      - name: Checkout device tree
+        uses: actions/checkout@v4
+        with:
+          path: device/xiaomi/cannon
+          persist-credentials: true
+          fetch-depth: 0
+
+      - name: Prepare build environment
+        run: |
+          echo "=== Installing dependencies ==="
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq \
+            git-core gnupg flex bison build-essential zip curl zlib1g-dev \
+            gcc-multilib g++-multilib libc6-dev-i386 lib32ncurses5-dev \
+            x11proto-core-dev libx11-dev lib32z1-dev libgl1-mesa-dev \
+            libxml2-utils xsltproc unzip fontconfig python3 python3-pip \
+            libncurses5 libssl-dev libelf-dev bc cpio rsync
+          echo "=== Dependencies installed ==="
+
+      - name: Install repo tool
+        run: |
+          mkdir -p ~/bin
+          curl -sL https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+          chmod a+x ~/bin/repo
+          echo "$HOME/bin" >> $GITHUB_PATH
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git config --global color.ui false
+
+      - name: Initialize TWRP minimal manifest
+        run: |
+          export PATH=~/bin:$PATH
+          mkdir -p ~/twrp
+          cd ~/twrp
+          echo "=== Initializing minimal TWRP manifest ==="
+          repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-12.1
+          echo "=== Repo initialized ==="
+
+      - name: Sync TWRP source
+        run: |
+          export PATH=~/bin:$PATH
+          cd ~/twrp
+          echo "=== Syncing minimal TWRP source ==="
+          repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
+          echo "=== Source synced ==="
+          echo "=== Checking key files ==="
+          ls -la bionic/libc/Android.bp 2>/dev/null && echo "bionic/libc/Android.bp exists"
+          ls -la bootable/recovery/ 2>/dev/null | head -3
+          wc -l bionic/libc/Android.bp
+
+      - name: Fix jemalloc dependency
+        run: |
+          cd ~/twrp
+          echo "=== Fixing jemalloc dependency in bionic/libc ==="
+          # Check if jemalloc is referenced
+          grep -n "libjemalloc5\|jemalloc" bionic/libc/Android.bp | head -20 || echo "No jemalloc references found"
+          
+          # Create a minimal fake jemalloc5 module that won't cause dependency cycles
+          mkdir -p external/jemalloc
+          cat > external/jemalloc/Android.bp << 'EOF'
+cc_library_headers {
+    name: "libjemalloc5",
+    vendor: true,
+    recovery_available: true,
+    visibility: ["//visibility:public"],
+    export_include_dirs: ["include"],
+}
+EOF
+          mkdir -p external/jemalloc/include
+          echo "Fake libjemalloc5 headers module created"
+          
+          # Also need to check if libc requires static libjemalloc5
+          # If so, we need a different approach
+          echo "=== Checking libc dependencies ==="
+          grep -n "libjemalloc5" bionic/libc/Android.bp | head -10
+          echo "=== Jemalloc fix done ==="
+
+      - name: Copy device tree
+        run: |
+          echo "=== Copying device tree ==="
+          mkdir -p ~/twrp/device/xiaomi
+          cp -r $GITHUB_WORKSPACE/device/xiaomi/cannon ~/twrp/device/xiaomi/
+          ls -la ~/twrp/device/xiaomi/cannon/
+          echo "=== Device tree copied ==="
+
+      - name: Build TWRP
+        run: |
+          export PATH=~/bin:$PATH
+          export ALLOW_MISSING_DEPENDENCIES=true
+          cd ~/twrp
+          rm -f ~/twrp/build_full.log ~/twrp/build_errors.log
+          {
+            echo "=== Setting up build environment ==="
+            source build/envsetup.sh
+            echo "=== Lunching: twrp_cannon-eng ==="
+            lunch twrp_cannon-eng
+            echo "=== Lunch exit code: $? ==="
+            echo "=== Building recoveryimage ==="
+            mka recoveryimage -j$(nproc --all)
+            echo "=== recoveryimage exit code: $? ==="
+            echo "=== Build complete ==="
+          } 2>&1 | tee ~/twrp/build_full.log
+          echo "=== Build exit code: ${PIPESTATUS[0]} ==="
+          echo "=== Listing out directory ==="
+          find ~/twrp/out/target/product/$DEVICE/ -name "*.img" -type f 2>/dev/null | head -20
+          echo "=== Saving error summary ==="
+          grep -i -E "error:|failed|fatal:|missing|cannot|no such|ninja: build stopped" ~/twrp/build_full.log | tail -80 > ~/twrp/build_errors.log || true
+          cat ~/twrp/build_errors.log
+
+      - name: Check build output
+        run: |
+          echo "=== Checking build output ==="
+          ls -la ~/twrp/out/target/product/$DEVICE/ 2>/dev/null || echo "No device output dir"
+          RECOVERY_IMG=~/twrp/out/target/product/$DEVICE/recovery.img
+          if [ -f "$RECOVERY_IMG" ]; then
+            echo "=== recovery.img found ==="
+            file "$RECOVERY_IMG"
+            ls -lh "$RECOVERY_IMG"
+          else
+            echo "=== recovery.img NOT found, listing all img files ==="
+            find ~/twrp/out/ -name "*.img" -type f 2>/dev/null
+            exit 1
+          fi
+
+      - name: Upload recovery image
+        uses: actions/upload-artifact@v4
+        with:
+          name: twrp-${{ env.DEVICE }}-${{ env.MANIFEST_BRANCH }}
+          path: ~/twrp/out/target/product/${{ env.DEVICE }}/recovery.img
+          retention-days: 30
+
+      - name: Save build info
+        if: always()
+        run: |
+          echo "=== Saving build info ==="
+          cd $GITHUB_WORKSPACE/device/xiaomi/cannon
+          cp ~/twrp/build_full.log build_full.log 2>/dev/null || echo "No build_full.log"
+          cp ~/twrp/build_errors.log build_errors.log 2>/dev/null || echo "No build_errors.log"
+          find ~/twrp/out/target/product/$DEVICE/ -type f 2>/dev/null > out_files.txt || true
+          ls -laR ~/twrp/out/target/product/$DEVICE/ 2>/dev/null > out_dir.txt || true
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add build_full.log build_errors.log out_files.txt out_dir.txt 2>/dev/null || true
+          git commit -m "Add build info for debugging" 2>&1 || echo "Nothing to commit"
+          git push 2>&1 || echo "Push failed"
+          echo "=== Done ==="
+
+      - name: Upload build logs (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs-${{ env.DEVICE }}
+          path: |
+            ~/twrp/build_full.log
+            ~/twrp/build_errors.log
+          retention-days: 7
