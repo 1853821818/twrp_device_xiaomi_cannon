@@ -1,5 +1,7 @@
 No build/release
 === TARGET_RELEASE: ap1a ===
-=== Trying lunch twrp_cannon-eng ===
-Invalid lunch combo: twrp_cannon-eng
-Valid combos must be of the form <product>-<release>-<variant>
+=== Trying lunch twrp_cannon-ap1a-eng ===
+build/make/core/release_config.mk:145: error: No release config found for TARGET_RELEASE: ap1a. Available releases are: .
+10:54:06 dumpvars failed with: exit status 1
+build/make/core/release_config.mk:145: error: No release config found for TARGET_RELEASE: ap1a. Available releases are: .
+10:54:07 dumpvars failed with: exit status 1
