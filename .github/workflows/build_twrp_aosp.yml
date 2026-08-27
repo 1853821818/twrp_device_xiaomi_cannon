@@ -71,19 +71,7 @@ jobs:
           mkdir -p .repo/local_manifests
           echo '<?xml version="1.0" encoding="UTF-8"?>' > .repo/local_manifests/twrp.xml
           echo '<manifest>' >> .repo/local_manifests/twrp.xml
-          echo '  <project name="TeamWin/android_bootable_recovery" path="bootable/recovery" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
-          echo '  <project name="TeamWin/android_system_core" path="system/core" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
-          echo '  <project name="TeamWin/android_external_busybox" path="external/busybox" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
-          echo '  <project name="TeamWin/android_external_magisk" path="external/magisk" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
-          echo '  <project name="TeamWin/android_external_gptfdisk" path="external/gptfdisk" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
-          echo '  <project name="TeamWin/android_external_jansson" path="external/jansson" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
-          echo '  <project name="TeamWin/android_external_libcrepair" path="external/libcrepair" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
-          echo '  <project name="TeamWin/android_external_libselinux" path="external/libselinux" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
-          echo '  <project name="TeamWin/android_external_libsepol" path="external/libsepol" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
-          echo '  <project name="TeamWin/android_external_lz4" path="external/lz4" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
-          echo '  <project name="TeamWin/android_external_zlib" path="external/zlib" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
-          echo '  <project name="TeamWin/android_system_update_engine" path="system/update_engine" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
-          echo '  <project name="TeamWin/android_system_vold" path="system/vold" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
+          echo '  <project name="TeamWin/android_bootable_recovery" path="bootable/recovery" revision="twrp-12.1" />' >> .repo/local_manifests/twrp.xml
           echo '</manifest>' >> .repo/local_manifests/twrp.xml
           cat .repo/local_manifests/twrp.xml
           echo "=== TWRP local manifest created ==="
