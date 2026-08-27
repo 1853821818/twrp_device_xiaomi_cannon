@@ -56,8 +56,8 @@ jobs:
           export PATH=~/bin:$PATH
           mkdir -p ~/twrp
           cd ~/twrp
-          echo "=== Initializing repo with branch: $MANIFEST_BRANCH ==="
-          repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b $MANIFEST_BRANCH
+          echo "=== Initializing repo with branch: twrp-12 ==="
+          repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-12
           echo "=== Repo initialized ==="
 
       - name: Sync TWRP source
