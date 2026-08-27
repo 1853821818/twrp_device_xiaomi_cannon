@@ -87,12 +87,12 @@ jobs:
           echo "=== Syncing source ==="
           repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --current-branch
           echo "=== Source synced ==="
-          echo "=== Replacing fake jemalloc with real AOSP one ==="
+          echo "=== Replacing fake jemalloc with real AOSP one (android-12.0.0_r1) ==="
           rm -rf external/jemalloc
-          git clone --depth=1 -b master https://android.googlesource.com/platform/external/jemalloc external/jemalloc
+          git clone --depth=1 -b android-12.0.0_r1 https://android.googlesource.com/platform/external/jemalloc external/jemalloc
           ls -la external/jemalloc/
-          echo "=== Checking for Android.bp ==="
-          ls -la external/jemalloc/Android.bp external/jemalloc/Android.mk 2>/dev/null || echo "No Android.bp/Android.mk found"
+          echo "=== Checking for libjemalloc5 in Android.bp ==="
+          grep -r "libjemalloc5" external/jemalloc/ 2>/dev/null | head -10 || echo "libjemalloc5 not found"
           echo "=== jemalloc replaced ==="
 
       - name: Copy device tree
