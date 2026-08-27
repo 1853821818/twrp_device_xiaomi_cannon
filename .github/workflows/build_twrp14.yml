@@ -23,7 +23,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-22.04
-    timeout-minutes: 240
+    timeout-minutes: 360
 
     steps:
       - name: Checkout device tree
@@ -55,64 +55,47 @@ jobs:
           git config --global user.email "actions@github.com"
           git config --global color.ui false
 
-      - name: Initialize TWRP manifest
+      - name: Initialize AOSP manifest
         run: |
           export PATH=~/bin:$PATH
           mkdir -p ~/twrp
           cd ~/twrp
-          echo "=== Initializing repo with branch: twrp-12.1 ==="
-          repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-12.1
+          echo "=== Initializing full AOSP 12.1 manifest ==="
+          repo init --depth=1 -u https://android.googlesource.com/platform/manifest -b android-12.1.0_r27
           echo "=== Repo initialized ==="
 
-      - name: Sync TWRP source
+      - name: Add TWRP via local manifest
+        run: |
+          cd ~/twrp
+          echo "=== Creating local manifest for TWRP ==="
+          mkdir -p .repo/local_manifests
+          echo '<?xml version="1.0" encoding="UTF-8"?>' > .repo/local_manifests/twrp.xml
+          echo '<manifest>' >> .repo/local_manifests/twrp.xml
+          echo '  <project name="TeamWin/android_bootable_recovery" path="bootable/recovery" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
+          echo '  <project name="TeamWin/android_system_core" path="system/core" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
+          echo '  <project name="TeamWin/android_external_busybox" path="external/busybox" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
+          echo '  <project name="TeamWin/android_external_magisk" path="external/magisk" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
+          echo '  <project name="TeamWin/android_external_gptfdisk" path="external/gptfdisk" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
+          echo '  <project name="TeamWin/android_external_jansson" path="external/jansson" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
+          echo '  <project name="TeamWin/android_external_libcrepair" path="external/libcrepair" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
+          echo '  <project name="TeamWin/android_external_libselinux" path="external/libselinux" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
+          echo '  <project name="TeamWin/android_external_libsepol" path="external/libsepol" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
+          echo '  <project name="TeamWin/android_external_lz4" path="external/lz4" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
+          echo '  <project name="TeamWin/android_external_zlib" path="external/zlib" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
+          echo '  <project name="TeamWin/android_system_update_engine" path="system/update_engine" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
+          echo '  <project name="TeamWin/android_system_vold" path="system/vold" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
+          echo '  <project name="TeamWin/android_bootable_recovery" path="bootable/recovery" revision="android-12.1" />' >> .repo/local_manifests/twrp.xml
+          echo '</manifest>' >> .repo/local_manifests/twrp.xml
+          cat .repo/local_manifests/twrp.xml
+          echo "=== TWRP local manifest created ==="
+
+      - name: Sync source
         run: |
           export PATH=~/bin:$PATH
           cd ~/twrp
-          echo "=== Syncing source ==="
+          echo "=== Syncing full AOSP + TWRP source ==="
           repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
           echo "=== Source synced ==="
-
-      - name: Add missing dependencies via local manifest
-        run: |
-          cd ~/twrp
-          echo "=== Creating local manifest for jemalloc_new ==="
-          mkdir -p .repo/local_manifests
-          echo '<?xml version="1.0" encoding="UTF-8"?>' > .repo/local_manifests/missing_deps.xml
-          echo '<manifest>' >> .repo/local_manifests/missing_deps.xml
-          echo '  <project name="platform/external/jemalloc_new" path="external/jemalloc" revision="refs/tags/android-12.1.0_r27" />' >> .repo/local_manifests/missing_deps.xml
-          echo '</manifest>' >> .repo/local_manifests/missing_deps.xml
-          cat .repo/local_manifests/missing_deps.xml
-          echo "=== Syncing jemalloc_new ==="
-          export PATH=~/bin:$PATH
-          repo sync -j$(nproc --all) --force-sync external/jemalloc 2>&1 | tail -20
-          echo "=== Checking jemalloc ==="
-          ls -la external/jemalloc/ 2>/dev/null | head -10
-          ls external/jemalloc/Android.bp 2>/dev/null && echo "Android.bp found" || echo "No Android.bp"
-          echo "=== Done ==="
-
-      - name: Fix jemalloc visibility
-        run: |
-          cd ~/twrp
-          echo "=== Fixing visibility with sed ==="
-          # Remove all existing visibility lines first, then add public
-          for f in bionic/libc/Android.bp external/jemalloc/Android.bp; do
-            if [ -f "$f" ]; then
-              # Remove lines containing visibility:
-              sed -i '/visibility:/d' "$f"
-              echo "Removed existing visibility from $f"
-            fi
-          done
-          # Add public visibility to libc_headers
-          if [ -f bionic/libc/Android.bp ]; then
-            sed -i 's/name: "libc_headers",/name: "libc_headers",\n    visibility: ["\/\/visibility:public"],/' bionic/libc/Android.bp
-            echo "Added public visibility to libc_headers"
-          fi
-          # Add public visibility to libjemalloc5
-          if [ -f external/jemalloc/Android.bp ]; then
-            sed -i 's/name: "libjemalloc5",/name: "libjemalloc5",\n    visibility: ["\/\/visibility:public"],/' external/jemalloc/Android.bp
-            echo "Added public visibility to libjemalloc5"
-          fi
-          echo "=== Visibility fixes done ==="
 
       - name: Copy device tree
         run: |
