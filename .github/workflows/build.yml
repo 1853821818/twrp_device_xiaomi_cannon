@@ -58,28 +58,22 @@ jobs:
           cd ~/twrp
           echo "=== Initializing repo with branch: $MANIFEST_BRANCH ==="
           repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b $MANIFEST_BRANCH
-          echo "=== Checking manifest files ==="
-          ls -la .repo/manifest.xml
-          ls -la .repo/manifests/
-          echo "=== Removing jemalloc from ALL manifest files ==="
-          grep -v "external/jemalloc" .repo/manifests/default.xml > .repo/manifests/default.xml.tmp
-          mv .repo/manifests/default.xml.tmp .repo/manifests/default.xml
-          if [ -f .repo/manifest.xml ]; then
-            grep -v "external/jemalloc" .repo/manifest.xml > .repo/manifest.xml.tmp
-            mv .repo/manifest.xml.tmp .repo/manifest.xml
-          fi
-          rm -rf .repo/projects/external/jemalloc.git
-          rm -rf .repo/project-objects/platform/external/jemalloc.git
-          echo "=== Checking jemalloc in manifests ==="
-          grep -ri "jemalloc" .repo/manifests/ .repo/manifest.xml 2>/dev/null || echo "jemalloc completely removed"
           echo "=== Repo initialized ==="
 
       - name: Sync TWRP source
         run: |
           export PATH=~/bin:$PATH
           cd ~/twrp
-          echo "=== Syncing source with --no-manifest-update (this may take a while) ==="
-          repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --no-manifest-update
+          echo "=== Creating local manifest to remove jemalloc ==="
+          mkdir -p .repo/local_manifests
+          cat > .repo/local_manifests/remove_jemalloc.xml << 'EOF'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <manifest>
+            <remove-project name="platform/external/jemalloc" />
+          </manifest>
+          EOF
+          echo "=== Syncing source with -c (current branch only) ==="
+          repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
           echo "=== Source synced ==="
           echo "=== Manually cloning jemalloc ==="
           git clone --depth=1 https://github.com/xin3liang/platform_external_jemalloc.git external/jemalloc
