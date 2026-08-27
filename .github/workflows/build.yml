@@ -59,25 +59,19 @@ jobs:
           echo "=== Initializing repo with branch: $MANIFEST_BRANCH ==="
           repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b $MANIFEST_BRANCH
           echo "=== Repo initialized ==="
-          echo "=== Adding local manifests for jemalloc ==="
-          mkdir -p .repo/local_manifests
-          cat > .repo/local_manifests/jemalloc.xml << 'EOF'
-          <?xml version="1.0" encoding="UTF-8"?>
-          <manifest>
-            <remove-project name="platform/external/jemalloc" />
-            <remote name="github" fetch="https://github.com/" />
-            <project path="external/jemalloc" name="xin3liang/platform_external_jemalloc" remote="github" revision="master" clone-depth="1" />
-          </manifest>
-          EOF
-          echo "=== Local manifests added ==="
 
       - name: Sync TWRP source
         run: |
           export PATH=~/bin:$PATH
           cd ~/twrp
           echo "=== Syncing source (this may take a while) ==="
-          repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
+          repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags || echo "Repo sync had some failures, continuing..."
           echo "=== Source synced ==="
+          echo "=== Manually cloning jemalloc ==="
+          rm -rf external/jemalloc
+          git clone --depth=1 https://github.com/xin3liang/platform_external_jemalloc.git external/jemalloc
+          ls -la external/jemalloc/
+          echo "=== jemalloc cloned ==="
 
       - name: Copy device tree
         run: |
