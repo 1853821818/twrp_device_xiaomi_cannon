@@ -44,70 +44,40 @@ jobs:
       - name: Install repo tool
         run: |
           mkdir -p ~/bin
-          # Use older repo version that doesn't use superproject
-          curl -sL https://storage.googleapis.com/git-repo-downloads/repo-2.15 > ~/bin/repo
+          curl -sL https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
           chmod a+x ~/bin/repo
           echo "$HOME/bin" >> $GITHUB_PATH
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           git config --global color.ui false
-          repo --version
 
       - name: Initialize TWRP manifest
         run: |
           export PATH=~/bin:$PATH
           mkdir -p ~/twrp
           cd ~/twrp
-          echo "=== Initializing repo with branch: twrp-12 ==="
-          repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-12
-          echo "=== Repo initialized ==="
+          echo "=== Initializing repo with branch: twrp-12.1 ==="
+          repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-12.1
+          echo "=== Exporting manifest ==="
+          repo manifest -o /tmp/original_manifest.xml
+          echo "=== Removing jemalloc from manifest ==="
+          grep -v "external/jemalloc" /tmp/original_manifest.xml > /tmp/new_manifest.xml
+          echo "=== Re-initializing with modified manifest ==="
+          cp /tmp/new_manifest.xml .repo/manifests/custom_manifest.xml
+          repo init -m custom_manifest.xml
+          echo "=== Repo initialized with modified manifest ==="
 
       - name: Sync TWRP source
         run: |
           export PATH=~/bin:$PATH
           cd ~/twrp
-          echo "=== Creating fake jemalloc project in .repo/projects ==="
-          mkdir -p .repo/projects/external/jemalloc.git
-          cd .repo/projects/external/jemalloc.git
-          git init --bare
-          git config user.email "fake@fake.com"
-          git config user.name "fake"
-          # Remove remote to prevent fetch
-          git remote remove origin 2>/dev/null || true
-          git remote remove aosp 2>/dev/null || true
-          mkdir -p /tmp/jemalloc_fake
-          cd /tmp/jemalloc_fake
-          git init
-          echo "fake" > README.md
-          git add README.md
-          git commit -m "fake jemalloc"
-          git push ~/twrp/.repo/projects/external/jemalloc.git master
-          cd ~/twrp
-          mkdir -p .repo/project-objects/platform/external/jemalloc.git
-          cp -r .repo/projects/external/jemalloc.git/* .repo/project-objects/platform/external/jemalloc.git/
-          # Also create working directory
-          mkdir -p external/jemalloc
-          cd external/jemalloc
-          git init
-          git remote add origin ~/twrp/.repo/projects/external/jemalloc.git
-          git pull origin master
-          cd ~/twrp
-          echo "=== Fake jemalloc project created ==="
-          ls -la .repo/projects/external/jemalloc.git/
-          echo "=== Removing jemalloc remote fetch config ==="
-          cat .repo/projects/external/jemalloc.git/config
-          git -C .repo/projects/external/jemalloc.git config --remove-section remote.aosp 2>/dev/null || true
-          git -C .repo/projects/external/jemalloc.git config --remove-section remote.origin 2>/dev/null || true
-          echo "=== jemalloc remote config removed ==="
-          cat .repo/projects/external/jemalloc.git/config
           echo "=== Syncing source ==="
-          set +e
-          repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --current-branch
-          SYNC_EXIT=$?
-          set -e
-          echo "repo sync exit code: $SYNC_EXIT"
-          echo "=== Source synced (or continued after errors) ==="
-          echo "=== Creating fake libjemalloc5 module ==="
+          repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
+          echo "=== Source synced ==="
+          echo "=== Checking if jemalloc exists ==="
+          ls -la external/jemalloc/ 2>/dev/null || echo "jemalloc not synced (expected)"
+          echo "=== Creating jemalloc directory with fake libjemalloc5 ==="
+          mkdir -p external/jemalloc
           echo 'cc_library_shared {' > external/jemalloc/Android.bp
           echo '    name: "libjemalloc5",' >> external/jemalloc/Android.bp
           echo '    srcs: [],' >> external/jemalloc/Android.bp
