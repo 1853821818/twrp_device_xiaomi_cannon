@@ -1,1 +1,8 @@
-[31merror:[0m bionic/libc/Android.bp:1828:9: expected "}", found String
+out/build-twrp_cannon-cleanspec.ninja is missing, regenerating...
+out/build-twrp_cannon.ninja is missing, regenerating...
+out/build-twrp_cannon-package.ninja is missing, regenerating...
+FAILED: out/soong/.intermediates/bionic/libc/libc/android_arm64_armv8-a_shared/libc.so.toc
+echo "module libc missing dependencies: libjemalloc5{os:android,image:,arch:arm64_armv8-a,sdk:,link:static}" && false
+module libc missing dependencies: libjemalloc5{os:android,image:,arch:arm64_armv8-a,sdk:,link:static}
+ninja: build stopped: subcommand failed.
+21:23:59 ninja failed with: exit status 1
