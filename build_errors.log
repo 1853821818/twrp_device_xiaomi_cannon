@@ -1,4 +1,4 @@
-drwxr-xr-x 11 runner runner 4096 Aug 27 11:36 release
+drwxr-xr-x 11 runner runner 4096 Aug 27 12:04 release
 === Searching for release config ===
 build/make/tools/releasetools
 build/release
@@ -16,8 +16,22 @@ build/release/gms_mainline_go/required/release_configs
 === Checking make/release ===
 No build/make/release
 === TARGET_RELEASE: ap1a ===
+=== release_configs contents ===
+build/release/release_configs/user.textproto
+build/release/release_configs/userdebug.textproto
+build/release/release_configs/root.textproto
+build/release/release_configs/bp1a.textproto
+build/release/release_configs/eng.textproto
+build/release/release_configs/ap4a.textproto
+build/release/release_configs/ap2a.textproto
+build/release/release_configs/ap3a.textproto
+build/release/release_configs/trunk_staging.textproto
+=== release_config.mk lookup logic ===
+141-    TARGET_RELEASE = trunk_staging
+144-ifeq ($(filter $(_all_release_configs), $(TARGET_RELEASE)),)
+145:    $(error No release config found for TARGET_RELEASE: $(TARGET_RELEASE). Available releases are: $(_all_release_configs))
 === Trying lunch twrp_cannon-ap1a-eng ===
 build/make/core/release_config.mk:145: error: No release config found for TARGET_RELEASE: ap1a. Available releases are: .
-11:37:06 dumpvars failed with: exit status 1
+12:06:55 dumpvars failed with: exit status 1
 build/make/core/release_config.mk:145: error: No release config found for TARGET_RELEASE: ap1a. Available releases are: .
-11:37:07 dumpvars failed with: exit status 1
+12:06:57 dumpvars failed with: exit status 1
