@@ -100,6 +100,14 @@ jobs:
           mkdir -p out/starlark_results
           echo '# Empty release config starlark' > out/starlark_results/out_release_config_entrypoint.scl.mk
           echo "=== Created ==="
+          echo "=== Checking version_util.mk ==="
+          sed -n '170,195p' build/make/core/version_util.mk 2>/dev/null || echo "Cannot read version_util.mk"
+          echo "=== Patching version_util.mk to add defaults ==="
+          echo 'PLATFORM_VERSION_CODENAME := REL' >> build/make/core/version_defaults.mk
+          echo 'PLATFORM_VERSION := 14' >> build/make/core/version_defaults.mk
+          echo 'PLATFORM_SDK_VERSION := 34' >> build/make/core/version_defaults.mk
+          echo 'PLATFORM_MIN_SUPPORTED_TARGET_SDK_VERSION := 24' >> build/make/core/version_defaults.mk
+          echo "=== Patched ==="
 
       - name: Copy device tree
         run: |
