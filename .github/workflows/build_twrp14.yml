@@ -77,13 +77,13 @@ jobs:
           cd ~/twrp
           echo "=== Creating fake libjemalloc5 module ==="
           mkdir -p external/jemalloc
-          echo 'cc_library_static {' > external/jemalloc/Android.bp
+          echo 'cc_library_headers {' > external/jemalloc/Android.bp
           echo '    name: "libjemalloc5",' >> external/jemalloc/Android.bp
-          echo '    srcs: [],' >> external/jemalloc/Android.bp
-          echo '    stl: "none",' >> external/jemalloc/Android.bp
           echo '    vendor: true,' >> external/jemalloc/Android.bp
           echo '    recovery_available: true,' >> external/jemalloc/Android.bp
+          echo '    export_include_dirs: ["include"],' >> external/jemalloc/Android.bp
           echo '}' >> external/jemalloc/Android.bp
+          mkdir -p external/jemalloc/include
           cat external/jemalloc/Android.bp
           echo "=== Fake libjemalloc5 module created ==="
 
