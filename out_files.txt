@@ -5310,7 +5310,6 @@
 /home/runner/twrp/out/target/product/cannon/obj/EXECUTABLES/recovery_intermediates/exclude.d
 /home/runner/twrp/out/target/product/cannon/obj/EXECUTABLES/recovery_intermediates/twrp.d
 /home/runner/twrp/out/target/product/cannon/obj/EXECUTABLES/recovery_intermediates/find_file.o
-/home/runner/twrp/out/target/product/cannon/obj/EXECUTABLES/recovery_intermediates/partitionmanager.d
 /home/runner/twrp/out/target/product/cannon/obj/EXECUTABLES/recovery_intermediates/find_file.d
 /home/runner/twrp/out/target/product/cannon/obj/EXECUTABLES/recovery_intermediates/fixContexts.o
 /home/runner/twrp/out/target/product/cannon/obj/EXECUTABLES/recovery_intermediates/partition.d
