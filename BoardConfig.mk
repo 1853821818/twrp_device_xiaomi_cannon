@@ -165,8 +165,10 @@ TARGET_USES_MKE2FS := true
 # MALLOC_SVELTE := true
 
 # Fix TWRP compile errors
-COMMON_GLOBAL_CFLAGS += -Wno-error=format-extra-args
-COMMON_GLOBAL_CPPFLAGS += -Wno-error=format-extra-args
+BOARD_CFLAGS += -Wno-error=format-extra-args
+BOARD_CPPFLAGS += -Wno-error=format-extra-args
+TARGET_RECOVERY_CFLAGS += -Wno-error=format-extra-args
+TARGET_RECOVERY_CPPFLAGS += -Wno-error=format-extra-args
 
 # HIDL
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := hardware/interfaces/compatibility_matrices/compatibility_matrix.5.xml
