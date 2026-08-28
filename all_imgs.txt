@@ -1,0 +1,1 @@
+/home/runner/twrp/out/target/product/cannon/dtb.img
