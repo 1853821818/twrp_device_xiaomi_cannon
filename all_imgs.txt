@@ -1,1 +1,4 @@
+/home/runner/twrp/out/target/product/cannon/recovery.img
 /home/runner/twrp/out/target/product/cannon/dtb.img
+/home/runner/twrp/out/target/product/cannon/ramdisk.img
+/home/runner/twrp/out/target/product/cannon/ramdisk-recovery.img
